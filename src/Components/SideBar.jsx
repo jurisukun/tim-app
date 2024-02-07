@@ -4,6 +4,7 @@ import {
   MenuList,
   MenuItem,
   Button,
+  Avatar,
 } from "@material-tailwind/react";
 import { RiLogoutBoxLine } from "react-icons/ri";
 import { FaUserPlus } from "react-icons/fa6";
@@ -76,10 +77,10 @@ function SideBar() {
           </Menu>
         </div>
         <div className="flex items-center px-4 gap-2">
-          <img
-            src="tite.png"
-            alt=""
-            className="w-[20px] bg-blue-100 h-[20px]"
+          <Avatar
+            src="https://docs.material-tailwind.com/img/face-2.jpg"
+            alt="avatar"
+            className="w-[35px] h-[35px]"
           />
           <h1 className="text-sm font-semibold text-black/80">Username</h1>
           <span>

@@ -4,6 +4,7 @@ import {
   MenuList,
   MenuItem,
   Button,
+  Avatar,
 } from "@material-tailwind/react";
 import { RiLogoutBoxLine } from "react-icons/ri";
 import { IoMenu } from "react-icons/io5";
@@ -102,10 +103,10 @@ function Content() {
             </Menu>
           </div>
           <div className="flex h-[20px] items-center justify-between px-4 gap-2">
-            <img
-              src="tite.png"
-              alt=""
-              className="w-[20px] bg-blue-100 h-[20px]"
+            <Avatar
+              src="https://docs.material-tailwind.com/img/face-2.jpg"
+              alt="avatar"
+              className="w-[35px] h-[35px]"
             />
             <h1 className="text-[20px] font-semibold text-black/80">
               Username
@@ -118,7 +119,7 @@ function Content() {
       )}
       <main className="w-full">
         <MainContainer />
-        <AddClient />
+        {/* <AddClient /> */}
       </main>
     </div>
   );

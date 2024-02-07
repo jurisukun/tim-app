@@ -5,7 +5,7 @@ function App() {
     <>
       <div>
         <Home />
-        <LoginPage />
+        {/* <LoginPage /> */}
       </div>
     </>
   );
