@@ -32,7 +32,7 @@ function Sidebar() {
     setOpen(open === value ? 0 : value);
   };
   return (
-    <div className="overflow-hidden hidden lg:block lg:w-[30%]  xl:w-[20%] w-[70%] md:w-[40%] relative b-shadow ">
+    <div className="overflow-hidden hidden lg:block lg:w-[30%]  xl:w-[20%] w-[70%] md:w-[50%] relative b-shadow ">
       <div className=" lg:hidden block absolute top-0 right-0 z-10 m-2">
         <FaWindowClose className="font-bold text-3xl  " />
       </div>{" "}
