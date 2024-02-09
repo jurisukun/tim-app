@@ -6,6 +6,26 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import { useState } from "react";
+import { useCheckAuth } from "../utils/hooks/useCheckAuth";
+
+export function LoginCheck() {
+  const { loading, error, data } = useCheckAuth();
+
+  if (loading) {
+    return (
+      <div className="w-full h-screen flex flex-col items-center justify-center font-semibold text-lg text-red-700">
+        <p className="flex flex-row items-center">Loading...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return <LoginPage />;
+  }
+  if (data) {
+    window.location.replace("/dashboard");
+  }
+}
 
 function LoginPage() {
   const [username, setUsername] = useState();
@@ -15,7 +35,7 @@ function LoginPage() {
     if (!username || !password) {
       window.location.reload();
     } else {
-      fetch(`http://localhost:35000/auth/login`, {
+      fetch(`${import.meta.env.VITE_API_URL}/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

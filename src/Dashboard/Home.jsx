@@ -1,13 +1,15 @@
 import SideBar from "../Components/SideBar";
-import Content from "../Components/Content";
-import HomeProfile from "../ProfilePage/HomeProfile";
+import CheckAuth from "../CheckAuth/CheckAuth";
+import { Outlet } from "react-router-dom";
+
 function Home() {
   return (
-    <div className="w-full h-screen items-center">
-      <SideBar />
-      <Content />
-      <HomeProfile />
-    </div>
+    <CheckAuth>
+      <div className="w-full h-screen items-center">
+        <SideBar />
+        <Outlet />
+      </div>
+    </CheckAuth>
   );
 }
 

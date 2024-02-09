@@ -28,6 +28,9 @@ import { FaWindowClose } from "react-icons/fa";
 import { TiThMenuOutline } from "react-icons/ti";
 import { useState } from "react";
 import Navbar from "./Navbar";
+import EmailTemplate from "./emailTemplate";
+import DailyTracker from "./DailyTracker";
+import Tasks from "./Tasks";
 function content() {
   const [open, setOpen] = React.useState(0);
 
@@ -48,26 +51,32 @@ function content() {
     }
   };
   return (
-    <div className="w-[100%] lg:w-[70%] xl:w-[80%]  md:w-[100%] relative   h-screen">
+    <div className="w-[100%] lg:w-[70%] xl:width-d  md:w-[100%] relative   h-screen">
       <Navbar />
+      {/* <EmailTemplate /> */}
+      {/* <DailyTracker /> */}
+      <Tasks />
       <div
         onClick={handleMenuClick}
-        className=" absolute top-0 right-0 z-10 m-4 md:block lg:hidden cursor-pointer">
+        className=" absolute top-0 right-0 z-10 m-4 md:block lg:hidden cursor-pointer"
+      >
         <TiThMenuOutline className="font-bold text-3xl  " />
       </div>
       {isMenuOpen && (
         <div className="fixed top-0 left-0">
           <div className="overflow-hidden block lg:hidden  w-[70%] md:w-[100%] relative b-shadow ">
             <div
-              className="lg:hidden block absolute top-0 right-0 z-10 m-4"
-              onClick={handleCloseClick}>
+              className="lg:hidden block absolute top-0 right-0 z-50 m-4"
+              onClick={handleCloseClick}
+            >
               <FaWindowClose className="font-bold text-3xl cursor-pointer " />
             </div>{" "}
             <Card className="h-screen  w-full max-w-[25rem]  p-4 shadow-xl shadow-blue-gray-900/5 overflow-y-scroll">
               <Typography
                 variant="h5"
                 color="blue-gray"
-                className=" text-blue-gray-700 text-center">
+                className=" text-blue-gray-700 text-center"
+              >
                 Deceased Profile
               </Typography>
               <div className="mb-2 p-4 flex items-center gap-[10px] mt-4 justify-left">
@@ -95,17 +104,20 @@ function content() {
                         open === 1 ? "rotate-180" : ""
                       }`}
                     />
-                  }>
+                  }
+                >
                   <ListItem className="p-0" selected={open === 1}>
                     <AccordionHeader
                       onClick={() => handleOpen(1)}
-                      className="border-b-0 p-3">
+                      className="border-b-0 p-3"
+                    >
                       <ListItemPrefix>
                         <PresentationChartBarIcon className="h-5 w-5" />
                       </ListItemPrefix>
                       <Typography
                         color="blue-gray"
-                        className="mr-auto font-normal">
+                        className="mr-auto font-normal"
+                      >
                         Menu
                       </Typography>
                     </AccordionHeader>
@@ -123,9 +135,9 @@ function content() {
                     </List>
                   </AccordionBody>
                 </Accordion>
-                <div className="p-3 my-2">
+                <div className="">
                   {" "}
-                  <Select variant="static" label="Referal Status">
+                  <Select label="Referal Status">
                     <Option>Test 1</Option>
                     <Option>Test 2 </Option>
                     <Option>Test 3 </Option>
@@ -188,7 +200,8 @@ function content() {
                 </ListItemPrefix>
                 <Typography
                   color="blue-gray"
-                  className="mr-auto font-normal cursor-pointer">
+                  className="mr-auto font-normal cursor-pointer"
+                >
                   Go back
                 </Typography>
               </div>

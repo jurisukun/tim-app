@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Menu,
   MenuHandler,
@@ -12,16 +11,18 @@ function Navbar() {
     <div className="flex items-center h-[80px]">
       <div className="w-full bbb hidden lg:block  h-[80px]">
         <div className="h-full lg:flex flex-row items-center justify-evenly ">
-          <Button variant="outlined">Funeral Detail</Button>
-          <Button variant="outlined">Daily Tracker</Button>
-          <Button variant="outlined">Email</Button>
-          <Button variant="outlined">Tasks</Button>
-          <Button variant="outlined">Forms</Button>
-          <Button variant="outlined">Billing</Button>
+          <Button>Funeral Detail</Button>
+          <Button>Daily Tracker</Button>
+          <Button>Email</Button>
+          <Button>Tasks</Button>
+          <Button>Forms</Button>
+          <Button>Billing</Button>
         </div>
       </div>
       <div className="w-full bbb lg:hidden block h-[80px]">
-        <div className="m-5 protest-riot-regular text-3xl">Funeral System</div>
+        <div className="m-5 protest-riot-regular md:text-3xl text-2xl">
+          Funeral System
+        </div>
         <div className="flex absolute top-3 right-20 items-center justify-center">
           <Menu placement="left-start">
             <MenuHandler>

@@ -8,25 +8,31 @@ import {
 } from "@material-tailwind/react";
 import { RiLogoutBoxLine } from "react-icons/ri";
 import { FaUserPlus } from "react-icons/fa6";
+import { useNavigate } from "react-router-dom";
+
 function SideBar() {
+  const navigate = useNavigate();
+  const goto = (e) => {
+    navigate(`/user/${e.target.value}`);
+  };
   return (
-    <div className="w-[100%] h-[70px] bg-white p-2 lg:flex hidden justify-between b-shadow">
+    <div className="w-[100%] h-[70px] bg-white p-4 lg:flex hidden justify-between b-shadow ">
       <div className="text-2xl flex items-center font-medium text-left protest-riot-regular">
         Dashboard
       </div>
       <div className="flex items-center justify-between ">
         <div className=" flex items-center">
-          <Menu placement="bottom">
+          <Menu placement="bottom" FaUserPlus>
             <MenuHandler>
               <Button className=" text-left bg-red-900 mx-[10px]">
                 Funeral
               </Button>
             </MenuHandler>
-            <MenuList>
-              <MenuItem>Client</MenuItem>
-              <MenuItem>Contracts</MenuItem>
-              <MenuItem>Itineraries</MenuItem>
-              <MenuItem>Daily Tracker</MenuItem>
+            <MenuList onClick={(e) => goto(e)}>
+              <MenuItem value="client">Client</MenuItem>
+              <MenuItem value="contracts">Contracts</MenuItem>
+              <MenuItem value="itenerar">Itineraries</MenuItem>
+              <MenuItem value="daily">Daily Tracker</MenuItem>
             </MenuList>
           </Menu>
 
@@ -36,9 +42,9 @@ function SideBar() {
                 Events
               </Button>
             </MenuHandler>
-            <MenuList>
-              <MenuItem>Event Calendar</MenuItem>
-              <MenuItem>Task Calendar</MenuItem>
+            <MenuList onClick={(e) => goto(e)}>
+              <MenuItem value="calendar">Event Calendar</MenuItem>
+              <MenuItem value="task">Task Calendar</MenuItem>
             </MenuList>
           </Menu>
 
@@ -49,17 +55,19 @@ function SideBar() {
               </Button>
             </MenuHandler>
             <MenuList>
-              <MenuItem>Drive</MenuItem>
-              <MenuItem>Calendar</MenuItem>
-              <MenuItem>Maps</MenuItem>
-              <MenuItem>Gmail</MenuItem>
-              <MenuItem>Dave</MenuItem>
-              <MenuItem>FDJ Website</MenuItem>
-              <MenuItem>Canva</MenuItem>
-              <MenuItem>Youtube</MenuItem>
-              <MenuItem>Casket Orders</MenuItem>
-              <MenuItem>E-Vital</MenuItem>
-              <MenuItem>Call FWD</MenuItem>
+              <MenuItem value="https://drive.google.com">Drive</MenuItem>
+              <MenuItem value="https://calendar.google.com">Calendar</MenuItem>
+              <MenuItem value="https://maps.google.com">Maps</MenuItem>
+              <MenuItem value="https://mail.google.com">Gmail</MenuItem>
+              <MenuItem value="https://drive.google.com">Dave</MenuItem>
+              <MenuItem value="https://drive.google.com">FDJ Website</MenuItem>
+              <MenuItem value="https://canva.com">Canva</MenuItem>
+              <MenuItem value="https://youtube.com">Youtube</MenuItem>
+              <MenuItem value="https://drive.google.com">
+                Casket Orders
+              </MenuItem>
+              <MenuItem value="https://drive.google.com">E-Vital</MenuItem>
+              <MenuItem value="https://drive.google.com">Call FWD</MenuItem>
             </MenuList>
           </Menu>
 

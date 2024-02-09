@@ -26,3 +26,41 @@
 .card {
   box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
 }
+@layer utilities {
+  .height-c {
+    height: calc(100vh - 70px);
+  }
+
+  @responsive {
+    .lg\\:height-c {
+      @apply height-c;
+    }
+  }
+}
+@layer utilities {
+  .width-d {
+    width: calc(100% - 300px);
+  }
+
+  @responsive {
+    .lg\\:height-c {
+      @apply height-c;
+    }
+  }
+}
+
+@layer utilities {
+  .height-e {
+    height: calc(100vh - 80px);
+  }
+
+  @responsive {
+    .lg\\:height-c {
+      @apply height-c;
+    }
+  }
+}
+.d-b {
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+    rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+}

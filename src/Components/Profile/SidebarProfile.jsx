@@ -32,7 +32,7 @@ function Sidebar() {
     setOpen(open === value ? 0 : value);
   };
   return (
-    <div className="overflow-hidden hidden lg:block lg:w-[30%]  xl:w-[20%] w-[70%] md:w-[50%] relative b-shadow ">
+    <div className="overflow-hidden hidden lg:block lg:w-[30%]  xl:w-[300px] w-[70%] md:w-[50%] relative b-shadow ">
       <div className=" lg:hidden block absolute top-0 right-0 z-10 m-2">
         <FaWindowClose className="font-bold text-3xl  " />
       </div>{" "}
@@ -40,7 +40,8 @@ function Sidebar() {
         <Typography
           variant="h5"
           color="blue-gray"
-          className=" text-blue-gray-700 text-center">
+          className=" text-blue-gray-700 text-center"
+        >
           Deceased Profile
         </Typography>
         <div className="mb-2 p-4 flex items-center gap-[10px] mt-4 justify-left">
@@ -68,11 +69,13 @@ function Sidebar() {
                   open === 1 ? "rotate-180" : ""
                 }`}
               />
-            }>
+            }
+          >
             <ListItem className="p-0" selected={open === 1}>
               <AccordionHeader
                 onClick={() => handleOpen(1)}
-                className="border-b-0 p-3">
+                className="border-b-0 p-3"
+              >
                 <ListItemPrefix>
                   <PresentationChartBarIcon className="h-5 w-5" />
                 </ListItemPrefix>
@@ -92,9 +95,9 @@ function Sidebar() {
               </List>
             </AccordionBody>
           </Accordion>
-          <div className="p-3 my-2">
+          <div className="">
             {" "}
-            <Select variant="static" label="Referal Status">
+            <Select label="Referal Status">
               <Option>Test 1</Option>
               <Option>Test 2 </Option>
               <Option>Test 3 </Option>
@@ -157,7 +160,8 @@ function Sidebar() {
           </ListItemPrefix>
           <Typography
             color="blue-gray"
-            className="mr-auto font-normal cursor-pointer">
+            className="mr-auto font-normal cursor-pointer"
+          >
             Go back
           </Typography>
         </div>

@@ -13,6 +13,7 @@ import { useState } from "react";
 import { FaUserPlus } from "react-icons/fa6";
 import MainContainer from "./MainContainer";
 import AddClient from "./Account/AddClient";
+
 function Content() {
   const [isDashboardVisible, setDashboardVisible] = useState(false);
 
@@ -25,15 +26,15 @@ function Content() {
   };
 
   return (
-    <div className="w-full h-screen relative p-4">
-      <div className="absolute top-0 right-0 justify-end p-3">
+    <div className="w-full  relative  lg:height-c h-screen ">
+      <div className="absolute top-0 right-0 justify-end p-3 z-50">
         <IoMenu
           className="font-bold text-4xl cursor-pointer lg:hidden block"
           onClick={showDashboard}
         />
       </div>
       {isDashboardVisible && (
-        <div className="w-[60%] md:w-[40%] absolute top-0 left-0 h-screen bg-white p-2 lg:hidden block b-shadow z-10 ">
+        <div className="w-[60%] md:w-[40%] absolute top-0 left-0 h-screen bg-white p-2 lg:hidden block b-shadow z-50 ">
           <div className="mt-[10px] text-2xl font-medium text-left protest-riot-regular flex items-center justify-between">
             Dashboard
             <IoMdClose
