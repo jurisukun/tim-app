@@ -5,8 +5,35 @@ import {
   Button,
   Typography,
 } from "@material-tailwind/react";
+import { useState } from "react";
 
-function loginPage() {
+function LoginPage() {
+  const [username, setUsername] = useState();
+  const [password, setPassword] = useState();
+
+  const handleLogin = () => {
+    if (!username || !password) {
+      window.location.reload();
+    } else {
+      fetch(`http://localhost:35000/auth/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, password }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.token) {
+            localStorage.setItem("token", data.token);
+            window.location.reload();
+          } else {
+            window.location.reload();
+          }
+        });
+    }
+  };
+
   return (
     <div className=" w-full h-screen bg-white flex justify-center items-center ">
       <Card color="transparent" shadow={false} className="shadoww p-4 lg:p-6">
@@ -32,6 +59,7 @@ function loginPage() {
               labelProps={{
                 className: "before:content-none after:content-none",
               }}
+              onChange={(e) => setUsername(e.target.value)}
             />
             <Typography variant="h6" color="blue-gray" className="-mb-3">
               Password
@@ -44,6 +72,7 @@ function loginPage() {
               labelProps={{
                 className: "before:content-none after:content-none",
               }}
+              onChange={(e) => setPassword(e.target.value)}
             />
           </div>
           <Checkbox
@@ -64,7 +93,11 @@ function loginPage() {
             }
             containerProps={{ className: "-ml-2.5" }}
           />
-          <Button className="mt-6 bg-red-900" fullWidth>
+          <Button
+            className="mt-6 bg-red-900"
+            fullWidth
+            onClick={() => handleLogin()}
+          >
             Log In
           </Button>
         </form>
@@ -73,4 +106,4 @@ function loginPage() {
   );
 }
 
-export default loginPage;
+export default LoginPage;
