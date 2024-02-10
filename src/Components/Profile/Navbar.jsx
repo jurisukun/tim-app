@@ -8,8 +8,9 @@ import {
 
 function Navbar() {
   return (
-    <div className="flex items-center h-[80px]">
-      <div className="w-full bbb hidden lg:block  h-[80px]">
+    <div className="flex items-center  ">
+      {/* lg:absolute lg:-top-16 lg:right-0 */}
+      <div className="w-full bbb hidden lg:block  h-[80px]  hover:top-0 transition-all z-50 bg-white">
         <div className="h-full lg:flex flex-row items-center justify-evenly ">
           <Button className="bg-red-800">Funeral Detail</Button>
           <Button className="bg-red-800">Daily Tracker</Button>

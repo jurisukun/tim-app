@@ -1,30 +1,4 @@
-import React from "react";
-import { ChevronRightIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
-import {
-  PresentationChartBarIcon,
-  ShoppingBagIcon,
-  UserCircleIcon,
-  Cog6ToothIcon,
-  InboxIcon,
-  PowerIcon,
-} from "@heroicons/react/24/solid";
-import {
-  Card,
-  Typography,
-  List,
-  ListItem,
-  ListItemPrefix,
-  ListItemSuffix,
-  Chip,
-  Accordion,
-  AccordionHeader,
-  AccordionBody,
-  Avatar,
-  Select,
-  Option,
-} from "@material-tailwind/react";
-import { IoChevronBackCircleSharp } from "react-icons/io5";
-import { FaWindowClose } from "react-icons/fa";
+
 import { TiThMenuOutline } from "react-icons/ti";
 import { useState } from "react";
 import Navbar from "./Navbar";
@@ -35,6 +9,8 @@ import AddClient from "../Account/AddClient";
 import Forms from "./Forms";
 import Billing from "./Billing";
 import Sidebar from "./SidebarProfile";
+
+
 
 function content() {
   const [isMenuOpen, setMenuOpen] = useState(false);
@@ -51,13 +27,13 @@ function content() {
     }
   };
   return (
-    <div className="w-[100%] lg:w-[70%] xl:width-d  md:w-[100%] relative   h-screen">
+    <div className="w-[100%] lg:w-[70%] xl:width-d  md:w-[100%] relative   h-screen overflow-hidden">
       <Navbar />
       {/* <EmailTemplate /> */}
-      {/* <DailyTracker /> */}
+      <DailyTracker />
       {/* <Tasks /> */}
       {/* <AddClient /> */}
-      <Forms />
+      {/* <Forms /> */}
       {/* <Billing /> */}
 
       <div

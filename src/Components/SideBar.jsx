@@ -7,6 +7,7 @@ import {
   Avatar,
 } from "@material-tailwind/react";
 import { RiLogoutBoxLine } from "react-icons/ri";
+
 import { FaUserPlus } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 
@@ -91,11 +92,13 @@ function SideBar() {
             className="w-[35px] h-[35px]"
           />
           <h1 className="text-sm font-semibold text-black/80">Username</h1>
-          <span>
+          {/* <span>
             <RiLogoutBoxLine className="font-bold text-2xl text-black/60 cursor-pointer " />
-          </span>
+          </span> */}
         </div>
+
       </div>
+      
     </div>
   );
 }

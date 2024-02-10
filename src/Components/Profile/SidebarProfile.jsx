@@ -107,7 +107,7 @@ function Sidebar({ handleCloseClick }) {
           </div>
         </List>
         <div className="p-3">
-          <Typography className=" text-blue-gray-800 text-[15px]">
+          <Typography className=" text-blue-gray-800 text-[12px] text-red-800 font-semibold">
             Name Of Contact :
           </Typography>
           <Typography className=" text-blue-gray-600 text-[15px] border-b-2">
@@ -115,7 +115,7 @@ function Sidebar({ handleCloseClick }) {
           </Typography>
         </div>
         <div className="p-3">
-          <Typography className=" text-blue-gray-800 text-[15px]">
+          <Typography className=" text-blue-gray-800 text-[12px] text-red-800 font-semibold">
             Email:
           </Typography>
           <Typography className=" text-blue-gray-600 text-[15px] border-b-2">
@@ -123,7 +123,7 @@ function Sidebar({ handleCloseClick }) {
           </Typography>
         </div>
         <div className="p-3">
-          <Typography className=" text-blue-gray-800 text-[15px]">
+          <Typography className=" text-blue-gray-800 text-[12px] text-red-800 font-semibold">
             Telephone:
           </Typography>
           <Typography className=" text-blue-gray-600 text-[15px] border-b-2">
@@ -131,7 +131,7 @@ function Sidebar({ handleCloseClick }) {
           </Typography>
         </div>
         <div className="p-3">
-          <Typography className=" text-blue-gray-800 text-[15px]">
+          <Typography className=" text-blue-gray-800 text-[12px] text-red-800 font-semibold">
             Service Type :
           </Typography>
           <Typography className=" text-blue-gray-600 text-[15px] border-b-2">
@@ -139,7 +139,7 @@ function Sidebar({ handleCloseClick }) {
           </Typography>
         </div>
         <div className="p-3">
-          <Typography className=" text-blue-gray-800 text-[15px]">
+          <Typography className=" text-blue-gray-800 text-[12px] text-red-800 font-semibold">
             Inquiry Status :
           </Typography>
           <Typography className=" text-blue-gray-600 text-[15px] border-b-2">
@@ -147,14 +147,14 @@ function Sidebar({ handleCloseClick }) {
           </Typography>
         </div>
         <div className="p-3">
-          <Typography className=" text-blue-gray-800 text-[15px]">
+          <Typography className=" text-blue-gray-800 text-[12px] text-red-800 font-semibold">
             Notes :
           </Typography>
           <Typography className=" text-blue-gray-600 text-[15px] border-b-2">
             Test 123
           </Typography>
         </div>
-        <div className="p-3 flex items-center">
+        <div className="p-3 flex items-center lg:hidden">
           <ListItemPrefix>
             <IoChevronBackCircleSharp className="h-5 w-5 cursor-pointer" />
           </ListItemPrefix>

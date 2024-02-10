@@ -1,138 +1,60 @@
-import { useState } from "react";
+
 import {
   Button,
   Textarea,
   Input,
   Typography,
   Checkbox,
+  
+   Popover,
+  PopoverHandler,
+  PopoverContent,
 } from "@material-tailwind/react";
-import { IoIosCloseCircle } from "react-icons/io";
+
+
+function EmailPopover({title,data}) {
+   return <Popover placement="bottom-end">
+      <PopoverHandler>
+        <div className="mt-2 relative">
+        <Button size="sm"
+            className="bg-blue-gray-500 text-ellipsis">{title}</Button>
+        </div>
+      </PopoverHandler> 
+      <PopoverContent className="overflow-y-scroll p-4">
+        <div className="  h-[300px] w-[250px]  rounded-lg z-10">
+         { data.map((file,key)=>(
+<div key={key} className="flex items-center">
+                <Checkbox className="" />
+                <Typography>{file}</Typography>
+              </div>
+          ))}
+              <Button size="sm" className="my-4 bg-black/80">
+                Save
+              </Button>
+            </div>
+      </PopoverContent>
+    </Popover>
+}
+
+const funeralArrangement = [
+  "Greetings", "Authorization", "Client Page Link Generator", "Funeral Preference", "Pricing", "Booking Disclaimer", "Casket Link", "Urn Flipbook Link", "Outro And Reminder"
+]
+
+
+
 function emailTemplate() {
-  const [isFuneralDivVisible, setFuneralDivVisibility] = useState(false);
-  const [isPreArrangementDivVisible, setPreArrangementDivVisibility] =
-    useState(false);
+  
 
-  const handleFuneralButtonClick = () => {
-    setFuneralDivVisibility(!isFuneralDivVisible);
-    setPreArrangementDivVisibility(false);
-  };
 
-  const handlePreArrangementButtonClick = () => {
-    setPreArrangementDivVisibility(!isPreArrangementDivVisible);
-    setFuneralDivVisibility(false);
-  };
   return (
-    <div className="w-full height-e  p-4">
+    <div className="flex flex-col gap-4 w-full height-e  p-4">
       <div className="text-xl font-medium text-blue-gray-800">
         Email Templates
-        <div className="flex flex-wrap lg:gap-4 gap-1 md:gap-1 ">
-          <div className="mt-2 relative">
-            <Button
-              size="sm"
-              onClick={handleFuneralButtonClick}
-              className="bg-blue-gray-500">
-              Funeral Arrangement
-            </Button>
-
-            {isFuneralDivVisible && (
-              <div className="absolute mt-2 w-[300px] bg-white shadoww h-[500px] p-4 rounded-lg z-10">
-                <IoIosCloseCircle
-                  onClick={handleFuneralButtonClick}
-                  className="lg:hidden block float-right text-3xl"
-                />
-                <div className="flex items-center">
-                  <Checkbox className="" />
-                  <Typography>Greetings</Typography>
-                </div>
-                <div className="flex items-center">
-                  <Checkbox className="" />
-                  <Typography>Authorization Expectations</Typography>
-                </div>
-                <div className="flex items-center">
-                  <Checkbox className="" />
-                  <Typography>Client Page Link Generator</Typography>
-                </div>
-                <div className="flex items-center">
-                  <Checkbox className="" />
-                  <Typography>Funeral Preference</Typography>
-                </div>
-                <div className="flex items-center">
-                  <Checkbox className="" />
-                  <Typography>Pricing</Typography>
-                </div>
-                <div className="flex items-center">
-                  <Checkbox className="" />
-                  <Typography>Booking Disclaimer (if Necessary)</Typography>
-                </div>
-                <div className="flex items-center">
-                  <Checkbox className="" />
-                  <Typography>Casket Link</Typography>
-                </div>
-                <div className="flex items-center">
-                  <Checkbox className="" />
-                  <Typography>Urn Flipbook Link</Typography>
-                </div>
-                <div className="flex items-center">
-                  <Checkbox className="" />
-                  <Typography>Outro And Reminder</Typography>
-                </div>
-                <Button className="mt-4 bg-black/80">Save</Button>
-              </div>
-            )}
-          </div>
-          <div className="mt-2 relative">
-            <Button
-              size="sm"
-              onClick={handlePreArrangementButtonClick}
-              className="bg-blue-gray-500">
-              Pre-arrangement Arrangement
-            </Button>
-            {isPreArrangementDivVisible && (
-              <div className="absolute mt-2 w-[300px] bg-white shadoww h-[500px] p-4 rounded-lg z-10">
-                <IoIosCloseCircle
-                  onClick={handlePreArrangementButtonClick}
-                  className="lg:hidden block float-right text-3xl"
-                />
-                <div className="flex items-center">
-                  <Checkbox className="" />
-                  <Typography>Greetings</Typography>
-                </div>
-                <div className="flex items-center">
-                  <Checkbox className="" />
-                  <Typography>Authorization Expectations</Typography>
-                </div>
-                <div className="flex items-center">
-                  <Checkbox className="" />
-                  <Typography>Client Page Link Generator</Typography>
-                </div>
-                <div className="flex items-center">
-                  <Checkbox className="" />
-                  <Typography>Funeral Preference</Typography>
-                </div>
-                <div className="flex items-center">
-                  <Checkbox className="" />
-                  <Typography>Pricing</Typography>
-                </div>
-                <div className="flex items-center">
-                  <Checkbox className="" />
-                  <Typography>Booking Disclaimer (if Necessary)</Typography>
-                </div>
-                <div className="flex items-center">
-                  <Checkbox className="" />
-                  <Typography>Casket Link</Typography>
-                </div>
-                <div className="flex items-center">
-                  <Checkbox className="" />
-                  <Typography>Urn Flipbook Link</Typography>
-                </div>
-                <div className="flex items-center">
-                  <Checkbox className="" />
-                  <Typography>Outro And Reminder</Typography>
-                </div>
-                <Button className="mt-4 bg-black/80">Save</Button>
-              </div>
-            )}
-          </div>
+        <div className="w-full lg:gap-4 gap-1 md:gap-1 ">
+          <div className="mt-2 relative lg:flex lg:flex-row w-full gap-2 grid grid-cols-2 grid-rows-3 sm:grid-cols-3">
+           <EmailPopover title="Funeral Arrangement" data={funeralArrangement} />
+           <EmailPopover title="Pre-arrangement" data={funeralArrangement} />
+          
           <div className="mt-2 relative">
             <Button size="sm" className="bg-blue-gray-500">
               Orbituary And Youtube
@@ -153,6 +75,7 @@ function emailTemplate() {
               Zelle Payment
             </Button>
           </div>
+        </div>
         </div>
       </div>
       <div className="w-full h-[70vh] mt-4 ">

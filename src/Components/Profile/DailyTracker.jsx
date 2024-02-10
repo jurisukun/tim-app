@@ -17,6 +17,40 @@ function DailyTracker() {
   const handleExitClick = () => {
     setShowAddRecord(false);
   };
+
+  const data=[{
+    date:"February 10, 2024",
+    time:"Alasyete ng gabi",
+    staffName:"Kulas",
+    interactionType:"Diko alam",
+    interactionWith:"Diko alam",
+    purposeOfCall:"Mangungutang",
+    phoneNumber:"093947283483247",
+    notes:"auj efwh haf weh whufhwe hew uewiu gwefi ewif a",
+    action:"Pindot"
+  },
+  {
+    date:"February 10, 2024",
+    time:"Alasyete ng gabi",
+    staffName:"Kulas",
+    interactionType:"Diko alam",
+    interactionWith:"Diko alam",
+    purposeOfCall:"Mangungutang",
+    phoneNumber:"093947283483247",
+    notes:"auj efwh haf weh whufhwe hew uewiu gwefi ewif a",
+    action:"Pindot"
+  },
+  {
+    date:"February 10, 2024",
+    time:"Alasyete ng gabi",
+    staffName:"Kulas",
+    interactionType:"Diko alam",
+    interactionWith:"Diko alam",
+    purposeOfCall:"Mangungutang",
+    phoneNumber:"093947283483247",
+    notes:"auj efwh haf weh whufhwe hew uewiu gwefi ewif a",
+    action:"Pindot"
+  }]
   return (
     <div className="w-full height-e relative p-4">
       <div className="text-xl font-medium text-blue-gray-800 flex items-center justify-between">
@@ -105,166 +139,74 @@ function DailyTracker() {
               </Typography>
             </th>
           </tr>
-          <tr>
-            <td className="border px-2 py-2">Feruary 10, 2024</td>
-            <td className="border px-2 py-2">Alasyete ng gabi</td>
-            <td className="border px-2 py-2">Kulas</td>
-            <td className="border px-2 py-2">Diko alam</td>
-            <td className="border px-2 py-2">Diko alam</td>
-            <td className="border px-2 py-2">Mangungutang</td>
-            <td className="border px-2 py-2">093947283483247</td>
-            <td className="border px-2 py-2">
-              auj efwh haf weh whufhwe hew uewiu gwefi ewif a{" "}
-            </td>
-            <td className="border px-2 py-2">Pindot </td>
-          </tr>
-          <tr>
-            <td className="border px-2 py-2">Feruary 10, 2024</td>
-            <td className="border px-2 py-2">Alasyete ng gabi</td>
-            <td className="border px-2 py-2">Kulas</td>
-            <td className="border px-2 py-2">Diko alam</td>
-            <td className="border px-2 py-2">Diko alam</td>
-            <td className="border px-2 py-2">Mangungutang</td>
-            <td className="border px-2 py-2">093947283483247</td>
-            <td className="border px-2 py-2">
-              auj efwh haf weh whufhwe hew uewiu gwefi ewif a{" "}
-            </td>
-            <td className="border px-2 py-2">Pindot </td>
-          </tr>
-          <tr>
-            <td className="border px-2 py-2">Feruary 10, 2024</td>
-            <td className="border px-2 py-2">Alasyete ng gabi</td>
-            <td className="border px-2 py-2">Kulas</td>
-            <td className="border px-2 py-2">Diko alam</td>
-            <td className="border px-2 py-2">Diko alam</td>
-            <td className="border px-2 py-2">Mangungutang</td>
-            <td className="border px-2 py-2">093947283483247</td>
-            <td className="border px-2 py-2">
-              auj efwh haf weh whufhwe hew uewiu gwefi ewif a{" "}
-            </td>
-            <td className="border px-2 py-2">Pindot </td>
-          </tr>
+          {data.map((item, key) => {
+            return (
+              <tr key={key}>
+                <td className="border px-2 py-2">{item.date}</td>
+                <td className="border px-2 py-2">{item.time}</td>
+                <td className="border px-2 py-2">{item.staffName}</td>
+                <td className="border px-2 py-2">{item.interactionType}</td>
+                <td className="border px-2 py-2">{item.interactionWith}</td>
+                <td className="border px-2 py-2">{item.purposeOfCall}</td>
+                <td className="border px-2 py-2">{item.phoneNumber}</td>
+                <td className="border px-2 py-2">{item.notes}</td>
+                <td className="border px-2 py-2">{item.action}</td>
+              </tr>
+            );
+          })}
+         
         </table>
       </Card>
 
       {/* mobile view */}
       <div className="xl:hidden lg:block overflow-y-scroll h-[80vh] p-2">
-        {" "}
+        
         <div className="mt-3  grid md:grid-cols-2 sm:grid-cols-2 gap-5 ">
-          <Card className="mt-3 shadoww p-2">
-            <div className="flex items-center gap-3">
-              <Typography className="text-black">Date:</Typography>
-              <Typography>February 10, 2024</Typography>
-            </div>
-            <div className="flex items-center gap-3">
-              <Typography className="text-black">Time:</Typography>
-              <Typography>Alasyete ng gabi</Typography>
-            </div>
-            <div className="flex items-center gap-3">
-              <Typography className="text-black">Staff Name:</Typography>
-              <Typography>Kulas</Typography>
-            </div>
-            <div className="flex items-center gap-3">
-              <Typography className="text-black">Interaction Type:</Typography>
-              <Typography>Wala</Typography>
-            </div>
-            <div className="flex items-center gap-3">
-              <Typography className="text-black">Interaction With:</Typography>
-              <Typography>Wala</Typography>
-            </div>
-            <div className="flex items-center gap-3">
-              <Typography className="text-black"> Purpose Of Call:</Typography>
-              <Typography>utang</Typography>
-            </div>
-            <div className="flex items-center gap-3">
-              <Typography className="text-black"> Phone Number:</Typography>
-              <Typography>09848283742</Typography>
-            </div>
-            <div className="flex items-start gap-3">
-              <Typography className="text-black"> Notes:</Typography>
-              <Typography>skaljd hau heh weuih iwef uowepi whegipw </Typography>
-            </div>
-            <div className="flex items-center gap-3">
-              <Typography className="text-black"> Actions:</Typography>
-              <Typography>Pindot</Typography>
-            </div>
-          </Card>
-          <Card className="mt-3 shadoww p-2">
-            <div className="flex items-center gap-3">
-              <Typography className="text-black">Date:</Typography>
-              <Typography>February 10, 2024</Typography>
-            </div>
-            <div className="flex items-center gap-3">
-              <Typography className="text-black">Time:</Typography>
-              <Typography>Alasyete ng gabi</Typography>
-            </div>
-            <div className="flex items-center gap-3">
-              <Typography className="text-black">Staff Name:</Typography>
-              <Typography>Kulas</Typography>
-            </div>
-            <div className="flex items-center gap-3">
-              <Typography className="text-black">Interaction Type:</Typography>
-              <Typography>Wala</Typography>
-            </div>
-            <div className="flex items-center gap-3">
-              <Typography className="text-black">Interaction With:</Typography>
-              <Typography>Wala</Typography>
-            </div>
-            <div className="flex items-center gap-3">
-              <Typography className="text-black"> Purpose Of Call:</Typography>
-              <Typography>utang</Typography>
-            </div>
-            <div className="flex items-center gap-3">
-              <Typography className="text-black"> Phone Number:</Typography>
-              <Typography>09848283742</Typography>
-            </div>
-            <div className="flex items-start gap-3">
-              <Typography className="text-black"> Notes:</Typography>
-              <Typography>skaljd hau heh weuih iwef uowepi whegipw </Typography>
-            </div>
-            <div className="flex items-center gap-3">
-              <Typography className="text-black"> Actions:</Typography>
-              <Typography>Pindot</Typography>
-            </div>
-          </Card>
-          <Card className="mt-3 shadoww p-2">
-            <div className="flex items-center gap-3">
-              <Typography className="text-black">Date:</Typography>
-              <Typography>February 10, 2024</Typography>
-            </div>
-            <div className="flex items-center gap-3">
-              <Typography className="text-black">Time:</Typography>
-              <Typography>Alasyete ng gabi</Typography>
-            </div>
-            <div className="flex items-center gap-3">
-              <Typography className="text-black">Staff Name:</Typography>
-              <Typography>Kulas</Typography>
-            </div>
-            <div className="flex items-center gap-3">
-              <Typography className="text-black">Interaction Type:</Typography>
-              <Typography>Wala</Typography>
-            </div>
-            <div className="flex items-center gap-3">
-              <Typography className="text-black">Interaction With:</Typography>
-              <Typography>Wala</Typography>
-            </div>
-            <div className="flex items-center gap-3">
-              <Typography className="text-black"> Purpose Of Call:</Typography>
-              <Typography>utang</Typography>
-            </div>
-            <div className="flex items-center gap-3">
-              <Typography className="text-black"> Phone Number:</Typography>
-              <Typography>09848283742</Typography>
-            </div>
-            <div className="flex items-start gap-3">
-              <Typography className="text-black"> Notes:</Typography>
-              <Typography>skaljd hau heh weuih iwef uowepi whegipw </Typography>
-            </div>
-            <div className="flex items-center gap-3">
-              <Typography className="text-black"> Actions:</Typography>
-              <Typography>Pindot</Typography>
-            </div>
-          </Card>
+          {
+            data.map((item,key)=>{
+              return(
+                <Card key={key} className="shadoww p-2">
+                <div className="flex items-center gap-3">
+                  <Typography className="text-black">Date:</Typography>
+                  <Typography>{item.date}</Typography>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Typography className="text-black">Time:</Typography>
+                  <Typography>{item.time}</Typography>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Typography className="text-black">Staff Name:</Typography>
+                  <Typography>{item.staffName}</Typography>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Typography className="text-black">Interaction Type:</Typography>
+                  <Typography>{item.interactionType}</Typography>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Typography className="text-black">Interaction With:</Typography>
+                  <Typography>{item.interactionWith}</Typography>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Typography className="text-black"> Purpose Of Call:</Typography>
+                  <Typography>{item.purposeOfCall}</Typography>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Typography className="text-black"> Phone Number:</Typography>
+                  <Typography>{item.phoneNumber}</Typography>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Typography className="text-black"> Notes:</Typography>
+                  <Typography>{item.notes}</Typography>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Typography className="text-black"> Actions:</Typography>
+                  <Typography>{item.action}</Typography>
+                </div>
+              </Card>
+              )
+            })
+          }
+          
         </div>
       </div>
 
@@ -294,8 +236,9 @@ function DailyTracker() {
               <Input label=" Notes" />
             </div>
             <div className="flex items-center justify-between">
-              <Button>Submit</Button>
-              <Button onClick={handleExitClick}>Exit</Button>
+            
+              <Button onClick={handleExitClick} variant="outlined">Exit</Button>
+                <Button>Submit</Button>
             </div>
           </Card>
         </div>
