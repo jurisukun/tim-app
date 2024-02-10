@@ -30,13 +30,12 @@ function emailTemplate() {
             <Button
               size="sm"
               onClick={handleFuneralButtonClick}
-              className="bg-blue-gray-500"
-            >
+              className="bg-blue-gray-500">
               Funeral Arrangement
             </Button>
 
             {isFuneralDivVisible && (
-              <div className="absolute w-[300px] bg-white shadoww h-[500px] p-4 rounded-lg z-10">
+              <div className="absolute mt-2 w-[300px] bg-white shadoww h-[500px] p-4 rounded-lg z-10">
                 <IoIosCloseCircle
                   onClick={handleFuneralButtonClick}
                   className="lg:hidden block float-right text-3xl"
@@ -85,12 +84,11 @@ function emailTemplate() {
             <Button
               size="sm"
               onClick={handlePreArrangementButtonClick}
-              className="bg-blue-gray-500"
-            >
+              className="bg-blue-gray-500">
               Pre-arrangement Arrangement
             </Button>
             {isPreArrangementDivVisible && (
-              <div className="absolute w-[300px] bg-white shadoww h-[500px] p-4 rounded-lg z-10">
+              <div className="absolute mt-2 w-[300px] bg-white shadoww h-[500px] p-4 rounded-lg z-10">
                 <IoIosCloseCircle
                   onClick={handlePreArrangementButtonClick}
                   className="lg:hidden block float-right text-3xl"
@@ -157,7 +155,7 @@ function emailTemplate() {
           </div>
         </div>
       </div>
-      <div className="w-full h-[76vh] mt-4 ">
+      <div className="w-full h-[70vh] mt-4 ">
         <div className=" mt-4">
           <Input label="Subject:" />
         </div>
@@ -175,7 +173,7 @@ function emailTemplate() {
           />
         </div>
         <div>
-          <Button className="bg-red-900">Send Email</Button>
+          <Button className="bg-red-900 mt-5">Send Email</Button>
         </div>
       </div>
     </div>

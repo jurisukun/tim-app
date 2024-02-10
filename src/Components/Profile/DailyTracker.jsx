@@ -24,12 +24,11 @@ function DailyTracker() {
         <Button
           size="sm"
           onClick={handleAddRecordClick}
-          className="bg-blue-gray-700"
-        >
+          className="bg-blue-gray-700">
           Add Record
         </Button>
       </div>
-      <Card className="mt-3 hidden lg:block h-[85vh] overflow-y-scroll">
+      <Card className="mt-3 hidden xl:block h-[80vh] overflow-y-scroll">
         {" "}
         <table className="shadow-lg bg-white w-full">
           <tr>
@@ -37,8 +36,7 @@ function DailyTracker() {
               <Typography
                 variant="small"
                 color="blue-gray"
-                className="font-semi-bold text-1xl "
-              >
+                className="font-semi-bold text-1xl ">
                 Date
               </Typography>
             </th>
@@ -46,8 +44,7 @@ function DailyTracker() {
               <Typography
                 variant="small"
                 color="blue-gray"
-                className="font-semi-bold text-1xl "
-              >
+                className="font-semi-bold text-1xl ">
                 Time
               </Typography>
             </th>
@@ -55,8 +52,7 @@ function DailyTracker() {
               <Typography
                 variant="small"
                 color="blue-gray"
-                className="font-semi-bold text-1xl "
-              >
+                className="font-semi-bold text-1xl ">
                 Staff Name
               </Typography>
             </th>
@@ -64,8 +60,7 @@ function DailyTracker() {
               <Typography
                 variant="small"
                 color="blue-gray"
-                className="font-semi-bold text-1xl "
-              >
+                className="font-semi-bold text-1xl ">
                 Interaction Type
               </Typography>
             </th>
@@ -73,8 +68,7 @@ function DailyTracker() {
               <Typography
                 variant="small"
                 color="blue-gray"
-                className="font-semi-bold text-1xl "
-              >
+                className="font-semi-bold text-1xl ">
                 Interaction With
               </Typography>
             </th>
@@ -82,8 +76,7 @@ function DailyTracker() {
               <Typography
                 variant="small"
                 color="blue-gray"
-                className="font-semi-bold text-1xl "
-              >
+                className="font-semi-bold text-1xl ">
                 Purpose of call
               </Typography>
             </th>
@@ -91,8 +84,7 @@ function DailyTracker() {
               <Typography
                 variant="small"
                 color="blue-gray"
-                className="font-semi-bold text-1xl "
-              >
+                className="font-semi-bold text-1xl ">
                 Phone Number
               </Typography>
             </th>
@@ -100,8 +92,7 @@ function DailyTracker() {
               <Typography
                 variant="small"
                 color="blue-gray"
-                className="font-semi-bold text-1xl "
-              >
+                className="font-semi-bold text-1xl ">
                 Notes
               </Typography>
             </th>
@@ -109,8 +100,7 @@ function DailyTracker() {
               <Typography
                 variant="small"
                 color="blue-gray"
-                className="font-semi-bold text-1xl "
-              >
+                className="font-semi-bold text-1xl ">
                 Action
               </Typography>
             </th>
@@ -123,17 +113,45 @@ function DailyTracker() {
             <td className="border px-2 py-2">Diko alam</td>
             <td className="border px-2 py-2">Mangungutang</td>
             <td className="border px-2 py-2">093947283483247</td>
-            <td className="border px-2 py-2">Wala </td>
+            <td className="border px-2 py-2">
+              auj efwh haf weh whufhwe hew uewiu gwefi ewif a{" "}
+            </td>
+            <td className="border px-2 py-2">Pindot </td>
+          </tr>
+          <tr>
+            <td className="border px-2 py-2">Feruary 10, 2024</td>
+            <td className="border px-2 py-2">Alasyete ng gabi</td>
+            <td className="border px-2 py-2">Kulas</td>
+            <td className="border px-2 py-2">Diko alam</td>
+            <td className="border px-2 py-2">Diko alam</td>
+            <td className="border px-2 py-2">Mangungutang</td>
+            <td className="border px-2 py-2">093947283483247</td>
+            <td className="border px-2 py-2">
+              auj efwh haf weh whufhwe hew uewiu gwefi ewif a{" "}
+            </td>
+            <td className="border px-2 py-2">Pindot </td>
+          </tr>
+          <tr>
+            <td className="border px-2 py-2">Feruary 10, 2024</td>
+            <td className="border px-2 py-2">Alasyete ng gabi</td>
+            <td className="border px-2 py-2">Kulas</td>
+            <td className="border px-2 py-2">Diko alam</td>
+            <td className="border px-2 py-2">Diko alam</td>
+            <td className="border px-2 py-2">Mangungutang</td>
+            <td className="border px-2 py-2">093947283483247</td>
+            <td className="border px-2 py-2">
+              auj efwh haf weh whufhwe hew uewiu gwefi ewif a{" "}
+            </td>
             <td className="border px-2 py-2">Pindot </td>
           </tr>
         </table>
       </Card>
 
       {/* mobile view */}
-      <div className="lg:hidden block overflow-y-scroll h-[80vh] p-2">
+      <div className="xl:hidden lg:block overflow-y-scroll h-[80vh] p-2">
         {" "}
-        <div className="mt-3  grid md:grid-cols-3 grid-cols-1 gap-5  ">
-          <Card className="mt-3 d-b  p-2 ">
+        <div className="mt-3  grid md:grid-cols-2 sm:grid-cols-2 gap-5 ">
+          <Card className="mt-3 shadoww p-2">
             <div className="flex items-center gap-3">
               <Typography className="text-black">Date:</Typography>
               <Typography>February 10, 2024</Typography>
@@ -160,7 +178,11 @@ function DailyTracker() {
             </div>
             <div className="flex items-center gap-3">
               <Typography className="text-black"> Phone Number:</Typography>
-              <Typography>Notes</Typography>
+              <Typography>09848283742</Typography>
+            </div>
+            <div className="flex items-start gap-3">
+              <Typography className="text-black"> Notes:</Typography>
+              <Typography>skaljd hau heh weuih iwef uowepi whegipw </Typography>
             </div>
             <div className="flex items-center gap-3">
               <Typography className="text-black"> Actions:</Typography>
@@ -194,7 +216,11 @@ function DailyTracker() {
             </div>
             <div className="flex items-center gap-3">
               <Typography className="text-black"> Phone Number:</Typography>
-              <Typography>Notes</Typography>
+              <Typography>09848283742</Typography>
+            </div>
+            <div className="flex items-start gap-3">
+              <Typography className="text-black"> Notes:</Typography>
+              <Typography>skaljd hau heh weuih iwef uowepi whegipw </Typography>
             </div>
             <div className="flex items-center gap-3">
               <Typography className="text-black"> Actions:</Typography>
@@ -228,7 +254,11 @@ function DailyTracker() {
             </div>
             <div className="flex items-center gap-3">
               <Typography className="text-black"> Phone Number:</Typography>
-              <Typography>Notes</Typography>
+              <Typography>09848283742</Typography>
+            </div>
+            <div className="flex items-start gap-3">
+              <Typography className="text-black"> Notes:</Typography>
+              <Typography>skaljd hau heh weuih iwef uowepi whegipw </Typography>
             </div>
             <div className="flex items-center gap-3">
               <Typography className="text-black"> Actions:</Typography>
@@ -245,11 +275,10 @@ function DailyTracker() {
             <div>Add Daily Tracker</div>
             <div className="w-72 mt-3">
               <Select label="Select Type Of Interaction">
-                <Option>Material Tailwind HTML</Option>
-                <Option>Material Tailwind React</Option>
-                <Option>Material Tailwind Vue</Option>
-                <Option>Material Tailwind Angular</Option>
-                <Option>Material Tailwind Svelte</Option>
+                <Option>Call To</Option>
+                <Option>Call From</Option>
+                <Option>Email Exchange</Option>
+                <Option>Meeting with</Option>
               </Select>
             </div>
             <div>
