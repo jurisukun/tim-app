@@ -25,23 +25,25 @@ import {
 } from "@material-tailwind/react";
 import { IoChevronBackCircleSharp } from "react-icons/io5";
 import { FaWindowClose } from "react-icons/fa";
-function Sidebar() {
+function Sidebar({ handleCloseClick }) {
   const [open, setOpen] = React.useState(0);
 
   const handleOpen = (value) => {
     setOpen(open === value ? 0 : value);
   };
   return (
-    <div className="overflow-hidden hidden lg:block lg:w-[30%]  xl:w-[300px] w-[70%] md:w-[50%] relative b-shadow ">
+    <div className="overflow-hidden  relative b-shadow ">
       <div className=" lg:hidden block absolute top-0 right-0 z-10 m-2">
-        <FaWindowClose className="font-bold text-3xl  " />
+        <FaWindowClose
+          onClick={handleCloseClick}
+          className="font-bold text-3xl cursor-pointer "
+        />
       </div>{" "}
       <Card className="h-screen  w-full max-w-[25rem]  p-4 shadow-xl shadow-blue-gray-900/5 overflow-y-scroll">
         <Typography
           variant="h5"
           color="blue-gray"
-          className=" text-blue-gray-700 text-center"
-        >
+          className=" text-blue-gray-700 text-center">
           Deceased Profile
         </Typography>
         <div className="mb-2 p-4 flex items-center gap-[10px] mt-4 justify-left">
@@ -69,13 +71,11 @@ function Sidebar() {
                   open === 1 ? "rotate-180" : ""
                 }`}
               />
-            }
-          >
+            }>
             <ListItem className="p-0" selected={open === 1}>
               <AccordionHeader
                 onClick={() => handleOpen(1)}
-                className="border-b-0 p-3"
-              >
+                className="border-b-0 p-3">
                 <ListItemPrefix>
                   <PresentationChartBarIcon className="h-5 w-5" />
                 </ListItemPrefix>
@@ -160,8 +160,7 @@ function Sidebar() {
           </ListItemPrefix>
           <Typography
             color="blue-gray"
-            className="mr-auto font-normal cursor-pointer"
-          >
+            className="mr-auto font-normal cursor-pointer">
             Go back
           </Typography>
         </div>

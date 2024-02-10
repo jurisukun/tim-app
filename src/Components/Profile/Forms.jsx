@@ -286,7 +286,7 @@ function Forms() {
         </div>
       </div>
       {/* generate files */}
-      <div className="shadoww rounded-lg w-full h-[70vh] mt-2 p-4">
+      <div className=" rounded-lg w-full h-[70vh] mt-2 p-4">
         <div className="bg-white rounded-md w-full h-full overflow-y-scroll">
           Generated Files Content
         </div>
