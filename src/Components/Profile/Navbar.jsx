@@ -11,12 +11,12 @@ function Navbar() {
     <div className="flex items-center h-[80px]">
       <div className="w-full bbb hidden lg:block  h-[80px]">
         <div className="h-full lg:flex flex-row items-center justify-evenly ">
-          <Button>Funeral Detail</Button>
-          <Button>Daily Tracker</Button>
-          <Button>Email</Button>
-          <Button>Tasks</Button>
-          <Button>Forms</Button>
-          <Button>Billing</Button>
+          <Button className="bg-red-800">Funeral Detail</Button>
+          <Button className="bg-red-800">Daily Tracker</Button>
+          <Button className="bg-red-800">Email</Button>
+          <Button className="bg-red-800">Tasks</Button>
+          <Button className="bg-red-800">Forms</Button>
+          <Button className="bg-red-800">Billing</Button>
         </div>
       </div>
       <div className="w-full bbb lg:hidden block h-[80px]">

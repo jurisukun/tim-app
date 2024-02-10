@@ -275,11 +275,10 @@ function DailyTracker() {
             <div>Add Daily Tracker</div>
             <div className="w-72 mt-3">
               <Select label="Select Type Of Interaction">
-                <Option>Material Tailwind HTML</Option>
-                <Option>Material Tailwind React</Option>
-                <Option>Material Tailwind Vue</Option>
-                <Option>Material Tailwind Angular</Option>
-                <Option>Material Tailwind Svelte</Option>
+                <Option>Call To</Option>
+                <Option>Call From</Option>
+                <Option>Email Exchange</Option>
+                <Option>Meeting with</Option>
               </Select>
             </div>
             <div>

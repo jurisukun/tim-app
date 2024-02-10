@@ -334,7 +334,11 @@ function Tasks() {
                 <Option>Juls Abucejo</Option>
                 <Option>Patrick Bongalos</Option>
               </Select>
-              <Button size="sm">Go</Button>
+              <Button
+                size="sm"
+                className="w-[20px] flex items-center justify-center">
+                Go
+              </Button>
             </div>
             <div className="flex items-center gap-3 mt-3">
               <Typography className="text-black w-[90px]">Notes:</Typography>
@@ -377,7 +381,11 @@ function Tasks() {
                 <Option>Juls Abucejo</Option>
                 <Option>Patrick Bongalos</Option>
               </Select>
-              <Button size="sm">Go</Button>
+              <Button
+                className="w-[20px] flex items-center justify-center"
+                size="sm">
+                Go
+              </Button>
             </div>
             <div className="flex items-center gap-3 mt-3">
               <Typography className="text-black w-[90px]">Notes:</Typography>
@@ -420,7 +428,11 @@ function Tasks() {
                 <Option>Juls Abucejo</Option>
                 <Option>Patrick Bongalos</Option>
               </Select>
-              <Button size="sm">Go</Button>
+              <Button
+                className="w-[20px] flex items-center justify-center"
+                size="sm">
+                Go
+              </Button>
             </div>
             <div className="flex items-center gap-3 mt-3">
               <Typography className="text-black w-[90px]">Notes:</Typography>
