@@ -57,11 +57,11 @@ function content() {
   return (
     <div className="w-[100%] lg:w-[70%] xl:width-d  md:w-[100%] relative   h-screen">
       <Navbar />
-      <EmailTemplate />
+      {/* <EmailTemplate /> */}
       {/* <DailyTracker /> */}
       {/* <Tasks /> */}
       {/* <AddClient /> */}
-      {/* <Forms /> */}
+      <Forms />
       {/* <Billing /> */}
 
       <div
