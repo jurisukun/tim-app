@@ -10,16 +10,19 @@ import DailyTracker from "./Components/Profile/DailyTracker";
 import EventCalendar from "./Components/Event/EventCalendar";
 import TaskCalendar from "./Components/Task/TaskCalendar";
 
+import { Toaster } from "react-hot-toast";
+
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 const router = createBrowserRouter([
   {
-    path: "/login",
+    path: "/",
     element: <LoginCheck />,
   },
   {
     path: "/dashboard",
     element: <Home />,
+
     children: [
       {
         path: "",
@@ -51,18 +54,52 @@ const router = createBrowserRouter([
       },
     ],
   },
+
   {
     path: "client/profile",
     element: <HomeProfile />,
+    // children: [
+    //   {
+    //     path: "/:id",
+    //     element: <Content />,
+    //   },
+    //   {
+    //     path: "/daily-tracker",
+    //     element: <Content />,
+    //   },
+    //   {
+    //     path: "email",
+    //     element: <Contract />,
+    //   },
+    //   {
+    //     path: "task",
+    //     element: <Itinerary />,
+    //   },
+    //   {
+    //     path: "forms",
+    //     element: <DailyTracker />,
+    //   },
+    //   {
+    //     path: "billing",
+    //     element: <EventCalendar />,
+    //   },
+    // ],
   },
   {
-    errorElement: <NotFoundPage />,
+    path: "client/profile/:id",
+    element: <HomeProfile />,
+  },
+
+  {
+    path: "*",
+    element: <NotFoundPage />,
   },
 ]);
 
 function App() {
   return (
     <>
+      <Toaster />
       <RouterProvider router={router} />
     </>
   );

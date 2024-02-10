@@ -4,12 +4,14 @@ import { Outlet } from "react-router-dom";
 
 function Home() {
   return (
-    <CheckAuth>
-      <div className="w-full h-screen items-center">
-        <SideBar />
+    // <CheckAuth>
+    <div className="w-full h-[100vh] items-center overflow-hidden relative">
+      <SideBar />
+      <main className="h-full">
         <Outlet />
-      </div>
-    </CheckAuth>
+      </main>
+    </div>
+    // </CheckAuth>
   );
 }
 

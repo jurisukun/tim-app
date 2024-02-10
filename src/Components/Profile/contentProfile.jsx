@@ -28,10 +28,12 @@ import { FaWindowClose } from "react-icons/fa";
 import { TiThMenuOutline } from "react-icons/ti";
 import { useState } from "react";
 import Navbar from "./Navbar";
+import SidebarProfile from "./SidebarProfile";
 import EmailTemplate from "./emailTemplate";
 import DailyTracker from "./DailyTracker";
 import Tasks from "./Tasks";
-function content() {
+
+export default function ProfileContent() {
   const [open, setOpen] = React.useState(0);
 
   const handleOpen = (value) => {
@@ -52,17 +54,31 @@ function content() {
   };
   return (
     <div className="w-[100%] lg:w-[70%] xl:width-d  md:w-[100%] relative   h-screen">
-      <Navbar />
+      <div className=" flex flex-row px-8 bbb">
+        <div className="lg:hidden flex items-center h-[80px] gap-2 px-3 w-[250px] bbb">
+          <Avatar
+            src="https://docs.material-tailwind.com/img/face-2.jpg"
+            alt="avatar"
+            className=" cursor-pointer"
+            onClick={handleMenuClick}
+          />
+          <Typography className=" text-blue-gray-500 text-[12px]">
+            Name of this shit
+          </Typography>
+        </div>
+        <Navbar />
+      </div>
       {/* <EmailTemplate /> */}
       {/* <DailyTracker /> */}
-      <Tasks />
-      <div
+      {/* <Tasks /> */}
+      {/* <div
         onClick={handleMenuClick}
         className=" absolute top-0 right-0 z-10 m-4 md:block lg:hidden cursor-pointer"
       >
         <TiThMenuOutline className="font-bold text-3xl  " />
-      </div>
-      {isMenuOpen && (
+      </div> */}
+      {/* <SidebarProfile /> */}
+      {/* {isMenuOpen && (
         <div className="fixed top-0 left-0">
           <div className="overflow-hidden block lg:hidden  w-[70%] md:w-[100%] relative b-shadow ">
             <div
@@ -70,7 +86,7 @@ function content() {
               onClick={handleCloseClick}
             >
               <FaWindowClose className="font-bold text-3xl cursor-pointer " />
-            </div>{" "}
+            </div>
             <Card className="h-screen  w-full max-w-[25rem]  p-4 shadow-xl shadow-blue-gray-900/5 overflow-y-scroll">
               <Typography
                 variant="h5"
@@ -124,7 +140,7 @@ function content() {
                   </ListItem>
                   <AccordionBody className="py-1">
                     <List className="p-0">
-                      <ListItem>Life Insurance</ListItem>
+                      <ListItem className="border">Life Insurance</ListItem>
                       <ListItem>Memorial Card</ListItem>
                       <ListItem>Memorail Program</ListItem>
                       <ListItem>
@@ -147,7 +163,7 @@ function content() {
                 </div>
               </List>
               <div className="p-3">
-                <Typography className=" text-blue-gray-800 text-[15px]">
+                <Typography className=" text-red-800 text-[12px] font-medium">
                   Name Of Contact :
                 </Typography>
                 <Typography className=" text-blue-gray-600 text-[15px] border-b-2">
@@ -208,9 +224,7 @@ function content() {
             </Card>
           </div>
         </div>
-      )}
+      )} */}
     </div>
   );
 }
-
-export default content;

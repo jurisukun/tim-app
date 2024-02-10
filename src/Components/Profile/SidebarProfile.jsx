@@ -25,7 +25,8 @@ import {
 } from "@material-tailwind/react";
 import { IoChevronBackCircleSharp } from "react-icons/io5";
 import { FaWindowClose } from "react-icons/fa";
-function Sidebar() {
+
+function SidebarProfile() {
   const [open, setOpen] = React.useState(0);
 
   const handleOpen = (value) => {
@@ -170,4 +171,4 @@ function Sidebar() {
   );
 }
 
-export default Sidebar;
+export default SidebarProfile;

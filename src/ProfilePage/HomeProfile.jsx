@@ -1,11 +1,11 @@
 import React from "react";
-import Sidebar from "../Components/Profile/SidebarProfile";
-import Content from "../Components/Profile/contentProfile";
+import SidebarProfile from "../Components/Profile/SidebarProfile";
+import ClientProfile from "../Components/Profile/contentProfile";
 function HomeProfile() {
   return (
     <div className="flex">
-      <Sidebar />
-      <Content />
+      <SidebarProfile />
+      <ClientProfile />
     </div>
   );
 }

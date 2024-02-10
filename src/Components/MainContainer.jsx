@@ -8,14 +8,29 @@ import {
 import { useEffect, useState } from "react";
 import { Avatar } from "@material-tailwind/react";
 
+import { format } from "date-fns";
+
 export default function MainContainer() {
   const [dummydata, setDummydata] = useState();
   useEffect(() => {
-    fetch("https://jsonplaceholder.typicode.com/users")
+    // fetch("https://jsonplaceholder.typicode.com/users")
+    //   .then((response) => response.json())
+    //   .then((data) => {
+    //     setDummydata(data);
+    //   });
+    fetch(`${import.meta.env.VITE_API_URL}/client`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    })
       .then((response) => response.json())
       .then((data) => {
+        console.log(data);
         setDummydata(data);
-      });
+      })
+      .catch((error) => console.error("Error:", error));
   }, []);
   const [isFilterVisible, setIsFilterVisible] = useState(false);
 
@@ -23,11 +38,42 @@ export default function MainContainer() {
     setIsFilterVisible(!isFilterVisible);
   };
 
+  const gotoProfile = (clientId) => {
+    window.location.href = `/client/profile/${clientId}`;
+  };
+
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sept",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+
+  const inquiryStatus = [
+    "At-need",
+    "Pre-need",
+    "Merchandise",
+    "Miscellaneous",
+    "Pending At-need",
+    "Pending Pre-need",
+    "Pre-need to At-need",
+    "Pricing for At-need",
+    "Pricing for Pre-need",
+  ];
+
   return (
     <>
-      <div className="p-4  w-full height-c ">
-        <div className="hidden md:block">
-          <div className="flex items-center justify-between relative">
+      <div className="p-4  w-full h-[100dvh] pb-40">
+        <div className="p-2">
+          <div className="flex items-center justify-between ">
             <div className="flex items-center gap-4">
               <p className=" font-bold text-2xl">Client</p>
               <Button
@@ -37,146 +83,64 @@ export default function MainContainer() {
                 Filter
               </Button>
               {isFilterVisible && (
-                <div className="bg-white lg:w-[900px] md:w-[600px] lg:h-[300px] md:h-[400px] absolute lg:bottom-[-300px] md:bottom-[-400px] left-[60px] rounded-md p-2 shadoww z-10 gap-2 flex">
-                  <div className=" ">
-                    <p className="text-left text-blue-gray-900 text-[15px]">
-                      Year
-                    </p>
-                    <div className="flex items-center">
-                      <Checkbox />
-                      <p className="text-blue-gray-600 text-[15px]">2024</p>
-                    </div>
-                    <div className="flex items-center">
-                      <Checkbox />
-                      <p className="text-blue-gray-600 text-[15px]">2023</p>
-                    </div>
-                  </div>
-                  {/* break */}
-                  <div className="">
-                    <p className="text-left text-blue-gray-900 text-[15px]">
-                      Month
-                    </p>
-                    <div className="w-[100%] flex flex-wrap  ">
-                      <div className="flex items-center">
-                        <Checkbox />
-                        <p className="text-blue-gray-600 text-[15px]">
-                          January
+                <div
+                  className=" absolute w-full h-full z-10 bg-[rgb(0,0,0,0.5)] top-0 left-0 flex items-center justify-center"
+                  // onClick={() => {
+                  //   setIsFilterVisible(false);
+                  // }}
+                >
+                  <div className="bg-white scale-90 z-15 bottom-[-450px] left-0 rounded-md p-2 shadoww z-10 md:w-[600px]  md:h-[400px]  lg:bottom-[-300px] md:bottom-[-400px] md:left-[60px] shadoww  sm:h-auto h-[400px] overflow-y-scroll sm:overflow-hidden gap-2 flex">
+                    <div className="flex sm:flex-row  flex-col">
+                      <div className="border  p-2 rounded-md">
+                        <p className="text-left text-blue-gray-900 text-[15px]">
+                          Year
                         </p>
+                        <div className="flex items-center">
+                          <Checkbox />
+                          <p className="text-blue-gray-600 text-[15px]">2024</p>
+                        </div>
+                        <div className="flex items-center">
+                          <Checkbox />
+                          <p className="text-blue-gray-600 text-[15px]">2023</p>
+                        </div>
                       </div>
-                      <div className="flex items-center">
-                        <Checkbox />
-                        <p className="text-blue-gray-600 text-[15px]">
-                          February
-                        </p>
-                      </div>
-                      <div className="flex items-center">
-                        <Checkbox />
-                        <p className="text-blue-gray-600 text-[15px]">March</p>
-                      </div>
-                      <div className="flex items-center">
-                        <Checkbox />
-                        <p className="text-blue-gray-600 text-[15px]">April</p>
-                      </div>
-                      <div className="flex items-center">
-                        <Checkbox />
-                        <p className="text-blue-gray-600 text-[15px]">May</p>
-                      </div>
-                      <div className="flex items-center">
-                        <Checkbox d />
-                        <p className="text-blue-gray-600 text-[15px]">Jun</p>
-                      </div>
-                      <div className="flex items-center">
-                        <Checkbox />
-                        <p className="text-blue-gray-600 text-[15px]">July</p>
-                      </div>
-                      <div className="flex items-center">
-                        <Checkbox />
-                        <p className="text-blue-gray-600 text-[15px]">August</p>
-                      </div>
-                      <div className="flex items-center">
-                        <Checkbox />
-                        <p className="text-blue-gray-600 text-[15px]">
-                          September
-                        </p>
-                      </div>
-                      <div className="flex items-center">
-                        <Checkbox />
-                        <p className="text-blue-gray-600 text-[15px]">
-                          October
-                        </p>
-                      </div>
-                      <div className="flex items-center">
-                        <Checkbox />
-                        <p className="text-blue-gray-600 text-[15px]">
-                          November
-                        </p>
-                      </div>
-                      <div className="flex items-center">
-                        <Checkbox />
-                        <p className="text-blue-gray-600 text-[15px]">
-                          December
-                        </p>
-                      </div>
-                    </div>
 
-                    {/* break */}
-                    <p className="text-left text-blue-gray-900 text-[15px] mt-4">
-                      Inquiry Status
-                    </p>
-                    <div className="w-[100%] flex flex-wrap  ">
-                      <div className="flex items-center">
-                        <Checkbox />
-                        <p className="text-blue-gray-600 text-[15px]">
-                          At-need
-                        </p>
-                      </div>
-                      <div className="flex items-center">
-                        <Checkbox />
-                        <p className="text-blue-gray-600 text-[15px]">
-                          Pre-need
-                        </p>
-                      </div>
-                      <div className="flex items-center">
-                        <Checkbox />
-                        <p className="text-blue-gray-600 text-[15px]">
-                          Merchandise
-                        </p>
-                      </div>
-                      <div className="flex items-center">
-                        <Checkbox />
-                        <p className="text-blue-gray-600 text-[15px]">
-                          Miscellaneous
-                        </p>
-                      </div>
-                      <div className="flex items-center">
-                        <Checkbox />
-                        <p className="text-blue-gray-600 text-[15px]">
-                          Pending At-need
-                        </p>
-                      </div>
-                      <div className="flex items-center">
-                        <Checkbox />
-                        <p className="text-blue-gray-600 text-[15px]">
-                          Pending Pre-need
-                        </p>
-                      </div>
-                      <div className="flex items-center">
-                        <Checkbox />
-                        <p className="text-blue-gray-600 text-[15px]">
-                          Pre-need to At-need
-                        </p>
-                      </div>
-                      <div className="flex items-center">
-                        <Checkbox />
-                        <p className="text-blue-gray-600 text-[15px]">
-                          Pricing for At-need
-                        </p>
-                      </div>
-                      <div className="flex items-center">
-                        <Checkbox />
-                        <p className="text-blue-gray-600 text-[15px]">
-                          Pricing for Pre-need
-                        </p>
+                      <div className="flex sm;flex-row md:flex-col gap-2  justify-center flex-col p-2">
+                        <div className=" border p-2 rounded-md">
+                          <p className="text-left text-blue-gray-900 text-[15px]">
+                            Month
+                          </p>
+                          <div className="w-[100%] grid grid-cols-3 grid-rows-4 md:grid-cols-4 md:grid-rows-3 md:w-fullgap-0 p-0 m-0">
+                            {months.map((month, key) => {
+                              return (
+                                <div key={key} className="flex items-center">
+                                  <Checkbox />
+                                  <p className="text-blue-gray-600 text-[15px]">
+                                    {month}
+                                  </p>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+
+                        <div className=" border p-2 rounded-md">
+                          <p className="text-left text-blue-gray-900 text-[15px]">
+                            Inquiry Status
+                          </p>
+                          <div className="grid  grid-cols-2 grid-rows-5 md:grid-cols-3 md:grid-rows-3 ">
+                            {inquiryStatus.map((status, key) => {
+                              return (
+                                <div key={key} className="flex items-center">
+                                  <Checkbox />
+                                  <p className="text-blue-gray-600 text-[15px]">
+                                    {status}
+                                  </p>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -188,201 +152,46 @@ export default function MainContainer() {
             </div>
           </div>
         </div>
-        {/* mobile-view */}
-        <div className="block md:hidden">
-          <div className="relative">
-            <div className="w-72 mb-3">
-              <Input label="Search" />
-            </div>
-            <div className="flex items-center gap-4">
-              <p className=" font-bold text-2xl">Client</p>
-              <Button
-                className="p-3 bg-blue-gray-600"
-                onClick={handleFilterClick}
-              >
-                Filter
-              </Button>
-              {isFilterVisible && (
-                <div className="bg-white w-[100%] h-[450px] absolute bottom-[-450px] left-0 rounded-md p-2 shadoww z-10 overflow-y-scroll">
-                  <div className=" flex p-2 justify-evenly">
-                    <div>
-                      <p className="text-left text-blue-gray-600 text-[10px]">
-                        Year
-                      </p>
-                      <div className="flex items-center">
-                        <Checkbox />
-                        <p className="text-blue-gray-600 text-[10px]">2024</p>
-                      </div>
-                      <div className="flex items-center">
-                        <Checkbox />
-                        <p className="text-blue-gray-600 text-[10px]">2023</p>
+
+        <div className=" p-2 w-full mt-3 overflow-y-scroll lg:h-[94%] h-[100%] grid lg:grid-cols-5 grid-cols-2 md:grid-cols-3 gap-8">
+          {dummydata &&
+            dummydata.map((user, key) => {
+              return (
+                <Card
+                  key={key}
+                  className="flex flex-col p-4 card cursor-pointer hover:shadow-lg transition-all duration-300 ease-in-out  bg-white rounded-md shadoww "
+                  onClick={() => gotoProfile(user.id)}
+                >
+                  <div className="flex flex-col gap-2" key={user.id}>
+                    <Typography className="text-ellipsis text-center overflow-hidden text-xs">
+                      {user?.inquirystatus}
+                    </Typography>
+                    <div className="flex items-center justify-left mb-3  gap-4">
+                      <Avatar
+                        src="https://docs.material-tailwind.com/img/face-2.jpg"
+                        alt="avatar"
+                        className="w-[50px] h-[50px] justify-self-start place-self-start"
+                      />
+                      <div>
+                        <Typography className="text-ellipsis overflow-hidden font-semibold text-sm line-clamp-2">
+                          {user.decname}
+                        </Typography>
                       </div>
                     </div>
-                    {/* break */}
-                    <div className=" ">
-                      <p className="text-left text-blue-gray-600 text-[10px]">
-                        Month
-                      </p>
-                      <div className="flex items-center">
-                        <Checkbox />
-                        <p className="text-blue-gray-600 text-[10px]">
-                          January
-                        </p>
-                      </div>
-                      <div className="flex items-center">
-                        <Checkbox />
-                        <p className="text-blue-gray-600 text-[10px]">
-                          February
-                        </p>
-                      </div>
-                      <div className="flex items-center">
-                        <Checkbox />
-                        <p className="text-blue-gray-600 text-[10px]">March</p>
-                      </div>
-                      <div className="flex items-center">
-                        <Checkbox />
-                        <p className="text-blue-gray-600 text-[10px]">April</p>
-                      </div>
-                      <div className="flex items-center">
-                        <Checkbox />
-                        <p className="text-blue-gray-600 text-[10px]">May</p>
-                      </div>
-                      <div className="flex items-center">
-                        <Checkbox d />
-                        <p className="text-blue-gray-600 text-[10px]">Jun</p>
-                      </div>
-                      <div className="flex items-center">
-                        <Checkbox />
-                        <p className="text-blue-gray-600 text-[10px]">July</p>
-                      </div>
-                      <div className="flex items-center">
-                        <Checkbox />
-                        <p className="text-blue-gray-600 text-[10px]">August</p>
-                      </div>
-                      <div className="flex items-center">
-                        <Checkbox />
-                        <p className="text-blue-gray-600 text-[10px]">
-                          September
-                        </p>
-                      </div>
-                      <div className="flex items-center">
-                        <Checkbox />
-                        <p className="text-blue-gray-600 text-[10px]">
-                          October
-                        </p>
-                      </div>
-                      <div className="flex items-center">
-                        <Checkbox />
-                        <p className="text-blue-gray-600 text-[10px]">
-                          November
-                        </p>
-                      </div>
-                      <div className="flex items-center">
-                        <Checkbox />
-                        <p className="text-blue-gray-600 text-[10px]">
-                          December
-                        </p>
-                      </div>
-                    </div>
-                    {/* break */}
-                    <div className="  ">
-                      <p className="text-left text-blue-gray-600 text-[10px]">
-                        Inquiry Status
-                      </p>
-                      <div className="flex items-center">
-                        <Checkbox />
-                        <p className="text-blue-gray-600 text-[10px]">
-                          At-need
-                        </p>
-                      </div>
-                      <div className="flex items-center">
-                        <Checkbox />
-                        <p className="text-blue-gray-600 text-[10px]">
-                          Pre-need
-                        </p>
-                      </div>
-                      <div className="flex items-center">
-                        <Checkbox />
-                        <p className="text-blue-gray-600 text-[10px]">
-                          Merchandise
-                        </p>
-                      </div>
-                      <div className="flex items-center">
-                        <Checkbox />
-                        <p className="text-blue-gray-600 text-[10px]">
-                          Miscellaneous
-                        </p>
-                      </div>
-                      <div className="flex items-center">
-                        <Checkbox />
-                        <p className="text-blue-gray-600 text-[10px]">
-                          Pending At-need
-                        </p>
-                      </div>
-                      <div className="flex items-center">
-                        <Checkbox />
-                        <p className="text-blue-gray-600 text-[10px]">
-                          Pending Pre-need
-                        </p>
-                      </div>
-                      <div className="flex items-center">
-                        <Checkbox />
-                        <p className="text-blue-gray-600 text-[10px]">
-                          Pre-need to At-need
-                        </p>
-                      </div>
-                      <div className="flex items-center">
-                        <Checkbox />
-                        <p className="text-blue-gray-600 text-[10px]">
-                          Pricing for At-need
-                        </p>
-                      </div>
-                      <div className="flex items-center">
-                        <Checkbox />
-                        <p className="text-blue-gray-600 text-[10px]">
-                          Pricing for Pre-need
-                        </p>
-                      </div>
-                    </div>
+
+                    <Typography className="text-ellipsis overflow-hidden text-xs">
+                      {user.email}
+                    </Typography>
+                    <Typography className="text-ellipsis overflow-hidden text-xs">
+                      {format(
+                        user?.dateupdated ?? user?.datecreated,
+                        "MMM dd, yyyy"
+                      )}
+                    </Typography>
                   </div>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-        {/* line break */}
-        <div className=" p-2 w-full mt-3 overflow-y-scroll lg:h-[94%] h-[100%]">
-          {dummydata && (
-            <div className="grid lg:grid-cols-5 grid-cols-2 md:grid-cols-3 gap-8">
-              {dummydata.map((user, key) => {
-                return (
-                  <Card
-                    key={key}
-                    className="flex flex-col p-4 card cursor-pointer"
-                  >
-                    <div className="" key={user.id}>
-                      <div className="flex items-center justify-left mb-3">
-                        <Avatar
-                          src="https://docs.material-tailwind.com/img/face-2.jpg"
-                          alt="avatar"
-                          className="w-[50px] h-[50px]"
-                        />
-                      </div>
-                      <Typography className="text-ellipsis overflow-hidden">
-                        {user.name}
-                      </Typography>
-                      <Typography className="text-ellipsis overflow-hidden">
-                        {user.email}
-                      </Typography>
-                      <Typography className="text-ellipsis overflow-hidden">
-                        {user.username}
-                      </Typography>
-                    </div>
-                  </Card>
-                );
-              })}
-            </div>
-          )}
+                </Card>
+              );
+            })}
         </div>
       </div>
     </>

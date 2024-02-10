@@ -8,6 +8,8 @@ import {
 import { useState } from "react";
 import { useCheckAuth } from "../utils/hooks/useCheckAuth";
 
+import toast from "react-hot-toast";
+
 export function LoginCheck() {
   const { loading, error, data } = useCheckAuth();
 
@@ -33,7 +35,7 @@ function LoginPage() {
 
   const handleLogin = () => {
     if (!username || !password) {
-      window.location.reload();
+      toast.error("Please fill in all fields");
     } else {
       fetch(`${import.meta.env.VITE_API_URL}/auth/login`, {
         method: "POST",
@@ -45,11 +47,15 @@ function LoginPage() {
         .then((res) => res.json())
         .then((data) => {
           if (data.token) {
+            toast.success("Success");
             localStorage.setItem("token", data.token);
             window.location.reload();
           } else {
-            window.location.reload();
+            toast.error(data.message);
           }
+        })
+        .catch((err) => {
+          toast.error("An error occurred. " + err.message);
         });
     }
   };
@@ -95,7 +101,7 @@ function LoginPage() {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-          <Checkbox
+          {/* <Checkbox
             label={
               <Typography
                 variant="small"
@@ -112,7 +118,7 @@ function LoginPage() {
               </Typography>
             }
             containerProps={{ className: "-ml-2.5" }}
-          />
+          /> */}
           <Button
             className="mt-6 bg-red-900"
             fullWidth
