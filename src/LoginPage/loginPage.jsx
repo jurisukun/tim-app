@@ -7,16 +7,17 @@ import {
 } from "@material-tailwind/react";
 import { useState } from "react";
 import { useCheckAuth } from "../utils/hooks/useCheckAuth";
+import { LoadingScreen } from "../CheckAuth/CheckAuth";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+import { ImSpinner3 } from "react-icons/im";
 
 export function LoginCheck() {
   const { loading, error, data } = useCheckAuth();
 
   if (loading) {
-    return (
-      <div className="w-full h-screen flex flex-col items-center justify-center font-semibold text-lg text-red-700">
-        <p className="flex flex-row items-center">Loading...</p>
-      </div>
-    );
+    return <LoadingScreen />;
   }
 
   if (error) {
@@ -30,11 +31,19 @@ export function LoginCheck() {
 function LoginPage() {
   const [username, setUsername] = useState();
   const [password, setPassword] = useState();
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleLogin = () => {
-    if (!username || !password) {
-      window.location.reload();
+    if (
+      !username ||
+      !password ||
+      !username.replace(/\s/g, "") ||
+      !password.replace(/\s/g, "")
+    ) {
+      toast.error("Please fill in all fields");
+      // window.location.reload();
     } else {
+      setIsLoading(true);
       fetch(`${import.meta.env.VITE_API_URL}/auth/login`, {
         method: "POST",
         headers: {
@@ -44,12 +53,21 @@ function LoginPage() {
       })
         .then((res) => res.json())
         .then((data) => {
+          setIsLoading(false);
+          if (!data?.token) {
+            toast.error("Invalid username or password");
+          }
           if (data.token) {
             localStorage.setItem("token", data.token);
-            window.location.reload();
-          } else {
-            window.location.reload();
+            toast.success("Login successful");
+            setTimeout(() => {
+              window.location.replace("/dashboard");
+            }, 2000);
           }
+        })
+        .catch((error) => {
+          setIsLoading(false);
+          toast.error(error?.message);
         });
     }
   };
@@ -95,7 +113,7 @@ function LoginPage() {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-          <Checkbox
+          {/* <Checkbox
             label={
               <Typography
                 variant="small"
@@ -112,13 +130,14 @@ function LoginPage() {
               </Typography>
             }
             containerProps={{ className: "-ml-2.5" }}
-          />
+          /> */}
           <Button
-            className="mt-6 bg-red-900"
+            className="mt-6 bg-red-900 flex items-center justify-center gap-3"
             fullWidth
             onClick={() => handleLogin()}
+            disabled={isLoading}
           >
-            Log In
+            Log In {isLoading ? <ImSpinner3 className="animate-spin" /> : ""}
           </Button>
         </form>
       </Card>

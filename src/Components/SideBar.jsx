@@ -5,6 +5,7 @@ import {
   MenuItem,
   Button,
   Avatar,
+  Typography,
 } from "@material-tailwind/react";
 import { RiLogoutBoxLine } from "react-icons/ri";
 
@@ -96,9 +97,7 @@ function SideBar() {
             <RiLogoutBoxLine className="font-bold text-2xl text-black/60 cursor-pointer " />
           </span> */}
         </div>
-
       </div>
-      
     </div>
   );
 }

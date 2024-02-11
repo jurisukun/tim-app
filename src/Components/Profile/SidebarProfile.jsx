@@ -33,17 +33,18 @@ function Sidebar({ handleCloseClick }) {
   };
   return (
     <div className="overflow-hidden  relative b-shadow ">
-      <div className=" lg:hidden block absolute top-0 right-0 z-10 m-2">
-        <FaWindowClose
-          onClick={handleCloseClick}
-          className="font-bold text-3xl cursor-pointer "
-        />
-      </div>{" "}
-      <Card className="h-screen  w-full max-w-[25rem]  p-4 shadow-xl shadow-blue-gray-900/5 overflow-y-scroll">
+      <Card className="h-screen  w-full   p-4 shadow-xl shadow-blue-gray-900/5  z-50 lg:z-0 overflow-y-scroll">
+        <div className=" lg:hidden block absolute top-0 right-0 z-10 m-2  ">
+          <FaWindowClose
+            onClick={handleCloseClick}
+            className="font-bold text-3xl cursor-pointer rounded-full"
+          />
+        </div>
         <Typography
           variant="h5"
           color="blue-gray"
-          className=" text-blue-gray-700 text-center">
+          className=" text-blue-gray-700 text-center"
+        >
           Deceased Profile
         </Typography>
         <div className="mb-2 p-4 flex items-center gap-[10px] mt-4 justify-left">
@@ -71,11 +72,13 @@ function Sidebar({ handleCloseClick }) {
                   open === 1 ? "rotate-180" : ""
                 }`}
               />
-            }>
+            }
+          >
             <ListItem className="p-0" selected={open === 1}>
               <AccordionHeader
                 onClick={() => handleOpen(1)}
-                className="border-b-0 p-3">
+                className="border-b-0 p-3"
+              >
                 <ListItemPrefix>
                   <PresentationChartBarIcon className="h-5 w-5" />
                 </ListItemPrefix>
@@ -160,7 +163,8 @@ function Sidebar({ handleCloseClick }) {
           </ListItemPrefix>
           <Typography
             color="blue-gray"
-            className="mr-auto font-normal cursor-pointer">
+            className="mr-auto font-normal cursor-pointer"
+          >
             Go back
           </Typography>
         </div>

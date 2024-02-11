@@ -6,11 +6,17 @@ import Content from "../src/Components/Content";
 import Current from "../src/Components/Current/Case";
 import Itinerary from "./Components/Itinerary/Itinerary";
 import Contract from "./Components/Contract/Contract";
-import DailyTracker from "./Components/Profile/DailyTracker";
+
 import EventCalendar from "./Components/Event/EventCalendar";
 import TaskCalendar from "./Components/Task/TaskCalendar";
 
+import DailyTracker from "./Components/Profile/DailyTracker";
+import EmailTemplate from "./Components/Profile/emailTemplate";
+import Billing from "./Components/Profile/Billing";
+import Tasks from "./Components/Profile/Tasks";
+
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import Forms from "./Components/Profile/Forms";
 
 const router = createBrowserRouter([
   {
@@ -47,13 +53,45 @@ const router = createBrowserRouter([
       },
       {
         path: "task",
-        element: <TaskCalendar />,
+        element: <Tasks />,
       },
     ],
   },
+
   {
     path: "client/profile",
     element: <HomeProfile />,
+  },
+  {
+    path: "client/:id/profile",
+    element: <HomeProfile />,
+
+    children: [
+      {
+        path: "funeral-details",
+        element: <DailyTracker />,
+      },
+      {
+        path: "daily-tracker",
+        element: <DailyTracker />,
+      },
+      {
+        path: "email",
+        element: <EmailTemplate />,
+      },
+      {
+        path: "tasks",
+        element: <Tasks />,
+      },
+      {
+        path: "forms",
+        element: <Forms />,
+      },
+      {
+        path: "billing",
+        element: <Billing />,
+      },
+    ],
   },
   {
     errorElement: <NotFoundPage />,

@@ -9,7 +9,7 @@ import {
   Option,
 } from "@material-tailwind/react";
 
-function AddAccount() {
+function AddAccount({ setOpenAccount }) {
   return (
     <div className="w-full fixed top-0 left-0 h-screen flex justify-center items-center bg-black/70">
       <Card className="mt-6 p-4">
@@ -17,7 +17,6 @@ function AddAccount() {
           Add Account
         </Typography>
         <CardBody>
-          {" "}
           <div className="w-80 mt-3">
             <Input label="First Name" />
           </div>
@@ -45,8 +44,10 @@ function AddAccount() {
           </div>
         </CardBody>
         <CardFooter className="pt-0 flex items-center justify-between">
+          <Button variant="outlined" onClick={() => setOpenAccount(false)}>
+            Exit
+          </Button>
           <Button>Add Account</Button>
-          <Button>Exit</Button>
         </CardFooter>
       </Card>
     </div>

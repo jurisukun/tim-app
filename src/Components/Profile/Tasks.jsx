@@ -31,21 +31,21 @@ function Tasks() {
   };
   return (
     <div className="w-full height-e relative p-4 ">
-      <div className="text-xl font-medium text-blue-gray-800 flex items-center gap-3 ">
-        <div className="gap-4 flex items-center">
-          Task Lists
+      <div className="text-xl font-medium text-blue-gray-800 flex items-center justify-between gap-4 px-8 h-[60px]">
+        <div className="gap-4 flex items-center">Task Lists</div>
+        <div className="flex gap-4">
           <Button
             size="sm"
             className="bg-blue-gray-800"
-            onClick={handleAddTaskClick}>
+            onClick={handleAddTaskClick}
+          >
             Add task
           </Button>
-        </div>
-        <div>
           <Button
             size="sm"
             className="bg-blue-gray-800"
-            onClick={handleTaskClick}>
+            onClick={handleTaskClick}
+          >
             Assign Task
           </Button>
         </div>
@@ -72,8 +72,10 @@ function Tasks() {
                 <Input label=" Notes" />
               </div>
               <div className="flex items-center justify-between">
+                <Button onClick={handleCloseModal} variant="outlined">
+                  Exit
+                </Button>
                 <Button>Submit</Button>
-                <Button onClick={handleCloseModal}>Exit</Button>
               </div>
             </Card>
           </div>
@@ -109,8 +111,10 @@ function Tasks() {
               </div>
 
               <div className="flex items-center justify-between">
+                <Button onClick={handleClosetaskModal} variant="outlined">
+                  Exit
+                </Button>
                 <Button>Submit</Button>
-                <Button onClick={handleClosetaskModal}>Exit</Button>
               </div>
             </Card>
           </div>
@@ -126,7 +130,8 @@ function Tasks() {
               <Typography
                 variant="small"
                 color="blue-gray"
-                className="font-semi-bold text-1xl ">
+                className="font-semi-bold text-1xl "
+              >
                 Task
               </Typography>
             </th>
@@ -134,7 +139,8 @@ function Tasks() {
               <Typography
                 variant="small"
                 color="blue-gray"
-                className="font-semi-bold text-1xl ">
+                className="font-semi-bold text-1xl "
+              >
                 Due Date
               </Typography>
             </th>
@@ -142,7 +148,8 @@ function Tasks() {
               <Typography
                 variant="small"
                 color="blue-gray"
-                className="font-semi-bold text-1xl ">
+                className="font-semi-bold text-1xl "
+              >
                 Status
               </Typography>
             </th>
@@ -150,7 +157,8 @@ function Tasks() {
               <Typography
                 variant="small"
                 color="blue-gray"
-                className="font-semi-bold text-1xl ">
+                className="font-semi-bold text-1xl "
+              >
                 Task Group
               </Typography>
             </th>
@@ -158,7 +166,8 @@ function Tasks() {
               <Typography
                 variant="small"
                 color="blue-gray"
-                className="font-semi-bold text-1xl ">
+                className="font-semi-bold text-1xl "
+              >
                 Notes
               </Typography>
             </th>
@@ -336,7 +345,8 @@ function Tasks() {
               </Select>
               <Button
                 size="sm"
-                className="w-[20px] flex items-center justify-center">
+                className="w-[20px] flex items-center justify-center"
+              >
                 Go
               </Button>
             </div>
@@ -383,7 +393,8 @@ function Tasks() {
               </Select>
               <Button
                 className="w-[20px] flex items-center justify-center"
-                size="sm">
+                size="sm"
+              >
                 Go
               </Button>
             </div>
@@ -430,7 +441,8 @@ function Tasks() {
               </Select>
               <Button
                 className="w-[20px] flex items-center justify-center"
-                size="sm">
+                size="sm"
+              >
                 Go
               </Button>
             </div>

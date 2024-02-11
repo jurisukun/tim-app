@@ -1,4 +1,3 @@
-
 import { TiThMenuOutline } from "react-icons/ti";
 import { useState } from "react";
 import Navbar from "./Navbar";
@@ -9,8 +8,7 @@ import AddClient from "../Account/AddClient";
 import Forms from "./Forms";
 import Billing from "./Billing";
 import Sidebar from "./SidebarProfile";
-
-
+import { Outlet } from "react-router-dom";
 
 function content() {
   const [isMenuOpen, setMenuOpen] = useState(false);
@@ -27,18 +25,12 @@ function content() {
     }
   };
   return (
-    <div className="w-[100%] lg:w-[70%] xl:width-d  md:w-[100%] relative   h-screen overflow-hidden">
+    <div className="w-[100%] relative  bbb">
       <Navbar />
-      {/* <EmailTemplate /> */}
-      <DailyTracker />
-      {/* <Tasks /> */}
-      {/* <AddClient /> */}
-      {/* <Forms /> */}
-      {/* <Billing /> */}
-
       <div
         onClick={handleMenuClick}
-        className=" absolute top-0 right-0 z-10 m-4  cursor-pointer lg:hidden block">
+        className=" absolute top-0 right-0 z-10 m-4  cursor-pointer lg:hidden block"
+      >
         <TiThMenuOutline className="font-bold text-3xl  " />
       </div>
       {isMenuOpen && (
