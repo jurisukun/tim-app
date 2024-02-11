@@ -9,7 +9,12 @@ import {
   Option,
 } from "@material-tailwind/react";
 
-function AddAccount({ setOpenAccount }) {
+import { useAtom } from "jotai";
+import { openAccount } from "../../utils/jotai/atoms";
+
+function AddAccount() {
+  const [, setopenaccount] = useAtom(openAccount);
+
   return (
     <div className="w-full fixed top-0 left-0 h-screen flex justify-center items-center bg-black/70">
       <Card className="mt-6 p-4">
@@ -44,7 +49,7 @@ function AddAccount({ setOpenAccount }) {
           </div>
         </CardBody>
         <CardFooter className="pt-0 flex items-center justify-between">
-          <Button variant="outlined" onClick={() => setOpenAccount(false)}>
+          <Button variant="outlined" onClick={() => setopenaccount(false)}>
             Exit
           </Button>
           <Button>Add Account</Button>

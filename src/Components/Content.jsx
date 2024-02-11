@@ -2,6 +2,7 @@ import { useState } from "react";
 
 import MainContainer from "./MainContainer";
 import AddClient from "./Account/AddClient";
+import AddAccount from "./Account/AddAccount";
 
 function Content() {
   const [isOpen, setIsOpen] = useState(false);
@@ -10,7 +11,7 @@ function Content() {
     <div className="w-full relative  lg:height-c h-screen ">
       <main className="w-full">
         <MainContainer />
-         <AddClient />
+        <AddClient />
       </main>
     </div>
   );

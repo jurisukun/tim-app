@@ -1,16 +1,25 @@
 import AddClient from "../Account/AddClient";
 import AddAccount from "../Account/AddAccount";
 
-import { useState } from "react";
+import { useAtom } from "jotai";
+
+import { openClient, openAccount } from "../../utils/jotai/atoms";
+import { ClientSchema } from "../../utils/zod/validation";
 
 export default function Case() {
-  const [openAccount, setOpenAccount] = useState(true);
-  const [openClient, setOpenClient] = useState(false);
+  const [openaccount] = useAtom(openAccount);
+  const [openclient] = useAtom(openClient);
+
+  try {
+    ClientSchema.parse({ firstname: "John", lastname: "  " });
+  } catch (err) {
+    console.log(err.errors);
+  }
 
   return (
     <div className="relative">
-      {openAccount && <AddAccount setOpenAccount={setOpenAccount} />}
-      {openClient && <AddClient setOpenClient={setOpenClient} />}
+      {openaccount && <AddAccount />}
+      {openclient && <AddClient />}
       Case
     </div>
   );

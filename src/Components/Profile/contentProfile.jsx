@@ -9,36 +9,22 @@ import Forms from "./Forms";
 import Billing from "./Billing";
 import Sidebar from "./SidebarProfile";
 import { Outlet } from "react-router-dom";
+import { Avatar } from "@material-tailwind/react";
+
+import { useAtom } from "jotai";
+import { openSidebar } from "../../utils/jotai/atoms";
 
 function content() {
   const [isMenuOpen, setMenuOpen] = useState(false);
+  const [sidebar] = useAtom(openSidebar);
 
-  const handleMenuClick = () => {
-    if (!isMenuOpen) {
-      setMenuOpen(true);
-    }
-  };
-
-  const handleCloseClick = () => {
-    if (isMenuOpen) {
-      setMenuOpen(false);
-    }
-  };
   return (
     <div className="w-[100%] relative  bbb">
       <Navbar />
-      <div
-        onClick={handleMenuClick}
-        className=" absolute top-0 right-0 z-10 m-4  cursor-pointer lg:hidden block"
-      >
-        <TiThMenuOutline className="font-bold text-3xl  " />
-      </div>
-      {isMenuOpen && (
+
+      {sidebar && (
         <div className="lg:hidden block absolute top-0 left-0  w-[70%] md:w-[40%]">
-          <Sidebar
-            handleCloseClick={handleCloseClick}
-            className=" lg:w-[30%] "
-          />
+          <Sidebar className=" lg:w-[30%] " />
         </div>
       )}
     </div>

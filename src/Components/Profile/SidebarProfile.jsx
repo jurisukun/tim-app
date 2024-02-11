@@ -25,8 +25,13 @@ import {
 } from "@material-tailwind/react";
 import { IoChevronBackCircleSharp } from "react-icons/io5";
 import { FaWindowClose } from "react-icons/fa";
-function Sidebar({ handleCloseClick }) {
+
+import { useAtom } from "jotai";
+import { openSidebar } from "../../utils/jotai/atoms";
+
+function Sidebar() {
   const [open, setOpen] = React.useState(0);
+  const [, setsidebar] = useAtom(openSidebar);
 
   const handleOpen = (value) => {
     setOpen(open === value ? 0 : value);
@@ -36,7 +41,7 @@ function Sidebar({ handleCloseClick }) {
       <Card className="h-screen  w-full   p-4 shadow-xl shadow-blue-gray-900/5  z-50 lg:z-0 overflow-y-scroll">
         <div className=" lg:hidden block absolute top-0 right-0 z-10 m-2  ">
           <FaWindowClose
-            onClick={handleCloseClick}
+            onClick={() => setsidebar(false)}
             className="font-bold text-3xl cursor-pointer rounded-full"
           />
         </div>

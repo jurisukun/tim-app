@@ -4,8 +4,12 @@ import {
   MenuList,
   MenuItem,
   Button,
+  Avatar,
 } from "@material-tailwind/react";
 import { useNavigate } from "react-router-dom";
+
+import { useAtom } from "jotai";
+import { openSidebar } from "../../utils/jotai/atoms";
 
 const menu = [
   { name: "Funeral Details", link: "/funeral-details" },
@@ -18,6 +22,8 @@ const menu = [
 
 function Navbar() {
   const navigate = useNavigate();
+  const [, opensidebar] = useAtom(openSidebar);
+
   return (
     <div className="flex items-center h-[80px]">
       {/* lg:absolute lg:-top-16 lg:right-0 */}
@@ -40,11 +46,11 @@ function Navbar() {
           <Button className="bg-red-800">Billing</Button> */}
         </div>
       </div>
-      <div className="w-full bbb lg:hidden block h-[80px]">
+      <div className="w-full bbb lg:hidden  h-[80px] flex  items-center">
         <div className="m-5 protest-riot-regular md:text-3xl text-2xl">
           Funeral System
         </div>
-        <div className="flex absolute top-3 right-20 items-center justify-center">
+        <div className="flex absolute top-3 right-20 items-center justify-center gap-6">
           <Menu placement="left-start">
             <MenuHandler>
               <Button>Menu</Button>
@@ -66,6 +72,14 @@ function Navbar() {
               <MenuItem>Billing</MenuItem> */}
             </MenuList>
           </Menu>
+          <div className="flex justify-center items-center">
+            <Avatar
+              src="https://docs.material-tailwind.com/img/face-2.jpg"
+              alt="avatar"
+              className=" cursor-pointer"
+              onClick={() => opensidebar(true)}
+            />
+          </div>
         </div>
       </div>
     </div>

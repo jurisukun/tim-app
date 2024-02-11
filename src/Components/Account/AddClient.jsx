@@ -17,10 +17,13 @@ import {
 } from "@material-tailwind/react";
 import React, { useState } from "react";
 
+import { useAtom } from "jotai";
+import { openClient } from "../../utils/jotai/atoms";
+
 export function AddClientTab() {
   return (
     <div>
-      <Card className="mt-6 p-4">
+      <Card className=" p-4">
         <CardBody className="p-2">
           <div className="w-full mt-3">
             <Input label="Contact Name" />
@@ -88,7 +91,7 @@ export function PrimaryIntakeTab() {
   return (
     <div className=" lg:h-[60vh] md:h-[50vh] h-[80vh] w-full overflow-y-auto ">
       <div>
-        <Card className="mt-6 p-4">
+        <Card className=" p-4">
           <CardBody className="w-full p-0 mt-4">
             <div className="w-80 mt-3 flex items-center">
               <Checkbox />
@@ -328,6 +331,8 @@ function AddClient({ setOpenClient }) {
     },
   ];
 
+  const [, setopenclient] = useAtom(openClient);
+
   return (
     <div className="w-full fixed top-0 left-0 h-screen flex justify-center items-center bg-black/70">
       <Tabs value="ADD CLIENT">
@@ -354,7 +359,7 @@ function AddClient({ setOpenClient }) {
                     <Button
                       size="sm"
                       variant="outlined"
-                      onClick={() => setOpenClient(false)}
+                      onClick={() => setopenclient(false)}
                     >
                       Exit
                     </Button>
