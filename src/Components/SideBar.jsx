@@ -24,18 +24,18 @@ function SideBar() {
     navigate(`/user/${e.target.value}`);
   };
   return (
-    <div className="  hidden transition-transform w-[275px]  absolute top-0 left-0 h-screen  lg:max-w-full p-2 lg:static lg:flex-row b-shadow z-50      lg:w-[100%] lg:h-[70px] bg-white lg:p-4 lg:flex  justify-between b-shadow ">
+    <div className="  hidden transition-transform w-[275px]  absolute top-0 left-0 h-screen  lg:max-w-full p-2 lg:static lg:flex-row b-shadow z-40      lg:w-[100%] lg:h-[70px] bg-white lg:p-4 lg:flex  justify-between b-shadow ">
       <div className="text-2xl flex items-center font-medium text-left protest-riot-regular">
         Dashboard
       </div>
       <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between h-full">
         <div className="h-full flex flex-col lg:flex-row justify-between py-4 gap-8 ">
-          <div className=" flex flex-col lg:flex-row items-center gap-4">
+          <div className=" flex flex-col lg:flex-row items-center gap-0">
             <Menu placement="bottom" FaUserPlus>
               <MenuHandler>
-                <Button className=" text-left bg-red-900 mx-[10px]  w-full lg:w-[100px] text-center">
+                <Typography className="cursor-pointer uppercase font-bold text-xs  hover:underline  transition-all border-0 bg-transparent text-gray-900 mx-[10px] shadow-none w-full lg:w-[80px] text-center">
                   Funeral
-                </Button>
+                </Typography>
               </MenuHandler>
               <MenuList onClick={(e) => goto(e)}>
                 <MenuItem value="client">Client</MenuItem>
@@ -47,9 +47,9 @@ function SideBar() {
 
             <Menu placement="bottom">
               <MenuHandler>
-                <Button className=" text-left  mx-[10px]  bg-red-900 w-full lg:w-[100px] text-center">
+                <Typography className="cursor-pointer  uppercase font-bold text-xs  hover:underline  transition-all border-0 bg-transparent text-gray-900 mx-[10px] shadow-none w-full lg:w-[80px] text-center">
                   Events
-                </Button>
+                </Typography>
               </MenuHandler>
               <MenuList onClick={(e) => goto(e)}>
                 <MenuItem value="calendar">Event Calendar</MenuItem>
@@ -59,9 +59,9 @@ function SideBar() {
 
             <Menu placement="bottom">
               <MenuHandler>
-                <Button className=" text-left  mx-[10px]  bg-red-900 w-full lg:w-[100px] text-center">
+                <Typography className="cursor-pointer  uppercase font-bold text-xs  hover:underline  transition-all border-0 bg-transparent text-gray-900 mx-[10px] shadow-none w-full lg:w-[80px] text-center">
                   Links
-                </Button>
+                </Typography>
               </MenuHandler>
               <MenuList>
                 <MenuItem value="https://drive.google.com">Drive</MenuItem>
@@ -86,8 +86,11 @@ function SideBar() {
 
             <Menu placement="bottom">
               <MenuHandler>
-                <Button className="flex   bg-gray-700  mx-[6px] w-full lg:w-[100px] text-center items-center justify-center gap-2">
-                  ADD <FaPlus className="tmx-2" />
+                <Button
+                  size="sm"
+                  className="flex hover:scale-105  bg-gray-700  mx-[6px] w-full lg:w-[100px] text-center items-center justify-center gap-2"
+                >
+                  ADD <FaUserPlus className="" />
                   {/* <FaUserPlus className="mx-2" /> */}
                 </Button>
               </MenuHandler>
@@ -107,12 +110,26 @@ function SideBar() {
             </Menu>
           </div>
           <div className="flex items-center px-4 gap-2">
-            <Avatar
-              src="https://docs.material-tailwind.com/img/face-2.jpg"
-              alt="avatar"
-              className="w-[35px] h-[35px]"
-            />
-            <h1 className="text-sm font-semibold text-black/80">Username</h1>
+            <Menu placement="bottom">
+              <MenuHandler>
+                <div className="flex items-center gap-3 justify-center">
+                  <Avatar
+                    src="https://docs.material-tailwind.com/img/face-2.jpg"
+                    alt="avatar"
+                    className="w-[35px] h-[35px]"
+                  />
+                  <h1 className="text-sm font-semibold text-black/80">
+                    Username
+                  </h1>
+                </div>
+              </MenuHandler>
+              <MenuList>
+                <MenuItem>Profile</MenuItem>
+                <MenuItem>Settings</MenuItem>
+                <MenuItem>Logout</MenuItem>
+              </MenuList>
+            </Menu>
+
             {/* <span>
             <RiLogoutBoxLine className="font-bold text-2xl text-black/60 cursor-pointer " />
           </span> */}

@@ -12,6 +12,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import { ImSpinner3 } from "react-icons/im";
+import { customfetch } from "../lib/fetchhandler/requestHandler";
 
 export function LoginCheck() {
   const { loading, error, data } = useCheckAuth();
@@ -44,14 +45,10 @@ function LoginPage() {
       // window.location.reload();
     } else {
       setIsLoading(true);
-      fetch(`${import.meta.env.VITE_API_URL}/auth/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ username, password }),
+      customfetch(`${import.meta.env.VITE_API_URL}/auth/login`, "POST", {
+        username,
+        password,
       })
-        .then((res) => res.json())
         .then((data) => {
           setIsLoading(false);
           if (!data?.token) {
@@ -62,7 +59,7 @@ function LoginPage() {
             toast.success("Login successful");
             setTimeout(() => {
               window.location.replace("/dashboard");
-            }, 2000);
+            }, 3000);
           }
         })
         .catch((error) => {
@@ -74,7 +71,11 @@ function LoginPage() {
 
   return (
     <div className=" w-full h-screen bg-white flex justify-center items-center ">
-      <Card color="transparent" shadow={false} className="shadoww p-4 lg:p-6">
+      <Card
+        color="transparent"
+        shadow={false}
+        className="shadoww p-4 lg:p-6 w-[40%] max-w-[375px] min-w-[300px]"
+      >
         <Typography
           variant="h4"
           color="blue-gray"
@@ -85,15 +86,14 @@ function LoginPage() {
         <Typography color="gray" className="mt-1 font-normal text-center">
           Log in to continue your account
         </Typography>
-        <form className="mt-[30px] mb-2 w-80 max-w-screen-lg sm:w-96">
+        <form className="mt-[30px] mb-2 ">
           <div className="mb-1 flex flex-col gap-6">
             <Typography variant="h6" color="blue-gray" className="-mb-3">
               Username
             </Typography>
             <Input
-              size="lg"
               placeholder="name@mail.com"
-              className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+              className=" !border-t-blue-gray-200 focus:!border-t-gray-900 w-full"
               labelProps={{
                 className: "before:content-none after:content-none",
               }}

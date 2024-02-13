@@ -77,17 +77,19 @@ export default function MainContainer() {
         <div className="p-2">
           <div className="flex items-center justify-between ">
             <div className="flex items-center gap-4">
-              <p className=" font-bold text-2xl">Client</p>
+              <p className=" font-bold text-md">Client</p>
               <Button
-                className="p-3 bg-blue-gray-600"
+                size="sm"
+                className=" bg-blue-gray-600"
                 onClick={handleFilterClick}
               >
                 Filter
               </Button>
               <Dialog open={isFilterVisible} handler={handleFilterClick}>
-        
-        <DialogBody className="flex  flex-col items-center justify-center max-h-[420px]">
-          <Typography className="text-lg font-bold text-start w-full px-6">Filter</Typography>
+                <DialogBody className="flex  flex-col items-center justify-center max-h-[420px]">
+                  <Typography className="text-lg font-bold text-start w-full px-6">
+                    Filter
+                  </Typography>
                   <div className="bg-white scale-90 z-15 rounded-md p-2 shadoww z-10 md:w-[600px]  shadoww  h-[400px] overflow-y-scroll sm:overflow-hidden gap-2 flex">
                     <div className="flex sm:flex-row  flex-col">
                       <div className="border  p-2 rounded-md">
@@ -143,11 +145,8 @@ export default function MainContainer() {
                       </div>
                     </div>
                   </div>
-                
-        </DialogBody>
-        
-      </Dialog>
-              
+                </DialogBody>
+              </Dialog>
             </div>
             <div className="w-72 md:mx-[50px]">
               <Input label="Search" />

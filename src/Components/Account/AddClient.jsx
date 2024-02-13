@@ -334,7 +334,7 @@ function AddClient({ setOpenClient }) {
   const [, setopenclient] = useAtom(openClient);
 
   return (
-    <div className="w-full fixed top-0 left-0 h-screen flex justify-center items-center bg-black/70">
+    <div className="w-full fixed top-0 left-0 h-screen flex justify-center items-center bg-black/70 z-50">
       <Tabs value="ADD CLIENT">
         <TabsHeader className="flex gap-2">
           {data.map(({ label, value }) => (

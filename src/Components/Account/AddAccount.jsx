@@ -16,8 +16,8 @@ function AddAccount() {
   const [, setopenaccount] = useAtom(openAccount);
 
   return (
-    <div className="w-full fixed top-0 left-0 h-screen flex justify-center items-center bg-black/70">
-      <Card className="mt-6 p-4">
+    <div className="w-full fixed z-50 top-0 left-0 h-screen flex justify-center items-center bg-black/70">
+      <Card className=" p-4 ">
         <Typography variant="h5" color="blue-gray" className="mb-2 text-center">
           Add Account
         </Typography>

@@ -2,18 +2,20 @@ import { LoginCheck } from "./LoginPage/loginPage";
 import Home from "./Dashboard/Home";
 import HomeProfile from "./ProfilePage/HomeProfile";
 import NotFoundPage from "./Components/NotFoundPage";
+import ErrorPage from "./Components/ErrorPage";
 import Content from "../src/Components/Content";
 import Current from "../src/Components/Current/Case";
 import Itinerary from "./Components/Itinerary/Itinerary";
 import Contract from "./Components/Contract/Contract";
 
 import EventCalendar from "./Components/Event/EventCalendar";
-import TaskCalendar from "./Components/Task/TaskCalendar";
 
 import DailyTracker from "./Components/Profile/DailyTracker";
 import EmailTemplate from "./Components/Profile/emailTemplate";
 import Billing from "./Components/Profile/Billing";
 import Tasks from "./Components/Profile/Tasks";
+
+import CheckAuth from "./CheckAuth/CheckAuth";
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Forms from "./Components/Profile/Forms";
@@ -25,7 +27,11 @@ const router = createBrowserRouter([
   },
   {
     path: "/dashboard",
-    element: <Home />,
+    element: (
+      <CheckAuth>
+        <Home />
+      </CheckAuth>
+    ),
     children: [
       {
         path: "",
@@ -60,7 +66,11 @@ const router = createBrowserRouter([
 
   {
     path: "client/profile",
-    element: <HomeProfile />,
+    element: (
+      <CheckAuth>
+        <HomeProfile />,
+      </CheckAuth>
+    ),
   },
   {
     path: "client/:id/profile",
@@ -68,8 +78,10 @@ const router = createBrowserRouter([
 
     children: [
       {
-        path: "funeral-details",
-        element: <DailyTracker />,
+        index: true,
+        loader: () => {
+          return (window.location.href = "/client/:id/profile/daily-tracker");
+        },
       },
       {
         path: "daily-tracker",
@@ -77,6 +89,7 @@ const router = createBrowserRouter([
       },
       {
         path: "email",
+        exact: true,
         element: <EmailTemplate />,
       },
       {
@@ -94,14 +107,19 @@ const router = createBrowserRouter([
     ],
   },
   {
-    errorElement: <NotFoundPage />,
+    path: "*",
+    element: <NotFoundPage />,
+  },
+
+  {
+    errorElement: <ErrorPage />,
   },
 ]);
 
 function App() {
   return (
     <>
-      <RouterProvider router={router} />
+      <RouterProvider router={router} errorElement={<ErrorPage />} />
     </>
   );
 }

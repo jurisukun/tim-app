@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { customfetch } from "../../lib/fetchhandler/requestHandler";
 
 export const useCheckAuth = () => {
   const [status, setStatus] = useState({
@@ -7,19 +8,15 @@ export const useCheckAuth = () => {
     data: null,
   });
   useEffect(() => {
-    fetch(import.meta.env.VITE_API_URL + "/auth/verify", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ token: localStorage.getItem("token") }),
-    })
+    customfetch(import.meta.env.VITE_API_URL + "/auth/verify", "POST")
       .then((res) => {
-        if (res.status !== 200) {
+        if (!res?.refreshToken && !res?.token) {
           setStatus({ loading: false, error: true, data: null });
           return;
         }
-        res.json(setStatus({ loading: false, error: false, data: res }));
+
+        // localStorage.setItem("token", res?.refreshToken ?? res?.token);
+        setStatus({ loading: false, error: false, data: res });
       })
       .catch((err) => setStatus({ loading: false, error: true, data: err }));
   }, []);

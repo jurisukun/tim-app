@@ -11,7 +11,6 @@ function Content() {
     <div className="w-full relative  lg:height-c h-screen ">
       <main className="w-full">
         <MainContainer />
-        <AddClient />
       </main>
     </div>
   );

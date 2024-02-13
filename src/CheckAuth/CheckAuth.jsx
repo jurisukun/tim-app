@@ -5,7 +5,7 @@ import { useCheckAuth } from "../utils/hooks/useCheckAuth";
 export function LoadingScreen() {
   return (
     <div className="w-full h-screen flex flex-col items-center justify-center font-semibold text-lg text-red-700">
-      <p className="flex flex-row items-center">
+      <p className="flex flex-row items-center text-sm">
         Loading... <ImSpinner3 className="animate-spin" />
       </p>
     </div>

@@ -122,7 +122,7 @@ function DailyTracker() {
   ];
 
   return (
-    <div className="w-full  h-full flex-1 relative">
+    <div className="w-full  h-full flex-1 ">
       <div className="w-full h-20 text-xl font-medium sticky top-0 bbb text-blue-gray-800 flex items-center justify-between p-4">
         Daily Tracker
         <Button
@@ -270,7 +270,6 @@ function DailyTracker() {
                 </div>
                 <div className="flex items-center gap-3">
                   <Typography className="text-black">
-                    {" "}
                     Purpose Of Call:
                   </Typography>
                   <Typography>{item.purposeOfCall}</Typography>
@@ -295,7 +294,7 @@ function DailyTracker() {
 
       {/* add record */}
       {showAddRecord && (
-        <div className="w-full h-full flex items-center justify-center absolute top-0 bg-black/80 left-0 z-5">
+        <div className="w-full h-full flex items-center justify-center absolute top-0 bg-black/80 left-0 z-50">
           <Card className=" p-4 gap-4">
             <div>Add Daily Tracker</div>
             <div className="w-72 mt-3">

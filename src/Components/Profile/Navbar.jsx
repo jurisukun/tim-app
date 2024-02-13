@@ -5,14 +5,16 @@ import {
   MenuItem,
   Button,
   Avatar,
+  Typography,
 } from "@material-tailwind/react";
-import { useNavigate } from "react-router-dom";
+
+import { useNavigate, NavLink } from "react-router-dom";
 
 import { useAtom } from "jotai";
 import { openSidebar } from "../../utils/jotai/atoms";
+import React from "react";
 
 const menu = [
-  { name: "Funeral Details", link: "/funeral-details" },
   { name: "Daily Tracker", link: "/daily-tracker" },
   { name: "Email", link: "/email" },
   { name: "Tasks", link: "/tasks" },
@@ -27,16 +29,35 @@ function Navbar() {
   return (
     <div className="flex items-center h-[80px]">
       {/* lg:absolute lg:-top-16 lg:right-0 */}
-      <div className="w-full bbb hidden lg:block  h-[80px]  hover:top-0 transition-all z-50 bg-white">
+      <div className="w-full bbb hidden lg:block  h-[80px]  hover:top-0 transition-all z-40 bg-white">
         <div className="h-full lg:flex flex-row items-center justify-evenly ">
+          <Button className="bg-red-800">Funeral Details</Button>
           {menu.map((item, index) => (
-            <Button
-              key={index}
-              className="bg-red-800"
-              onClick={() => navigate(`/client/:id/profile${item.link}`)}
-            >
-              {item.name}
-            </Button>
+            <React.Fragment key={index}>
+              <NavLink
+                key={index}
+                to={`/client/:id/profile${item.link}`}
+                className={({ isActive, isPending }) =>
+                  `uppercase w-auto text-sm underline-offset-8 transition-[underline]  ${
+                    isPending
+                      ? "pending"
+                      : isActive
+                      ? "active text-red-900 font-bold underline "
+                      : "text-gray-800  text-sm  hover:underline  hover:font-semibold transition-all"
+                  }`
+                }
+              >
+                {item.name}
+              </NavLink>
+
+              {/* <Typography
+                key={index}
+                className="bg-red-800"
+                onClick={() => navigate(`/client/:id/profile${item.link}`)}
+              >
+                {item.name}
+              </Typography> */}
+            </React.Fragment>
           ))}
           {/* <Button className="bg-red-800">Funeral Detail</Button>
           <Button className="bg-red-800">Daily Tracker</Button>

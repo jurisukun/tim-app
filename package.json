@@ -10,8 +10,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emotion/react": "^11.11.3",
     "@heroicons/react": "^2.1.1",
     "@material-tailwind/react": "^2.1.8",
+    "@table-library/react-table-library": "^4.1.7",
     "date-fns": "^3.3.1",
     "jotai": "^2.6.4",
     "jsonwebtoken": "^9.0.2",

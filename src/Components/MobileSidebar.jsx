@@ -11,13 +11,13 @@ import { FaUserPlus } from "react-icons/fa6";
 import { RiLogoutBoxLine } from "react-icons/ri";
 
 import { useAtom } from "jotai";
-import { openMobileNav } from "../utils/jotai/atoms";
+import { openMobileNav, openAccount, openClient } from "../utils/jotai/atoms";
 
 export function MenuRender({ data, title }) {
   return (
     <Menu placement="right-start">
       <MenuHandler>
-        <Button className=" text-left  mx-[4px] mt-[10px] w-[70%] bg-red-900">
+        <Button className="hover:underline text-left  mx-[4px] mt-[10px]  bg-transparent text-gray-900 shadow-none hover:shadow-none">
           {title}
         </Button>
       </MenuHandler>
@@ -32,12 +32,14 @@ export function MenuRender({ data, title }) {
 
 export default function MobileSidebar() {
   const [openmobilenav, setopenmobilenav] = useAtom(openMobileNav);
+  const [, setopenaccount] = useAtom(openAccount);
+  const [, setopenclient] = useAtom(openClient);
 
   const funeral = ["Client", "Contracts", "Itineraries", "Daily Tracker"];
   return (
     <>
       <div
-        className={`transition-all max-w-[275px]  absolute top-0  h-screen bg-white p-2 lg:-left-[275px] block b-shadow z-50  ${
+        className={`transition-all w-[250px]  absolute top-0  h-screen bg-white p-2 lg:-left-[275px] block b-shadow z-50  ${
           openmobilenav ? "left-0" : "-left-[275px]"
         }`}
       >
@@ -49,7 +51,7 @@ export default function MobileSidebar() {
           />
         </div>
 
-        <div className="w-full flex-col items-center justify-between h-[90%]">
+        <div className="w-full flex flex-col items-start justify-start h-[90%]">
           <MenuRender data={funeral} title="Funeral" />
           <MenuRender
             data={["Event Calendar", "Task Calendar"]}
@@ -74,27 +76,41 @@ export default function MobileSidebar() {
 
           <Menu placement="right-start">
             <MenuHandler>
-              <Button className="flex text-left items-center  mx-[4px] mt-[10px] w-[70%] bg-gray-800">
-                Account
+              <Button className="flex text-left items-center  mx-[4px] mt-[10px] bg-gray-800">
+                ADD
                 <FaUserPlus className="mx-2" />
               </Button>
             </MenuHandler>
             <MenuList>
-              <MenuItem> Add Account</MenuItem>
-              <MenuItem>Add Client</MenuItem>
+              <MenuItem onClick={() => setopenaccount(true)}>
+                Add Account
+              </MenuItem>
+              <MenuItem onClick={() => setopenclient(true)}>
+                Add Client
+              </MenuItem>
             </MenuList>
           </Menu>
         </div>
-        <div className="flex h-[20px] items-center justify-between px-4 gap-2">
-          <Avatar
-            src="https://docs.material-tailwind.com/img/face-2.jpg"
-            alt="avatar"
-            className="w-[35px] h-[35px]"
-          />
-          <h1 className="text-[20px] font-semibold text-black/80">Username</h1>
-          <span>
-            <RiLogoutBoxLine className="font-bold text-2xl text-black/60 cursor-pointer " />
-          </span>
+        <div className="flex h-[20px] items-center justify-between px-4 gap-2 w-full pb-8">
+          <Menu placement="right-start">
+            <MenuHandler>
+              <div className="flex items-center gap-3 justify-center ">
+                <Avatar
+                  src="https://docs.material-tailwind.com/img/face-2.jpg"
+                  alt="avatar"
+                  className="w-[35px] h-[35px]"
+                />
+                <h1 className="text-sm font-semibold text-black/80">
+                  Username
+                </h1>
+              </div>
+            </MenuHandler>
+            <MenuList>
+              <MenuItem>Profile</MenuItem>
+              <MenuItem>Settings</MenuItem>
+              <MenuItem>Logout</MenuItem>
+            </MenuList>
+          </Menu>
         </div>
       </div>
     </>

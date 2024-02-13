@@ -1,17 +1,17 @@
 import { z } from "zod";
 
 export const ClientSchema = z.object({
-  firstname: z.string().min(1),
-  lastname: z.string().min(1),
-  relationship: z.string().min(1),
+  firstname: z.string(),
+  middlename: z.string(),
+  lastname: z.string(),
+  relationship: z.string(),
+  telephone: z.string(),
   email: z.string().email(),
-  phone: z.string().min(1),
-  address: z.string().min(1),
-  city: z.string().min(1),
-  state: z.string().min(1),
-  zip: z.string().min(1),
-  country: z.string().min(1),
-  dob: z.string().min(1),
+  decname: z.string(),
+  servicetype: z.array(z.string()),
+  inquirystatus: z.string(),
+  notes: z.array(z.array(z.string())),
+  image_url: z.string(),
 });
 
 export const AccountSchema = z.object({
@@ -19,7 +19,15 @@ export const AccountSchema = z.object({
   lastname: z.string().min(1),
   username: z.string().min(1),
   email: z.string().email(),
-  password: z.string().min(1),
+  password: z.string().min(6),
   confirmPassword: z.string(),
-  type: z.string().min(1),
+  role: z.enum([
+    "ADMIN",
+    "EXECUTIVE",
+    "OPERATIONS",
+    "EMPLOYEE",
+    "CLIENT",
+    "OTHER",
+  ]),
+  image_url: z.string(),
 });
