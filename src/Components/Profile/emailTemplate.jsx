@@ -14,7 +14,10 @@ function EmailPopover({ title, data }) {
     <Popover placement="bottom-end">
       <PopoverHandler>
         <div className="mt-2 relative">
-          <Button size="sm" className="bg-blue-gray-500 text-ellipsis">
+          <Button
+            size="sm"
+            className="bg-blue-gray-500 text-ellipsis w-full h-full"
+          >
             {title}
           </Button>
         </div>
@@ -61,23 +64,23 @@ function emailTemplate() {
             />
             <EmailPopover title="Pre-arrangement" data={funeralArrangement} />
 
-            <div className="mt-2 relative">
-              <Button size="sm" className="bg-blue-gray-500">
+            <div className="mt-2 relative ">
+              <Button size="sm" className="bg-blue-gray-500 w-full  h-full">
                 Orbituary And Youtube
               </Button>
             </div>
-            <div className="mt-2 relative">
-              <Button size="sm" className="bg-blue-gray-500">
+            <div className="mt-2 relative ">
+              <Button size="sm" className="bg-blue-gray-500 w-full h-full ">
                 Visa Request
               </Button>
             </div>
-            <div className="mt-2 relative">
-              <Button size="sm" className="bg-blue-gray-500">
+            <div className="mt-2 relative ">
+              <Button size="sm" className="bg-blue-gray-500 w-full h-full">
                 Family Visa
               </Button>
             </div>
             <div className="mt-2 relative">
-              <Button size="sm" className="bg-blue-gray-500">
+              <Button size="sm" className="bg-blue-gray-500 w-full h-full">
                 Zelle Payment
               </Button>
             </div>

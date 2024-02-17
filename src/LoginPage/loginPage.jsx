@@ -13,6 +13,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 import { ImSpinner3 } from "react-icons/im";
 import { customfetch } from "../lib/fetchhandler/requestHandler";
+import { useLocation } from "react-router-dom";
 
 export function LoginCheck() {
   const { loading, error, data } = useCheckAuth();
@@ -33,6 +34,8 @@ function LoginPage() {
   const [username, setUsername] = useState();
   const [password, setPassword] = useState();
   const [isLoading, setIsLoading] = useState(false);
+
+  const location = useLocation();
 
   const handleLogin = () => {
     if (
@@ -58,7 +61,9 @@ function LoginPage() {
             localStorage.setItem("token", data.token);
             toast.success("Login successful");
             setTimeout(() => {
-              window.location.replace("/dashboard");
+              if (location.pathname === "/login")
+                window.location.replace("/dashboard");
+              else window.location.href = location.pathname;
             }, 3000);
           }
         })

@@ -3,7 +3,7 @@ import Home from "./Dashboard/Home";
 import HomeProfile from "./ProfilePage/HomeProfile";
 import NotFoundPage from "./Components/NotFoundPage";
 import ErrorPage from "./Components/ErrorPage";
-import Content from "../src/Components/Content";
+import MainContainer from "./Components/MainContainer";
 import Current from "../src/Components/Current/Case";
 import Itinerary from "./Components/Itinerary/Itinerary";
 import Contract from "./Components/Contract/Contract";
@@ -19,6 +19,12 @@ import CheckAuth from "./CheckAuth/CheckAuth";
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Forms from "./Components/Profile/Forms";
+
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+import { ThemeProvider } from "@material-tailwind/react";
+
+const queryClient = new QueryClient();
 
 const router = createBrowserRouter([
   {
@@ -39,7 +45,7 @@ const router = createBrowserRouter([
       },
       {
         path: "client",
-        element: <Content />,
+        element: <MainContainer />,
       },
       {
         path: "contract",
@@ -73,14 +79,14 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "client/:id/profile",
+    path: "client/:clientId/profile",
     element: <HomeProfile />,
 
     children: [
       {
         index: true,
-        loader: () => {
-          return (window.location.href = "/client/:id/profile/daily-tracker");
+        loader: ({ params }) => {
+          return (window.location.href = `/client/${params.clientId}/profile/daily-tracker`);
         },
       },
       {
@@ -119,7 +125,9 @@ const router = createBrowserRouter([
 function App() {
   return (
     <>
-      <RouterProvider router={router} errorElement={<ErrorPage />} />
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider router={router} errorElement={<ErrorPage />} />
+      </QueryClientProvider>
     </>
   );
 }

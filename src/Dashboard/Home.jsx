@@ -7,14 +7,23 @@ import MobileSidebar from "../Components/MobileSidebar";
 import AddAccount from "../Components/Account/AddAccount";
 import AddClient from "../Components/Account/AddClient";
 
-import { useAtom } from "jotai";
+import { useAtom, useSetAtom } from "jotai";
 import { openMobileNav, openClient, openAccount } from "../utils/jotai/atoms";
 import { Typography } from "@material-tailwind/react";
 
+import {
+  Menu,
+  MenuHandler,
+  MenuList,
+  MenuItem,
+  Button,
+} from "@material-tailwind/react";
+import { FaUserPlus } from "react-icons/fa6";
+
 function Home() {
-  const [, setopenmobilenav] = useAtom(openMobileNav);
-  const [openaccount] = useAtom(openAccount);
-  const [openclient] = useAtom(openClient);
+  const setopenmobilenav = useSetAtom(openMobileNav);
+  const [openaccount, setopenaccount] = useAtom(openAccount);
+  const [openclient, setopenclient] = useAtom(openClient);
 
   return (
     // <CheckAuth>
@@ -28,10 +37,27 @@ function Home() {
           <Typography className="text-2xl flex items-center font-medium text-left protest-riot-regular flex-start">
             Dashboard
           </Typography>
-          <IoMenu
-            className="font-bold text-3xl cursor-pointer lg:hidden flex "
-            onClick={() => setopenmobilenav(true)}
-          />
+          <div className="flex items-center justify-center gap-3">
+            <Menu placement="right-start">
+              <MenuHandler>
+                <Button className="flex text-center items-center w-[80px] mx-[4px]  bg-gray-800">
+                  <FaUserPlus className="mx-2" />
+                </Button>
+              </MenuHandler>
+              <MenuList>
+                <MenuItem onClick={() => setopenaccount(true)}>
+                  Add Account
+                </MenuItem>
+                <MenuItem onClick={() => setopenclient(true)}>
+                  Add Client
+                </MenuItem>
+              </MenuList>
+            </Menu>
+            <IoMenu
+              className="font-bold text-3xl cursor-pointer lg:hidden flex "
+              onClick={() => setopenmobilenav(true)}
+            />
+          </div>
         </div>
       </div>
       <Outlet />

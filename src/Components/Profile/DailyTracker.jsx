@@ -122,8 +122,8 @@ function DailyTracker() {
   ];
 
   return (
-    <div className="w-full  h-full flex-1 ">
-      <div className="w-full h-20 text-xl font-medium sticky top-0 bbb text-blue-gray-800 flex items-center justify-between p-4">
+    <div className="w-full  h-full flex-1 max-w-full">
+      <div className="w-full h-20 text-xl font-medium  bbb text-blue-gray-800 flex items-center justify-between p-4">
         Daily Tracker
         <Button
           size="sm"
@@ -136,104 +136,106 @@ function DailyTracker() {
       <div className="hidden md:block flex-1 h-full bg-red-50 overflow-y-scroll pb-6">
         <Card className="mt-3 hidden md:block p-2 ">
           <table className="shadow-lg bg-white w-full">
-            <tr>
-              <th className="bg-blue-gray-300 border  text-left px-2 py-2">
-                <Typography
-                  variant="small"
-                  color="blue-gray"
-                  className="font-semi-bold text-1xl "
-                >
-                  Date
-                </Typography>
-              </th>
-              <th className="bg-blue-gray-300 border text-left px-2 py-2">
-                <Typography
-                  variant="small"
-                  color="blue-gray"
-                  className="font-semi-bold text-1xl "
-                >
-                  Time
-                </Typography>
-              </th>
-              <th className="bg-blue-gray-300 border text-left px-2 py-2">
-                <Typography
-                  variant="small"
-                  color="blue-gray"
-                  className="font-semi-bold text-1xl "
-                >
-                  Staff Name
-                </Typography>
-              </th>
-              <th className="bg-blue-gray-300 border text-left px-2 py-2">
-                <Typography
-                  variant="small"
-                  color="blue-gray"
-                  className="font-semi-bold text-1xl "
-                >
-                  Interaction Type
-                </Typography>
-              </th>
-              <th className="bg-blue-gray-300 border text-left px-2 py-2">
-                <Typography
-                  variant="small"
-                  color="blue-gray"
-                  className="font-semi-bold text-1xl "
-                >
-                  Interaction With
-                </Typography>
-              </th>
-              <th className="bg-blue-gray-300 border text-left px-2 py-2">
-                <Typography
-                  variant="small"
-                  color="blue-gray"
-                  className="font-semi-bold text-1xl "
-                >
-                  Purpose of call
-                </Typography>
-              </th>
-              <th className="bg-blue-gray-300 border text-left px-2 py-2">
-                <Typography
-                  variant="small"
-                  color="blue-gray"
-                  className="font-semi-bold text-1xl "
-                >
-                  Phone Number
-                </Typography>
-              </th>
-              <th className="bg-blue-gray-300 border text-left px-2 py-2">
-                <Typography
-                  variant="small"
-                  color="blue-gray"
-                  className="font-semi-bold text-1xl "
-                >
-                  Notes
-                </Typography>
-              </th>
-              <th className="bg-blue-gray-300 border text-left px-2 py-2">
-                <Typography
-                  variant="small"
-                  color="blue-gray"
-                  className="font-semi-bold text-1xl "
-                >
-                  Action
-                </Typography>
-              </th>
-            </tr>
-            {data.map((item, key) => {
-              return (
-                <tr key={key}>
-                  <td className="border px-2 py-2">{item.date}</td>
-                  <td className="border px-2 py-2">{item.time}</td>
-                  <td className="border px-2 py-2">{item.staffName}</td>
-                  <td className="border px-2 py-2">{item.interactionType}</td>
-                  <td className="border px-2 py-2">{item.interactionWith}</td>
-                  <td className="border px-2 py-2">{item.purposeOfCall}</td>
-                  <td className="border px-2 py-2">{item.phoneNumber}</td>
-                  <td className="border px-2 py-2">{item.notes}</td>
-                  <td className="border px-2 py-2">{item.action}</td>
-                </tr>
-              );
-            })}
+            <tbody>
+              <tr>
+                <th className="bg-blue-gray-300 border  text-left px-2 py-2">
+                  <Typography
+                    variant="small"
+                    color="blue-gray"
+                    className="font-semi-bold text-1xl "
+                  >
+                    Date
+                  </Typography>
+                </th>
+                <th className="bg-blue-gray-300 border text-left px-2 py-2">
+                  <Typography
+                    variant="small"
+                    color="blue-gray"
+                    className="font-semi-bold text-1xl "
+                  >
+                    Time
+                  </Typography>
+                </th>
+                <th className="bg-blue-gray-300 border text-left px-2 py-2">
+                  <Typography
+                    variant="small"
+                    color="blue-gray"
+                    className="font-semi-bold text-1xl "
+                  >
+                    Staff Name
+                  </Typography>
+                </th>
+                <th className="bg-blue-gray-300 border text-left px-2 py-2">
+                  <Typography
+                    variant="small"
+                    color="blue-gray"
+                    className="font-semi-bold text-1xl "
+                  >
+                    Interaction Type
+                  </Typography>
+                </th>
+                <th className="bg-blue-gray-300 border text-left px-2 py-2">
+                  <Typography
+                    variant="small"
+                    color="blue-gray"
+                    className="font-semi-bold text-1xl "
+                  >
+                    Interaction With
+                  </Typography>
+                </th>
+                <th className="bg-blue-gray-300 border text-left px-2 py-2">
+                  <Typography
+                    variant="small"
+                    color="blue-gray"
+                    className="font-semi-bold text-1xl "
+                  >
+                    Purpose of call
+                  </Typography>
+                </th>
+                <th className="bg-blue-gray-300 border text-left px-2 py-2">
+                  <Typography
+                    variant="small"
+                    color="blue-gray"
+                    className="font-semi-bold text-1xl "
+                  >
+                    Phone Number
+                  </Typography>
+                </th>
+                <th className="bg-blue-gray-300 border text-left px-2 py-2">
+                  <Typography
+                    variant="small"
+                    color="blue-gray"
+                    className="font-semi-bold text-1xl "
+                  >
+                    Notes
+                  </Typography>
+                </th>
+                <th className="bg-blue-gray-300 border text-left px-2 py-2">
+                  <Typography
+                    variant="small"
+                    color="blue-gray"
+                    className="font-semi-bold text-1xl "
+                  >
+                    Action
+                  </Typography>
+                </th>
+              </tr>
+              {data.map((item, key) => {
+                return (
+                  <tr key={key}>
+                    <td className="border px-2 py-2">{item.date}</td>
+                    <td className="border px-2 py-2">{item.time}</td>
+                    <td className="border px-2 py-2">{item.staffName}</td>
+                    <td className="border px-2 py-2">{item.interactionType}</td>
+                    <td className="border px-2 py-2">{item.interactionWith}</td>
+                    <td className="border px-2 py-2">{item.purposeOfCall}</td>
+                    <td className="border px-2 py-2">{item.phoneNumber}</td>
+                    <td className="border px-2 py-2">{item.notes}</td>
+                    <td className="border px-2 py-2">{item.action}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
           </table>
         </Card>
       </div>
@@ -244,45 +246,51 @@ function DailyTracker() {
           {data.map((item, key) => {
             return (
               <Card key={key} className="shadoww p-6">
-                <div className="flex items-center gap-3">
-                  <Typography className="text-black">Date:</Typography>
-                  <Typography>{item.date}</Typography>
+                <div className="flex items-center gap-3 justify-between">
+                  <Typography className="text-black text-start border">
+                    Date:
+                  </Typography>
+                  <Typography className="text-start border">
+                    {item.date}
+                  </Typography>
                 </div>
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 justify-between">
                   <Typography className="text-black">Time:</Typography>
                   <Typography>{item.time}</Typography>
                 </div>
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 justify-between">
                   <Typography className="text-black">Staff Name:</Typography>
                   <Typography>{item.staffName}</Typography>
                 </div>
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 justify-between">
                   <Typography className="text-black">
                     Interaction Type:
                   </Typography>
                   <Typography>{item.interactionType}</Typography>
                 </div>
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 justify-between">
                   <Typography className="text-black">
                     Interaction With:
                   </Typography>
                   <Typography>{item.interactionWith}</Typography>
                 </div>
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 justify-between">
                   <Typography className="text-black">
                     Purpose Of Call:
                   </Typography>
                   <Typography>{item.purposeOfCall}</Typography>
                 </div>
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 justify-between">
                   <Typography className="text-black"> Phone Number:</Typography>
                   <Typography>{item.phoneNumber}</Typography>
                 </div>
-                <div className="flex items-start gap-3">
+                <div className="flex items-start gap-3 justify-between">
                   <Typography className="text-black"> Notes:</Typography>
-                  <Typography>{item.notes}</Typography>
+                  <Typography className="border text-end">
+                    {item.notes}
+                  </Typography>
                 </div>
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 justify-between">
                   <Typography className="text-black"> Actions:</Typography>
                   <Typography>{item.action}</Typography>
                 </div>

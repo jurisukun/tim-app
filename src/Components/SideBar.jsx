@@ -7,48 +7,53 @@ import {
   Avatar,
   Typography,
 } from "@material-tailwind/react";
-import { RiLogoutBoxLine } from "react-icons/ri";
+import { useCheckAuth } from "../utils/hooks/useCheckAuth";
 
 import { FaPlus, FaUserPlus } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 
-import { useAtom } from "jotai";
+import { useSetAtom } from "jotai";
 import { openClient, openAccount } from "../utils/jotai/atoms";
+import { MenuRender, funeral, links, calendar } from "./MobileSidebar";
 
 function SideBar() {
-  const [, setopenaccount] = useAtom(openAccount);
-  const [, setopenclient] = useAtom(openClient);
+  const setopenaccount = useSetAtom(openAccount);
+  const setopenclient = useSetAtom(openClient);
+
+  const { user } = useCheckAuth();
 
   const navigate = useNavigate();
   const goto = (e) => {
-    navigate(`/user/${e.target.value}`);
+    navigate(`/dashboard/${e.target.value}`);
   };
   return (
-    <div className="  hidden transition-transform w-[275px]  absolute top-0 left-0 h-screen  lg:max-w-full p-2 lg:static lg:flex-row b-shadow z-40      lg:w-[100%] lg:h-[70px] bg-white lg:p-4 lg:flex  justify-between b-shadow ">
+    <div className="hidden transition-transform w-[275px]  absolute top-0 left-0 h-screen  lg:max-w-full p-2 lg:static lg:flex-row b-shadow z-40 lg:w-[100%] lg:h-[70px] bg-white lg:p-4 lg:flex  justify-between b-shadow ">
       <div className="text-2xl flex items-center font-medium text-left protest-riot-regular">
         Dashboard
       </div>
       <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between h-full">
-        <div className="h-full flex flex-col lg:flex-row justify-between py-4 gap-8 ">
-          <div className=" flex flex-col lg:flex-row items-center gap-0">
-            <Menu placement="bottom" FaUserPlus>
+        <div className="h-full flex flex-col lg:flex-row justify-between py-4">
+          <div className=" flex flex-col lg:flex-row items-center ">
+            <MenuRender data={funeral} title="Funeral" position="bottom" />
+            <MenuRender data={calendar} title="Calendar" position="bottom" />
+            <MenuRender data={links} title="Links" position="bottom" />
+            {/* <Menu placement="bottom">
               <MenuHandler>
-                <Typography className="cursor-pointer uppercase font-bold text-xs  hover:underline  transition-all border-0 bg-transparent text-gray-900 mx-[10px] shadow-none w-full lg:w-[80px] text-center">
+                <Typography className="cursor-pointer  uppercase font-bold text-xs  hover:underline  hover:text-red-800 transition-all border-0 bg-transparent text-gray-900 mx-[10px] shadow-none w-full lg:w-[80px] text-center">
                   Funeral
                 </Typography>
               </MenuHandler>
               <MenuList onClick={(e) => goto(e)}>
                 <MenuItem value="client">Client</MenuItem>
                 <MenuItem value="contracts">Contracts</MenuItem>
-                <MenuItem value="itenerar">Itineraries</MenuItem>
+                <MenuItem value="itenerary">Itineraries</MenuItem>
                 <MenuItem value="daily">Daily Tracker</MenuItem>
               </MenuList>
             </Menu>
-
             <Menu placement="bottom">
               <MenuHandler>
-                <Typography className="cursor-pointer  uppercase font-bold text-xs  hover:underline  transition-all border-0 bg-transparent text-gray-900 mx-[10px] shadow-none w-full lg:w-[80px] text-center">
-                  Events
+                <Typography className="cursor-pointer  uppercase font-bold text-xs  hover:underline  hover:text-red-800 transition-all border-0 bg-transparent text-gray-900 mx-[10px] shadow-none w-full lg:w-[80px] text-center">
+                  Calendar
                 </Typography>
               </MenuHandler>
               <MenuList onClick={(e) => goto(e)}>
@@ -56,10 +61,9 @@ function SideBar() {
                 <MenuItem value="task">Task Calendar</MenuItem>
               </MenuList>
             </Menu>
-
             <Menu placement="bottom">
               <MenuHandler>
-                <Typography className="cursor-pointer  uppercase font-bold text-xs  hover:underline  transition-all border-0 bg-transparent text-gray-900 mx-[10px] shadow-none w-full lg:w-[80px] text-center">
+                <Typography className="cursor-pointer  uppercase font-bold text-xs  hover:underline  hover:text-red-800  transition-all border-0 bg-transparent text-gray-900 mx-[10px] shadow-none w-full lg:w-[80px] text-center">
                   Links
                 </Typography>
               </MenuHandler>
@@ -82,27 +86,27 @@ function SideBar() {
                 <MenuItem value="https://drive.google.com">E-Vital</MenuItem>
                 <MenuItem value="https://drive.google.com">Call FWD</MenuItem>
               </MenuList>
-            </Menu>
-
+  </Menu>*/}
             <Menu placement="bottom">
               <MenuHandler>
                 <Button
                   size="sm"
-                  className="flex hover:scale-105  bg-gray-700  mx-[6px] w-full lg:w-[100px] text-center items-center justify-center gap-2"
+                  className="flex hover:scale-105  bg-gray-700  mx-[6px] w-full lg:w-[100px]  hover:bg-red-800  text-center items-center justify-center gap-2"
                 >
                   ADD <FaUserPlus className="" />
-                  {/* <FaUserPlus className="mx-2" /> */}
                 </Button>
               </MenuHandler>
               <MenuList>
-                <MenuItem
-                  onClick={() => {
-                    console.log("open account");
-                    setopenaccount(true);
-                  }}
-                >
-                  Add Account
-                </MenuItem>
+                {user?.isAdmin && (
+                  <MenuItem
+                    onClick={() => {
+                      console.log("open account");
+                      setopenaccount(true);
+                    }}
+                  >
+                    Add Account
+                  </MenuItem>
+                )}
                 <MenuItem onClick={() => setopenclient(true)}>
                   Add Client
                 </MenuItem>

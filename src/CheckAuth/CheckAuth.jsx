@@ -12,7 +12,7 @@ export function LoadingScreen() {
   );
 }
 export default function CheckAuth({ children }) {
-  const { loading, error, data } = useCheckAuth();
+  const { loading, error, data } = useCheckAuth().status;
 
   if (loading) {
     return <LoadingScreen />;

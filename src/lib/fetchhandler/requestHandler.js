@@ -8,7 +8,7 @@ export const customfetch = async (url, method, body) => {
     body: JSON.stringify(body),
   });
 
-  const result = await response.json();
+  const result = await response?.json();
   if (result?.refreshToken || result?.token) {
     localStorage.setItem("token", result.refreshToken ?? result.token);
   }

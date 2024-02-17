@@ -7,6 +7,9 @@ export const useCheckAuth = () => {
     error: false,
     data: null,
   });
+
+  const [user, setUser] = useState({ isAdmin: null, role: null });
+
   useEffect(() => {
     customfetch(import.meta.env.VITE_API_URL + "/auth/verify", "POST")
       .then((res) => {
@@ -17,9 +20,11 @@ export const useCheckAuth = () => {
 
         // localStorage.setItem("token", res?.refreshToken ?? res?.token);
         setStatus({ loading: false, error: false, data: res });
+        const { isAdmin, role } = res;
+        setUser({ isAdmin, role });
       })
       .catch((err) => setStatus({ loading: false, error: true, data: err }));
   }, []);
 
-  return status;
+  return { status, user };
 };

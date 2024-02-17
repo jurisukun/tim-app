@@ -7,35 +7,72 @@ import {
   Avatar,
 } from "@material-tailwind/react";
 import { IoMdClose } from "react-icons/io";
-import { FaUserPlus } from "react-icons/fa6";
-import { RiLogoutBoxLine } from "react-icons/ri";
 
 import { useAtom } from "jotai";
 import { openMobileNav, openAccount, openClient } from "../utils/jotai/atoms";
+import { useNavigate } from "react-router-dom";
 
-export function MenuRender({ data, title }) {
+export function MenuRender({ data, title, position }) {
+  const navigate = useNavigate();
+
+  const goto = (e) => {
+    if (data[e?.index]?.link) {
+      window.open(data[e.index].link, "_blank");
+    } else navigate(`/dashboard/${e.value}`);
+  };
+
   return (
-    <Menu placement="right-start">
+    <Menu placement={position}>
       <MenuHandler>
-        <Button className="hover:underline text-left  mx-[4px] mt-[10px]  bg-transparent text-gray-900 shadow-none hover:shadow-none">
+        <Button
+          tabIndex={-1}
+          className="hover:underline border-0  hover:text-red-800 text-left  mx-[4px]   bg-transparent text-gray-900 shadow-none hover:shadow-none"
+        >
           {title}
         </Button>
       </MenuHandler>
       <MenuList>
         {data?.map((item, index) => (
-          <MenuItem key={index}>{item}</MenuItem>
+          <MenuItem
+            onClick={(e) => {
+              goto({ value: item.value, index });
+            }}
+            key={index}
+          >
+            {item.label}
+          </MenuItem>
         ))}
       </MenuList>
     </Menu>
   );
 }
 
+export const funeral = [
+  { label: "Client", value: "client" },
+  { label: "Contracts", value: "contracts" },
+  { label: "Itineraries", value: "itinerary" },
+  { label: "Daily Tracker", value: "daily" },
+];
+export const calendar = [
+  { label: "Event Calendar", value: "events" },
+  { label: "Task Calendar", value: "tasks" },
+];
+export const links = [
+  { label: "Drive", link: "https://drive.google.com" },
+  { label: "Calendar", link: "https://calendar.google.com" },
+  { label: "Maps", link: "https://maps.google.com" },
+  { label: "Gmail", link: "https://gmail.com" },
+  { label: "Drive", link: "https://drive.google.com" },
+  { label: "FDJ Website", link: "https://fdj.com" },
+  { label: "Canva", link: "https://canva.com" },
+  { label: "Youtube", link: "https://youtube.com" },
+  { label: "Casket Orders", link: "https://casketorders.com" },
+  { label: "E-Vital", link: "https://evital.com" },
+];
+
 export default function MobileSidebar() {
   const [openmobilenav, setopenmobilenav] = useAtom(openMobileNav);
-  const [, setopenaccount] = useAtom(openAccount);
-  const [, setopenclient] = useAtom(openClient);
 
-  const funeral = ["Client", "Contracts", "Itineraries", "Daily Tracker"];
   return (
     <>
       <div
@@ -51,50 +88,15 @@ export default function MobileSidebar() {
           />
         </div>
 
-        <div className="w-full flex flex-col items-start justify-start h-[90%]">
-          <MenuRender data={funeral} title="Funeral" />
-          <MenuRender
-            data={["Event Calendar", "Task Calendar"]}
-            title="Events"
-          />
-          <MenuRender
-            data={[
-              "Drive",
-              "Calendar",
-              "Maps",
-              "Gmail",
-              "Dave",
-              "FDJ Website",
-              "Canva",
-              "Youtube",
-              "Casket Orders",
-              "E-Vital",
-              "Call FWD",
-            ]}
-            title="Links"
-          />
-
-          <Menu placement="right-start">
-            <MenuHandler>
-              <Button className="flex text-left items-center  mx-[4px] mt-[10px] bg-gray-800">
-                ADD
-                <FaUserPlus className="mx-2" />
-              </Button>
-            </MenuHandler>
-            <MenuList>
-              <MenuItem onClick={() => setopenaccount(true)}>
-                Add Account
-              </MenuItem>
-              <MenuItem onClick={() => setopenclient(true)}>
-                Add Client
-              </MenuItem>
-            </MenuList>
-          </Menu>
+        <div className="w-full flex flex-col items-start justify-start h-[90%] py-6 gap-3">
+          <MenuRender data={funeral} title="Funeral" position="right-start" />
+          <MenuRender data={calendar} title="Calendar" position="right-start" />
+          <MenuRender data={links} title="Links" position="right-start" />
         </div>
-        <div className="flex h-[20px] items-center justify-between px-4 gap-2 w-full pb-8">
+        <div className="flex h-[20px] items-center justify-between px-4 gap-2 w-full ">
           <Menu placement="right-start">
             <MenuHandler>
-              <div className="flex items-center gap-3 justify-center ">
+              <div className="flex items-center gap-3 justify-center mb-10">
                 <Avatar
                   src="https://docs.material-tailwind.com/img/face-2.jpg"
                   alt="avatar"
