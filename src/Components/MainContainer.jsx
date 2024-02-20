@@ -74,8 +74,8 @@ export default function MainContainer() {
         `http://localhost:3000/clients`,
         "GET"
       );
-      setFilteredData(response?.clients);
-      return response?.clients;
+      setFilteredData(response?.data.clients);
+      return response?.data.clients;
     },
   });
 
@@ -262,9 +262,9 @@ export default function MainContainer() {
         </div>
       </div>
 
-      <div className="overflow-y-scroll p-2 w-full items-center  justify-center grid-rows-none mt-3   h-full grid lg:grid-cols-4 grid-cols-1 md:grid-cols-3 sm:grid-cols-2 gap-4 ">
-        {filteredData &&
-          filteredData.map((client, key) => {
+      <div className="overflow-y-scroll overflow-x-hidden p-4 w-full justify-center   grid-rows-none mt-3   h-full grid lg:grid-cols-4 grid-cols-1 md:grid-cols-3 sm:grid-cols-2 gap-4 ">
+        {data &&
+          data.map((client, key) => {
             return (
               <Card
                 key={client.id}
@@ -277,12 +277,13 @@ export default function MainContainer() {
                   </Typography>
                   <div className="flex items-center justify-left mb-3  gap-4">
                     <Avatar
+                      loading="lazy"
                       src="https://docs.material-tailwind.com/img/face-2.jpg"
                       alt="avatar"
                       className="w-[50px] h-[50px] justify-self-start place-self-start"
                     />
-                    <div>
-                      <Typography className="text-ellipsis overflow-hidden font-semibold text-sm line-clamp-2">
+                    <div className="w-full">
+                      <Typography className="text-ellipsis overflow-hidden font-semibold text-sm line-clamp-2 max-w-[60%]">
                         Name: {client.decname ?? "N/A"}
                       </Typography>
                     </div>

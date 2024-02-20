@@ -8,16 +8,39 @@ import { customfetch } from "../lib/fetchhandler/requestHandler";
 import { LoadingScreen } from "../CheckAuth/CheckAuth";
 import ErrorPage from "../Components/ErrorPage";
 
-import { openClient, sideBarProfileData } from "../utils/jotai/atoms";
+import {
+  openClient,
+  sideBarProfileData,
+  openCasket,
+  openFlower,
+  openLifeInsurance,
+  openMemorialCard,
+  openMemorialProgram,
+  openTodoList,
+} from "../utils/jotai/atoms";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { RESET } from "jotai/utils";
 import AddClient from "../Components/Account/AddClient";
-import { useEffect } from "react";
+import Casket from "../Components/Profile/ProfileDetails/Casket";
+import Flower from "../Components/Profile/ProfileDetails/Flower";
+import LifeInsurance from "../Components/Profile/ProfileDetails/LifeInsurance";
+import MemorialCard from "../Components/Profile/ProfileDetails/MemorialCard";
+import MemorialProgram from "../Components/Profile/ProfileDetails/MemorialProgram";
+import TodoList from "../Components/Profile/ProfileDetails/TodoList";
+import { LoginCheck } from "../LoginPage/loginPage";
 
 function HomeProfile() {
   const { clientId } = useParams();
   const openclient = useAtomValue(openClient);
+  const opencasket = useAtomValue(openCasket);
+  const openflower = useAtomValue(openFlower);
+  const openlifeinsurance = useAtomValue(openLifeInsurance);
+  const openmemorialcard = useAtomValue(openMemorialCard);
+  const openmemorialprogram = useAtomValue(openMemorialProgram);
+  const opentodolist = useAtomValue(openTodoList);
+
   const setsidebarprofiledata = useSetAtom(sideBarProfileData);
+  const defaultdata = useAtomValue(sideBarProfileData);
 
   // useEffect(() => {
   //   return () => {
@@ -34,22 +57,25 @@ function HomeProfile() {
         "GET"
       );
 
-      return result?.client;
+      return result?.data;
     },
   });
 
   if (isLoading) return <LoadingScreen />;
 
-  if (isError) return <ErrorPage />;
-
-  if (data) {
-    setsidebarprofiledata(data);
-  }
+  if (isError) return <LoginCheck />;
 
   return (
-    <div className="flex h-[100vh] overflow-hidden relative">
+    <div className="flex h-[100vh] overflow-hidden relative ">
       {openclient && <AddClient />}
-      <Sidebar />
+      {opencasket && <Casket />}
+      {openflower && <Flower />}
+      {openlifeinsurance && <LifeInsurance />}
+      {openmemorialcard && <MemorialCard />}
+      {openmemorialprogram && <MemorialProgram />}
+      {opentodolist && <TodoList />}
+
+      <Sidebar defaultdata={data?.client} />
 
       <div className="w-full ">
         <div className="w-[100%] h-auto relative">

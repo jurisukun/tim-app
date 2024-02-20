@@ -15,8 +15,11 @@ import { ImSpinner3 } from "react-icons/im";
 import { customfetch } from "../lib/fetchhandler/requestHandler";
 import { useLocation } from "react-router-dom";
 
+import { useTheme } from "@material-tailwind/react";
+
 export function LoginCheck() {
-  const { loading, error, data } = useCheckAuth();
+  console.log(useTheme());
+  const { loading, error, data } = useCheckAuth().status;
 
   if (loading) {
     return <LoadingScreen />;
@@ -75,7 +78,7 @@ function LoginPage() {
   };
 
   return (
-    <div className=" w-full h-screen bg-white flex justify-center items-center ">
+    <div className=" w-full h-screen  flex justify-center items-center ">
       <Card
         color="transparent"
         shadow={false}

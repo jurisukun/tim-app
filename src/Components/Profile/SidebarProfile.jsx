@@ -18,13 +18,28 @@ import {
 import { IoChevronBackCircleSharp } from "react-icons/io5";
 import { IoCloseCircle } from "react-icons/io5";
 
-import { useAtom } from "jotai";
-import { openSidebar, sideBarProfileData } from "../../utils/jotai/atoms";
+import { useAtom, useSetAtom, useAtomValue } from "jotai";
+import {
+  openSidebar,
+  sideBarProfileData,
+  openCasket,
+  openFlower,
+  openLifeInsurance,
+  openMemorialCard,
+  openMemorialProgram,
+  openTodoList,
+} from "../../utils/jotai/atoms";
 
-function Sidebar() {
+function Sidebar({ defaultdata }) {
   const [open, setOpen] = React.useState(0);
   const [opensidebar, setsidebar] = useAtom(openSidebar);
-  const [defaultdata] = useAtom(sideBarProfileData);
+
+  const opencasket = useSetAtom(openCasket);
+  const openflower = useSetAtom(openFlower);
+  const openlifeinsurance = useSetAtom(openLifeInsurance);
+  const openmemorialcard = useSetAtom(openMemorialCard);
+  const openmemorialprogram = useSetAtom(openMemorialProgram);
+  const opentodolist = useSetAtom(openTodoList);
 
   const handleOpen = (value) => {
     setOpen(open === value ? 0 : value);
@@ -53,6 +68,7 @@ function Sidebar() {
           </div>
           <div className="mb-2 p-4 flex items-center gap-[10px] mt-4 justify-left">
             <Avatar
+              loading="lazy"
               src="https://docs.material-tailwind.com/img/face-2.jpg"
               alt="avatar"
               className=" cursor-pointer"
@@ -93,17 +109,32 @@ function Sidebar() {
               </ListItem>
               <AccordionBody className="py-1">
                 <List className="p-0">
-                  <ListItem>Life Insurance</ListItem>
-                  <ListItem>Memorial Card</ListItem>
-                  <ListItem>Memorail Program</ListItem>
-                  <ListItem>Casket / Urn and Merchandise Selection</ListItem>
-                  <ListItem>Flower Instructions</ListItem>
-                  <ListItem>To do list</ListItem>
+                  <ListItem onClick={() => openlifeinsurance(true)}>
+                    Life Insurance
+                  </ListItem>
+                  <ListItem onClick={() => openmemorialcard(true)}>
+                    Memorial Card
+                  </ListItem>
+                  <ListItem onClick={() => openmemorialprogram(true)}>
+                    Memorail Program
+                  </ListItem>
+                  <ListItem onClick={() => opencasket(true)}>
+                    Casket / Urn and Merchandise Selection
+                  </ListItem>
+                  <ListItem onClick={() => openflower(true)}>
+                    Flower Instructions
+                  </ListItem>
+                  <ListItem onClick={() => opentodolist(true)}>
+                    To do list
+                  </ListItem>
                 </List>
               </AccordionBody>
             </Accordion>
             <div className="">
-              <Select label="Referal Status">
+              <Select
+                label="Referal Status"
+                value={defaultdata?.referral_status ?? ""}
+              >
                 <Option>Test 1</Option>
                 <Option>Test 2 </Option>
                 <Option>Test 3 </Option>
@@ -117,8 +148,7 @@ function Sidebar() {
               Name Of Contact :
             </Typography>
             <Typography className=" text-blue-gray-600 text-[15px] border-b-2 min-h-[25px]">
-              {defaultdata?.firstname} {defaultdata?.middlename}
-              {defaultdata?.lastname}
+              {defaultdata?.firstname}
             </Typography>
           </div>
           <div className="p-3">

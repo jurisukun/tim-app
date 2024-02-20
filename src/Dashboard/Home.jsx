@@ -7,7 +7,7 @@ import MobileSidebar from "../Components/MobileSidebar";
 import AddAccount from "../Components/Account/AddAccount";
 import AddClient from "../Components/Account/AddClient";
 
-import { useAtom, useSetAtom } from "jotai";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { openMobileNav, openClient, openAccount } from "../utils/jotai/atoms";
 import { Typography } from "@material-tailwind/react";
 
@@ -22,8 +22,10 @@ import { FaUserPlus } from "react-icons/fa6";
 
 function Home() {
   const setopenmobilenav = useSetAtom(openMobileNav);
-  const [openaccount, setopenaccount] = useAtom(openAccount);
-  const [openclient, setopenclient] = useAtom(openClient);
+  const openaccount = useAtomValue(openAccount);
+  const openclient = useAtomValue(openClient);
+  const setopenaccount = useSetAtom(openAccount);
+  const setopenclient = useSetAtom(openClient);
 
   return (
     // <CheckAuth>

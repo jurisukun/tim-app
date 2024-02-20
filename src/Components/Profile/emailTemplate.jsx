@@ -9,6 +9,9 @@ import {
   PopoverContent,
 } from "@material-tailwind/react";
 
+import { useQueryClient } from "@tanstack/react-query";
+import { useParams } from "react-router-dom";
+
 function EmailPopover({ title, data }) {
   return (
     <Popover placement="bottom-end">
@@ -26,13 +29,9 @@ function EmailPopover({ title, data }) {
         <div className="  h-[300px] w-[250px]  rounded-lg z-10 ">
           {data.map((file, key) => (
             <div key={key} className="flex items-center">
-              <Checkbox className="" />
-              <Typography>{file}</Typography>
+              <Checkbox className="" label={file} />
             </div>
           ))}
-          <Button size="sm" className="my-4 bg-black/80">
-            Save
-          </Button>
         </div>
       </PopoverContent>
     </Popover>
@@ -52,6 +51,10 @@ const funeralArrangement = [
 ];
 
 function emailTemplate() {
+  const queryClient = useQueryClient();
+  const { clientId } = useParams();
+  const defaultdata = queryClient.getQueryData(["clientprofile", clientId]);
+
   return (
     <div className="flex flex-col gap-4 w-full height-e  p-4">
       <div className="text-xl font-medium text-blue-gray-800 py-4">
@@ -92,7 +95,7 @@ function emailTemplate() {
           <Input label="Subject:" />
         </div>
         <div className=" mt-4">
-          <Input label="To:" />
+          <Input label="To:" defaultValue={defaultdata?.client?.email} />
         </div>
         <div className=" mt-4">
           <Input label="Cc:" />
@@ -102,6 +105,9 @@ function emailTemplate() {
             className="w-[400px] h-[250px]"
             variant="outlined"
             label="Message"
+            defaultValue={`Dear ${
+              (defaultdata?.client?.firstname, defaultdata?.client?.decname)
+            },`}
           />
         </div>
         <div>

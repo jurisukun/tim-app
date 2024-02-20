@@ -7,7 +7,26 @@ import {
   Input,
 } from "@material-tailwind/react";
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useParams } from "react-router-dom";
+import { LoadingScreen } from "../../CheckAuth/CheckAuth";
+import ErrorPage from "../ErrorPage";
+
 function DailyTracker() {
+  const { clientId } = useParams();
+
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["dailytracker", clientId],
+    queryFn: async () => {
+      const response = await fetch(`http://localhost:3000/dailytracker`, {
+        method: "GET",
+      });
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      return response.json();
+    },
+  });
   const [showAddRecord, setShowAddRecord] = useState(false);
 
   const handleAddRecordClick = () => {
@@ -18,109 +37,15 @@ function DailyTracker() {
     setShowAddRecord(false);
   };
 
-  const data = [
-    {
-      date: "February 10, 2024",
-      time: "Alasyete ng gabi",
-      staffName: "Kulas",
-      interactionType: "Diko alam",
-      interactionWith: "Diko alam",
-      purposeOfCall: "Mangungutang",
-      phoneNumber: "093947283483247",
-      notes: "auj efwh haf weh whufhwe hew uewiu gwefi ewif a",
-      action: "Pindot",
-    },
-    {
-      date: "February 10, 2024",
-      time: "Alasyete ng gabi",
-      staffName: "Kulas",
-      interactionType: "Diko alam",
-      interactionWith: "Diko alam",
-      purposeOfCall: "Mangungutang",
-      phoneNumber: "093947283483247",
-      notes: "auj efwh haf weh whufhwe hew uewiu gwefi ewif a",
-      action: "Pindot",
-    },
+  if (isLoading) {
+    return <LoadingScreen />;
+  }
 
-    {
-      date: "February 10, 2024",
-      time: "Alasyete ng gabi",
-      staffName: "Kulas",
-      interactionType: "Diko alam",
-      interactionWith: "Diko alam",
-      purposeOfCall: "Mangungutang",
-      phoneNumber: "093947283483247",
-      notes: "auj efwh haf weh whufhwe hew uewiu gwefi ewif a",
-      action: "Pindot",
-    },
-    {
-      date: "February 10, 2024",
-      time: "Alasyete ng gabi",
-      staffName: "Kulas",
-      interactionType: "Diko alam",
-      interactionWith: "Diko alam",
-      purposeOfCall: "Mangungutang",
-      phoneNumber: "093947283483247",
-      notes: "auj efwh haf weh whufhwe hew uewiu gwefi ewif a",
-      action: "Pindot",
-    },
-    {
-      date: "February 10, 2024",
-      time: "Alasyete ng gabi",
-      staffName: "Kulas",
-      interactionType: "Diko alam",
-      interactionWith: "Diko alam",
-      purposeOfCall: "Mangungutang",
-      phoneNumber: "093947283483247",
-      notes: "auj efwh haf weh whufhwe hew uewiu gwefi ewif a",
-      action: "Pindot",
-    },
-    {
-      date: "February 10, 2024",
-      time: "Alasyete ng gabi",
-      staffName: "Kulas",
-      interactionType: "Diko alam",
-      interactionWith: "Diko alam",
-      purposeOfCall: "Mangungutang",
-      phoneNumber: "093947283483247",
-      notes: "auj efwh haf weh whufhwe hew uewiu gwefi ewif a",
-      action: "Pindot",
-    },
-    {
-      date: "February 10, 2024",
-      time: "Alasyete ng gabi",
-      staffName: "Kulas",
-      interactionType: "Diko alam",
-      interactionWith: "Diko alam",
-      purposeOfCall: "Mangungutang",
-      phoneNumber: "093947283483247",
-      notes: "auj efwh haf weh whufhwe hew uewiu gwefi ewif a",
-      action: "Pindot",
-    },
-    {
-      date: "February 10, 2024",
-      time: "Alasyete ng gabi",
-      staffName: "Kulas",
-      interactionType: "Diko alam",
-      interactionWith: "Diko alam",
-      purposeOfCall: "Mangungutang",
-      phoneNumber: "093947283483247",
-      notes: "auj efwh haf weh whufhwe hew uewiu gwefi ewif a",
-      action: "Pindot",
-    },
-    {
-      date: "February 10, 2024",
-      time: "Alasyete ng gabi",
-      staffName: "Kulas",
-      interactionType: "Diko alam",
-      interactionWith: "Diko alam",
-      purposeOfCall: "Mangungutang",
-      phoneNumber: "093947283483247",
-      notes: "auj efwh haf weh whufhwe hew uewiu gwefi ewif a",
-      action: "Pindot",
-    },
-  ];
+  if (isError) {
+    return <ErrorPage />;
+  }
 
+  const { daily } = data;
   return (
     <div className="w-full  h-full flex-1 max-w-full">
       <div className="w-full h-20 text-xl font-medium  bbb text-blue-gray-800 flex items-center justify-between p-4">
@@ -133,117 +58,133 @@ function DailyTracker() {
           Add Record
         </Button>
       </div>
-      <div className="hidden md:block flex-1 h-full bg-red-50 overflow-y-scroll pb-6">
-        <Card className="mt-3 hidden md:block p-2 ">
-          <table className="shadow-lg bg-white w-full">
-            <tbody>
-              <tr>
-                <th className="bg-blue-gray-300 border  text-left px-2 py-2">
-                  <Typography
-                    variant="small"
-                    color="blue-gray"
-                    className="font-semi-bold text-1xl "
-                  >
-                    Date
-                  </Typography>
-                </th>
-                <th className="bg-blue-gray-300 border text-left px-2 py-2">
-                  <Typography
-                    variant="small"
-                    color="blue-gray"
-                    className="font-semi-bold text-1xl "
-                  >
-                    Time
-                  </Typography>
-                </th>
-                <th className="bg-blue-gray-300 border text-left px-2 py-2">
-                  <Typography
-                    variant="small"
-                    color="blue-gray"
-                    className="font-semi-bold text-1xl "
-                  >
-                    Staff Name
-                  </Typography>
-                </th>
-                <th className="bg-blue-gray-300 border text-left px-2 py-2">
-                  <Typography
-                    variant="small"
-                    color="blue-gray"
-                    className="font-semi-bold text-1xl "
-                  >
-                    Interaction Type
-                  </Typography>
-                </th>
-                <th className="bg-blue-gray-300 border text-left px-2 py-2">
-                  <Typography
-                    variant="small"
-                    color="blue-gray"
-                    className="font-semi-bold text-1xl "
-                  >
-                    Interaction With
-                  </Typography>
-                </th>
-                <th className="bg-blue-gray-300 border text-left px-2 py-2">
-                  <Typography
-                    variant="small"
-                    color="blue-gray"
-                    className="font-semi-bold text-1xl "
-                  >
-                    Purpose of call
-                  </Typography>
-                </th>
-                <th className="bg-blue-gray-300 border text-left px-2 py-2">
-                  <Typography
-                    variant="small"
-                    color="blue-gray"
-                    className="font-semi-bold text-1xl "
-                  >
-                    Phone Number
-                  </Typography>
-                </th>
-                <th className="bg-blue-gray-300 border text-left px-2 py-2">
-                  <Typography
-                    variant="small"
-                    color="blue-gray"
-                    className="font-semi-bold text-1xl "
-                  >
-                    Notes
-                  </Typography>
-                </th>
-                <th className="bg-blue-gray-300 border text-left px-2 py-2">
-                  <Typography
-                    variant="small"
-                    color="blue-gray"
-                    className="font-semi-bold text-1xl "
-                  >
-                    Action
-                  </Typography>
-                </th>
-              </tr>
-              {data.map((item, key) => {
-                return (
-                  <tr key={key}>
-                    <td className="border px-2 py-2">{item.date}</td>
-                    <td className="border px-2 py-2">{item.time}</td>
-                    <td className="border px-2 py-2">{item.staffName}</td>
-                    <td className="border px-2 py-2">{item.interactionType}</td>
-                    <td className="border px-2 py-2">{item.interactionWith}</td>
-                    <td className="border px-2 py-2">{item.purposeOfCall}</td>
-                    <td className="border px-2 py-2">{item.phoneNumber}</td>
-                    <td className="border px-2 py-2">{item.notes}</td>
-                    <td className="border px-2 py-2">{item.action}</td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </Card>
+      <div className="hidden md:block flex-1 h-full overflow-y-scroll pb-6">
+        {daily?.length > 0 && (
+          <Card className="mt-3 hidden md:block p-2 ">
+            <table className="shadow-lg bg-white w-full">
+              <tbody>
+                <tr>
+                  <th className="bg-blue-gray-300 border  text-left px-2 py-2">
+                    <Typography
+                      variant="small"
+                      color="blue-gray"
+                      className="font-semi-bold text-1xl "
+                    >
+                      Date
+                    </Typography>
+                  </th>
+                  <th className="bg-blue-gray-300 border text-left px-2 py-2">
+                    <Typography
+                      variant="small"
+                      color="blue-gray"
+                      className="font-semi-bold text-1xl "
+                    >
+                      Time
+                    </Typography>
+                  </th>
+                  <th className="bg-blue-gray-300 border text-left px-2 py-2">
+                    <Typography
+                      variant="small"
+                      color="blue-gray"
+                      className="font-semi-bold text-1xl "
+                    >
+                      Staff Name
+                    </Typography>
+                  </th>
+                  <th className="bg-blue-gray-300 border text-left px-2 py-2">
+                    <Typography
+                      variant="small"
+                      color="blue-gray"
+                      className="font-semi-bold text-1xl "
+                    >
+                      Interaction Type
+                    </Typography>
+                  </th>
+                  <th className="bg-blue-gray-300 border text-left px-2 py-2">
+                    <Typography
+                      variant="small"
+                      color="blue-gray"
+                      className="font-semi-bold text-1xl "
+                    >
+                      Interaction With
+                    </Typography>
+                  </th>
+                  <th className="bg-blue-gray-300 border text-left px-2 py-2">
+                    <Typography
+                      variant="small"
+                      color="blue-gray"
+                      className="font-semi-bold text-1xl "
+                    >
+                      Purpose of call
+                    </Typography>
+                  </th>
+                  <th className="bg-blue-gray-300 border text-left px-2 py-2">
+                    <Typography
+                      variant="small"
+                      color="blue-gray"
+                      className="font-semi-bold text-1xl "
+                    >
+                      Phone Number
+                    </Typography>
+                  </th>
+                  <th className="bg-blue-gray-300 border text-left px-2 py-2">
+                    <Typography
+                      variant="small"
+                      color="blue-gray"
+                      className="font-semi-bold text-1xl "
+                    >
+                      Notes
+                    </Typography>
+                  </th>
+                  <th className="bg-blue-gray-300 border text-left px-2 py-2">
+                    <Typography
+                      variant="small"
+                      color="blue-gray"
+                      className="font-semi-bold text-1xl "
+                    >
+                      Action
+                    </Typography>
+                  </th>
+                </tr>
+                {daily.map((item, key) => {
+                  return (
+                    <tr key={key}>
+                      <td className="border px-2 py-2">{item.date}</td>
+                      <td className="border px-2 py-2">{item.time}</td>
+                      <td className="border px-2 py-2">{item.staffName}</td>
+                      <td className="border px-2 py-2">
+                        {item.interactionType}
+                      </td>
+                      <td className="border px-2 py-2">
+                        {item.interactionWith}
+                      </td>
+                      <td className="border px-2 py-2">{item.purposeOfCall}</td>
+                      <td className="border px-2 py-2">{item.phoneNumber}</td>
+                      <td className="border px-2 py-2">{item.notes}</td>
+                      <td className="border px-2 py-2">{item.action}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </Card>
+        )}
+        {daily?.length <= 0 && (
+          <div className="h-full w-full items-center flex justify-center text-gray-400">
+            No records found
+          </div>
+        )}
       </div>
 
       {/* mobile view */}
       <div className="xl:hidden lg:block overflow-y-scroll h-[80vh] p-2 px-6">
+        {daily?.length <= 0 && (
+          <div className="h-full w-full items-center flex justify-center text-gray-400">
+            No records found
+          </div>
+        )}
         <div className="mt-3  grid md:grid-cols-2 sm:grid-cols-2 gap-5 ">
-          {data.map((item, key) => {
+          {daily?.map((item, key) => {
             return (
               <Card key={key} className="shadoww p-6">
                 <div className="flex items-center gap-3 justify-between">

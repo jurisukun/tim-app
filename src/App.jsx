@@ -22,7 +22,7 @@ import Forms from "./Components/Profile/Forms";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-import { ThemeProvider } from "@material-tailwind/react";
+import { ThemeProvider } from "./theme-provider";
 
 const queryClient = new QueryClient();
 
@@ -126,7 +126,9 @@ function App() {
   return (
     <>
       <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} errorElement={<ErrorPage />} />
+        <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+          <RouterProvider router={router} errorElement={<ErrorPage />} />
+        </ThemeProvider>
       </QueryClientProvider>
     </>
   );

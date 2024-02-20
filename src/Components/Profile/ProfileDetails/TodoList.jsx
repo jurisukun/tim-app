@@ -22,7 +22,7 @@ function TodoList() {
     setIsAddNotesVisible(false);
   };
   return (
-    <div className="w-full fixed top-0 left-0 h-screen flex justify-center items-center bg-black/70">
+    <div className="w-full fixed top-0 left-0 z-50 h-screen flex justify-center items-center bg-black/70">
       {isAddNotesVisible && (
         <div className="bg-white bb lg:w-[380px] w-[350px] absolute z-10 rounded-md p-6">
           <div className="w-[100%] h-[100%] text-white-100">
@@ -33,36 +33,37 @@ function TodoList() {
           </div>
           <Button
             onClick={handleCloseButtonClick}
-            className=" float-right mt-3">
+            className=" float-right mt-3"
+          >
             Close
           </Button>
         </div>
       )}
-      <Card className="p-6 h-[60vh] w-full md:w-[65%] lg:w-[45%] xl:w-[30%]">
+      <Card className="p-6  max-w-[375px] w-[85%] min-w-[300px] max-h-[90%]">
         <div className="text-lg font-medium text-blue-gray-800 text-center m2-6">
           To Do List
         </div>
-        <div className="h-[50vh] p-2 overflow-y-scroll">
-          <div className="flex items-center gap-4 mt-3">
-            <Typography className="text-blue-gray-600">
+        <div className="p-2 flex flex-col overflow-y-scroll gap-4">
+          <div className="flex flex-col items-center">
+            <Typography className="text-blue-gray-600 w-full text-left text-[14px]">
               Memorial Card Photo and Scripture
             </Typography>
             <Input type="date" />
           </div>
-          <div className="flex items-center gap-4 mt-3">
-            <Typography className="text-blue-gray-600">
+          <div className="flex flex-col items-center">
+            <Typography className="text-blue-gray-600 w-full text-left text-[14px]">
               Limo Pick Up Address and Drop-off
             </Typography>
             <Input type="date" />
           </div>
-          <div className="flex items-center gap-4 mt-3">
-            <Typography className="text-blue-gray-600">
+          <div className="flex flex-col items-center">
+            <Typography className="text-blue-gray-600 w-full text-left text-[14px]">
               Program Info (Order of Service and Obituary)
             </Typography>
             <Input type="date" />
           </div>
-          <div className="flex items-center gap-4 mt-3">
-            <Typography className="text-blue-gray-600">
+          <div className="flex flex-col items-center">
+            <Typography className="text-blue-gray-600 w-full text-left text-[14px]">
               Date of payment and clothing drop-off
             </Typography>
             <Input type="date" />

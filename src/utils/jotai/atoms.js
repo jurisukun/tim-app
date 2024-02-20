@@ -8,6 +8,13 @@ export const openMobileNav = atom(false);
 
 export const openSidebar = atom(false);
 
+export const openCasket = atom(false);
+export const openFlower = atom(false);
+export const openLifeInsurance = atom(false);
+export const openMemorialCard = atom(false);
+export const openMemorialProgram = atom(false);
+export const openTodoList = atom(false);
+
 export const sideBarProfileData = atomWithReset(null);
 
 export const openFuneralDetails = atom(false);
@@ -54,7 +61,7 @@ export const newPrimaryIntake = atomWithReset({
   intake_relationship: null,
   intake_email: null,
   intake_telephone: null,
-  additional_contact: [],
+  additional_contact: null,
   facial_hair: null,
   intake_notes: null,
 });

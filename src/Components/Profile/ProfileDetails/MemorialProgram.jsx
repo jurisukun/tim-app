@@ -22,7 +22,7 @@ function MemorialProgram() {
     setIsAddNotesVisible(false);
   };
   return (
-    <div className="w-full fixed top-0 left-0 h-screen flex justify-center items-center bg-black/70">
+    <div className="w-full fixed top-0 left-0  z-50 h-screen flex justify-center items-center bg-black/70">
       {isAddNotesVisible && (
         <div className="bg-white bb lg:w-[380px] w-[350px] absolute z-10 rounded-md p-6">
           <div className="w-[100%] h-[100%] text-white-100">
@@ -33,12 +33,13 @@ function MemorialProgram() {
           </div>
           <Button
             onClick={handleCloseButtonClick}
-            className=" float-right mt-3">
+            className=" float-right mt-3"
+          >
             Close
           </Button>
         </div>
       )}
-      <Card className="p-6 w-full md:w-[65%] lg:w-[45%] xl:w-[25%]">
+      <Card className="p-6  max-w-[375px] w-[85%] min-w-[300px] max-h-[95%]">
         <div className="text-lg font-medium text-blue-gray-800 text-center m2-6">
           Memorial Program Info
         </div>

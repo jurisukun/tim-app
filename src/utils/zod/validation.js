@@ -16,7 +16,7 @@ export const ClientSchema = z.object({
 
 export const PrimaryIntakeSchema = z.object({
   casenumber: z.string().nullable(),
-  date_of_death: z.date().nullable(),
+  date_of_death: z.string().nullable(),
   died_at: z.string().nullable(),
   apartment_number: z.string().nullable(),
   death_place: z.string().nullable(),
@@ -25,37 +25,37 @@ export const PrimaryIntakeSchema = z.object({
   death_zip: z.string().nullable(),
   death_country: z.string().nullable(),
   death_marital: z
-    .enum(["MARRIED_SEPARATED", "MARRIED", "SINGLE", "DIVORCED", "WIDOWED"])
+    .enum(["Married but separated", "Married", "Single", "Divorced", "Widowed"])
     .nullable(),
   nok: z.string().nullable(),
   nok_address: z.string().nullable(),
   beneficiary: z.string().nullable(),
   intake_relationship: z
     .enum([
-      "SELF",
-      "GUARDIAN",
-      "MOTHER",
-      "FATHER",
-      "SON",
-      "DAUGHTER",
-      "BROTHER",
-      "SISTER",
-      "NIECE",
-      "NEPHEW",
-      "COUSIN",
-      "AUNT",
-      "UNCLE",
-      "GRANDPARENT",
-      "GRANDCHILD",
-      "WIFE",
-      "HUSBAND",
-      "FRIEND",
-      "OTHER",
+      "Self",
+      "Authorized Guardian",
+      "Mother",
+      "Father",
+      "Son",
+      "Daughter",
+      "Brother",
+      "Sister",
+      "Niece",
+      "Nephew",
+      "Cousin",
+      "Aunt",
+      "Uncle",
+      "Grandparent",
+      "Grandchild",
+      "Wife",
+      "Husband",
+      "Friend",
+      "Other",
     ])
     .nullable(),
   intake_email: z.string().nullable() || z.string().email().nullable(),
   intake_telephone: z.string().nullable(),
-  additional_contact: z.array(z.string()).nullable(),
+  additional_contact: z.string().nullable(),
   facial_hair: z.string().nullable(),
   intake_notes: z.string().nullable(),
 });
@@ -63,42 +63,40 @@ export const PrimaryIntakeSchema = z.object({
 export const ServiceDetailsSchema = z.object({
   religion: z
     .enum([
-      "CHRISTIAN",
-      "CATOLIC",
-      "MUSLIM",
-      "ADVENTIST",
-      "JEHOVAH_WITNESS",
-      "OTHER",
-      "UNKNOWN",
+      "Christian",
+      "Catholic",
+      "Muslim",
+      "Advantist",
+      "Jehovah's Witness",
+      "Other",
+      "Unknown",
     ])
     .nullable(),
   church_affil: z.string().nullable(),
   service_location: z.string().nullable(),
   service_info: z.string().nullable(),
-  service_date: z.date().nullable(),
+  service_date: z.string().nullable(),
   service_time: z.string().nullable(),
   service_endtime: z.string().nullable(),
   viewing_location: z.string().nullable(),
   viewing_info: z.string().nullable(),
-  viewing_date: z.date().nullable(),
+  viewing_date: z.string().nullable(),
   viewing_time: z.string().nullable(),
   viewing_endtime: z.string().nullable(),
   cemetery_status: z
     .enum([
-      "FAMILY_TO_CHOOSE",
-      "FAMILIY_TO_SELECT",
-      "FAMILY_OWNS",
-      "CEMETERY_SELECTED",
+      "Family to Choose",
+      "Family to Select",
+      "Family Owns",
+      "Cemetery Selected",
     ])
     .nullable(),
   cemetery_name: z.string().nullable(),
   cemetery_info: z.string().nullable(),
-  cemetery_booking: z.enum(["YES", "NO", "PENDING"]).nullable(),
-  arrival_date: z.date().nullable(),
+  cemetery_booking: z.enum(["Yes", "No", "Pending"]).nullable(),
+  arrival_date: z.string().nullable(),
   arrival_time: z.string().nullable(),
-  type_of_disposition: z
-    .enum(["BURIAL", "ENTOMBMENT", "CREMATION", "OTHER"])
-    .nullable(),
+  type_of_disposition: z.enum(["Burial", "Cremation", "Entombment"]).nullable(),
   service_notes: z.string().nullable(),
 });
 
@@ -122,15 +120,15 @@ export const AccountSchema = z.object({
 
 export const DailyTrackerSchema = z.object({
   interaction_type: z.enum([
-    "CALL_TO",
-    "CALL_FROM",
-    "EMAIL_EXCHANGE",
-    "MEETING_WITH",
+    "Call to",
+    "Call from",
+    "Email exchange with",
+    "Meeting with",
   ]),
   interaction_with: z.string(),
   call_purpose: z.string(),
   phonenumber: z.string(),
-  notes: z.string(),
+  notes: z.string().nullable().optional(),
   createdBy: z.string(),
 });
 
@@ -171,11 +169,11 @@ export const MemorialCardSchema = z.object({
   withmemorialcard: z.enum(["YES", "NO"]),
   photo: z.string(),
   scripture: z.string(),
-  designed: z.enum(["NOT_STARTED", "IN_PROGRESS", "COMPLETED"]),
-  language: z.enum(["ENGLISH", "FRENCH", "ENGLISH_AND_FRENCH"]),
+  designed: z.enum(["Not Started", "In progress", "Completed"]),
+  language: z.enum(["English", "French", "English and French"]),
 
-  printed: z.enum(["NOT_STARTED", "IN_PROGRESS", "COMPLETED"]),
-  laminated: z.enum(["NOT_STARTED", "IN_PROGRESS", "COMPLETED"]),
+  printed: z.enum(["Not Started", "In progress", "Completed"]),
+  laminated: z.enum(["Not Started", "In progress", "Completed"]),
   quantity: z.number(),
   notes: z.string().nullable().optional(),
 });
@@ -185,8 +183,44 @@ export const MemorialProgramSchema = z.object({
   photo: z.string(),
   serviceorder: z.string(),
   obituary: z.string(),
-  designed: z.enum(["NOT_STARTED", "IN_PROGRESS", "COMPLETED"]),
-  printed: z.enum(["NOT_STARTED", "IN_PROGRESS", "COMPLETED"]),
+  designed: z.enum(["Not Started", "In progress", "Completed"]),
+  printed: z.enum(["Not Started", "In progress", "Completed"]),
   quantity: z.number(),
+  notes: z.string().nullable().optional(),
+});
+
+export const CasketUrnMerchSchema = z.object({
+  selectedcasket: z.string(),
+  updatedcasket: z.string(),
+  orderplaced: z.string(),
+  specialinstructions: z.string(),
+  urninformation: z.string(),
+  urnmodel: z.string(),
+  company: z.string(),
+  notes: z.string().nullable().optional(),
+});
+
+export const FlowerInstructionsSchema = z.object({
+  type: z.enum(["Casket Spray", "Standing Spray"]),
+  ribbon: z.string(),
+  colors: z.string(),
+  specialinstructions: z.string(),
+  additionaltype: z.string(),
+  additionalribbon: z.string(),
+  additionalcolors: z.string(),
+  additionalinstructions: z.string(),
+  florist: z.string(),
+  ordernumber: z.string(),
+  notes: z.string().nullable().optional(),
+});
+
+export const ToDoListSchema = z.object({
+  photoscripure: z.date(),
+  pickupdropoff: z.date(),
+  programinfo: z.date(),
+  paymentdate: z.date(),
+  total: z.number(),
+  printed: z.enum(["Not Started", "In progress", "Completed"]),
+  paymenthmethod: z.enum(["Cash", "Bank Certified Check"]),
   notes: z.string().nullable().optional(),
 });
