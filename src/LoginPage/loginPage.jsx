@@ -15,10 +15,7 @@ import { ImSpinner3 } from "react-icons/im";
 import { customfetch } from "../lib/fetchhandler/requestHandler";
 import { useLocation } from "react-router-dom";
 
-import { useTheme } from "@material-tailwind/react";
-
 export function LoginCheck() {
-  console.log(useTheme());
   const { loading, error, data } = useCheckAuth().status;
 
   if (loading) {

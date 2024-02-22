@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { customfetch } from "../../lib/fetchhandler/requestHandler";
 
+export let user;
+
 export const useCheckAuth = () => {
   const [status, setStatus] = useState({
     loading: true,
@@ -20,8 +22,8 @@ export const useCheckAuth = () => {
 
         // localStorage.setItem("token", res?.refreshToken ?? res?.token);
         setStatus({ loading: false, error: false, data: res });
-        const { isAdmin, role } = res;
-        setUser({ isAdmin, role });
+        const { isAdmin, role, userId } = res;
+        setUser({ isAdmin, role, userId });
       })
       .catch((err) => setStatus({ loading: false, error: true, data: err }));
   }, []);

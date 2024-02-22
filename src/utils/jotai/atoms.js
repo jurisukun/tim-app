@@ -90,10 +90,13 @@ export const newServiceDetails = atomWithReset({
 });
 
 export const newDailyTracker = atomWithReset({
+  // date: null,
+  // time: null,
+  client_id: null,
   interaction_type: null,
   interaction_with: null,
   call_purpose: null,
-  phonenumber: null,
+  phone_number: null,
   notes: null,
   createdBy: null,
 });

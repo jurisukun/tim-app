@@ -5,29 +5,59 @@ import {
   Option,
   Typography,
   Input,
+  Menu,
+  MenuHandler,
+  MenuList,
+  MenuItem,
+  Dialog,
+  DialogBody,
 } from "@material-tailwind/react";
-import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { LoadingScreen } from "../../CheckAuth/CheckAuth";
 import ErrorPage from "../ErrorPage";
+import { useAtomValue, useSetAtom } from "jotai";
+import { newDailyTracker } from "../../utils/jotai/atoms";
+
+import { DailyTrackerSchema } from "../../utils/zod/validation";
+import { toast } from "react-toastify";
+
+import { handleChange } from "../Account/AddClient";
+
+import { useCheckAuth } from "../../utils/hooks/useCheckAuth";
+import { set } from "date-fns";
 
 function DailyTracker() {
   const { clientId } = useParams();
+  const { user } = useCheckAuth();
+  const newdailytracker = useAtomValue(newDailyTracker);
+  const setnewdailytracker = useSetAtom(newDailyTracker);
 
+  const [showAddRecord, setShowAddRecord] = useState(false);
+  const [selectedRecord, setSelectedRecord] = useState();
+  const [recordId, setRecordId] = useState();
+
+  useEffect(() => {
+    if (selectedRecord) setnewdailytracker(selectedRecord);
+  }, [selectedRecord]);
+
+  const queryClient = useQueryClient();
   const { data, isLoading, isError } = useQuery({
     queryKey: ["dailytracker", clientId],
     queryFn: async () => {
-      const response = await fetch(`http://localhost:3000/dailytracker`, {
-        method: "GET",
-      });
+      const response = await fetch(
+        `http://localhost:3000/dailytracker/${clientId}`,
+        {
+          method: "GET",
+        }
+      );
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
       return response.json();
     },
   });
-  const [showAddRecord, setShowAddRecord] = useState(false);
 
   const handleAddRecordClick = () => {
     setShowAddRecord(true);
@@ -37,6 +67,130 @@ function DailyTracker() {
     setShowAddRecord(false);
   };
 
+  const addDailyTracker = async () => {
+    console.log(newdailytracker);
+    const parse = DailyTrackerSchema.safeParse(
+      selectedRecord ?? {
+        ...newdailytracker,
+        client_id: clientId,
+      }
+    );
+    if (parse.success) {
+      const response = await fetch(`http://localhost:3000/dailytracker`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON?.stringify({
+          client_id: clientId,
+
+          ...parse.data,
+          createdBy: user?.userId,
+        }),
+      });
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const result = await response.json();
+      if (result.error) {
+        toast.error(result.message);
+      }
+      toast.success(result.message);
+      setShowAddRecord(false);
+
+      return result.data;
+    } else {
+      toast.error(parse.error.errors[0].message);
+    }
+  };
+
+  const deleteDailyTracker = async () => {
+    const response = await fetch(
+      `http://localhost:3000/dailytracker/${recordId}`,
+      {
+        method: "DELETE",
+      }
+    );
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    const result = await response.json();
+    if (result.error) {
+      toast.error(result.message);
+    }
+    toast.success(result.message);
+    setRecordId(null);
+  };
+
+  const updateDailyTracker = async () => {
+    const parse = DailyTrackerSchema.safeParse({
+      ...newdailytracker,
+      client_id: clientId,
+    });
+    if (parse.success) {
+      const response = await fetch(
+        `http://localhost:3000/dailytracker/${selectedRecord.id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON?.stringify({
+            client_id: clientId,
+            ...newdailytracker,
+            createdBy: user?.userId,
+          }),
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const result = await response.json();
+      if (result.error) {
+        toast.error(result.message);
+      }
+      toast.success(result.message);
+
+      setShowAddRecord(false);
+
+      return result.data;
+    } else {
+      toast.error(parse.error.errors[0].message);
+    }
+  };
+
+  const mutation = useMutation({
+    mutationFn: recordId
+      ? deleteDailyTracker
+      : selectedRecord
+      ? updateDailyTracker
+      : addDailyTracker,
+    mutationKey: recordId
+      ? ["deletedailytracker", recordId]
+      : ["dailytrackermutation"],
+    onSuccess: (data) => {
+      recordId
+        ? queryClient.setQueryData(["dailytracker", clientId], (oldData) => {
+            return {
+              daily: oldData.daily.filter((item) => item.id !== recordId),
+            };
+          })
+        : selectedRecord
+        ? queryClient.setQueryData(["dailytracker", clientId], (oldData) => {
+            return {
+              daily: oldData.daily.map((item) =>
+                item.id === data.id ? data : item
+              ),
+            };
+          })
+        : queryClient.setQueryData(["dailytracker", clientId], (oldData) => {
+            return { daily: [data, ...oldData.daily] };
+          });
+      setRecordId(null);
+      setSelectedRecord(null);
+    },
+  });
+
   if (isLoading) {
     return <LoadingScreen />;
   }
@@ -45,7 +199,7 @@ function DailyTracker() {
     return <ErrorPage />;
   }
 
-  const { daily } = data;
+  let daily = data?.daily;
   return (
     <div className="w-full  h-full flex-1 max-w-full">
       <div className="w-full h-20 text-xl font-medium  bbb text-blue-gray-800 flex items-center justify-between p-4">
@@ -58,12 +212,12 @@ function DailyTracker() {
           Add Record
         </Button>
       </div>
-      <div className="hidden md:block flex-1 h-full overflow-y-scroll pb-6">
+      <div className="hidden md:block flex-1 h-[80%] p-3">
         {daily?.length > 0 && (
-          <Card className="mt-3 hidden md:block p-2 ">
+          <Card className="mt-3 hidden md:block p-2 max-h-full overflow-y-scroll">
             <table className="shadow-lg bg-white w-full">
               <tbody>
-                <tr>
+                <tr className="sticky top-0">
                   <th className="bg-blue-gray-300 border  text-left px-2 py-2">
                     <Typography
                       variant="small"
@@ -136,33 +290,54 @@ function DailyTracker() {
                       Notes
                     </Typography>
                   </th>
-                  <th className="bg-blue-gray-300 border text-left px-2 py-2">
-                    <Typography
-                      variant="small"
-                      color="blue-gray"
-                      className="font-semi-bold text-1xl "
-                    >
-                      Action
-                    </Typography>
-                  </th>
                 </tr>
                 {daily.map((item, key) => {
                   return (
-                    <tr key={key}>
-                      <td className="border px-2 py-2">{item.date}</td>
-                      <td className="border px-2 py-2">{item.time}</td>
-                      <td className="border px-2 py-2">{item.staffName}</td>
-                      <td className="border px-2 py-2">
-                        {item.interactionType}
-                      </td>
-                      <td className="border px-2 py-2">
-                        {item.interactionWith}
-                      </td>
-                      <td className="border px-2 py-2">{item.purposeOfCall}</td>
-                      <td className="border px-2 py-2">{item.phoneNumber}</td>
-                      <td className="border px-2 py-2">{item.notes}</td>
-                      <td className="border px-2 py-2">{item.action}</td>
-                    </tr>
+                    <Menu className="bg-black">
+                      <MenuHandler>
+                        <tr key={key} className="hover:shadow-md ">
+                          <td className="border px-2 py-2 text-xs">
+                            {item?.date}
+                          </td>
+                          <td className="border px-2 py-2">{item?.time}</td>
+                          <td className="border px-2 py-2">
+                            {item?.staff_name}
+                          </td>
+                          <td className="border px-2 py-2">
+                            {item?.interaction_type}
+                          </td>
+                          <td className="border px-2 py-2">
+                            {item?.interaction_with}
+                          </td>
+                          <td className="border px-2 py-2">
+                            {item?.call_purpose}
+                          </td>
+                          <td className="border px-2 py-2">
+                            {item?.phone_number}
+                          </td>
+                          <td className="border px-2 py-2 text-xs text-ellipsis">
+                            {item?.notes}
+                          </td>
+                        </tr>
+                      </MenuHandler>
+                      <MenuList className="border shadow-md ">
+                        <MenuItem
+                          onClick={() => {
+                            setSelectedRecord(item);
+                            setShowAddRecord(true);
+                          }}
+                          className="text-red-800"
+                        >
+                          View / Edit
+                        </MenuItem>
+                        <MenuItem
+                          onClick={() => setRecordId(item.id)}
+                          className="text-red-800"
+                        >
+                          Delete
+                        </MenuItem>
+                      </MenuList>
+                    </Menu>
                   );
                 })}
               </tbody>
@@ -177,7 +352,7 @@ function DailyTracker() {
       </div>
 
       {/* mobile view */}
-      <div className="xl:hidden lg:block overflow-y-scroll h-[80vh] p-2 px-6">
+      <div className="xl:hidden lg:block overflow-y-scroll h-full p-2 px-6">
         {daily?.length <= 0 && (
           <div className="h-full w-full items-center flex justify-center text-gray-400">
             No records found
@@ -192,48 +367,44 @@ function DailyTracker() {
                     Date:
                   </Typography>
                   <Typography className="text-start border">
-                    {item.date}
+                    {item?.date}
                   </Typography>
                 </div>
                 <div className="flex items-center gap-3 justify-between">
                   <Typography className="text-black">Time:</Typography>
-                  <Typography>{item.time}</Typography>
+                  <Typography>{item?.time}</Typography>
                 </div>
                 <div className="flex items-center gap-3 justify-between">
                   <Typography className="text-black">Staff Name:</Typography>
-                  <Typography>{item.staffName}</Typography>
+                  <Typography>{item?.staff_name}</Typography>
                 </div>
                 <div className="flex items-center gap-3 justify-between">
                   <Typography className="text-black">
                     Interaction Type:
                   </Typography>
-                  <Typography>{item.interactionType}</Typography>
+                  <Typography>{item?.interaction_type}</Typography>
                 </div>
                 <div className="flex items-center gap-3 justify-between">
                   <Typography className="text-black">
                     Interaction With:
                   </Typography>
-                  <Typography>{item.interactionWith}</Typography>
+                  <Typography>{item?.interaction_with}</Typography>
                 </div>
                 <div className="flex items-center gap-3 justify-between">
                   <Typography className="text-black">
                     Purpose Of Call:
                   </Typography>
-                  <Typography>{item.purposeOfCall}</Typography>
+                  <Typography>{item?.call_purpose}</Typography>
                 </div>
                 <div className="flex items-center gap-3 justify-between">
                   <Typography className="text-black"> Phone Number:</Typography>
-                  <Typography>{item.phoneNumber}</Typography>
+                  <Typography>{item?.phone_number}</Typography>
                 </div>
                 <div className="flex items-start gap-3 justify-between">
                   <Typography className="text-black"> Notes:</Typography>
                   <Typography className="border text-end">
-                    {item.notes}
+                    {item?.notes}
                   </Typography>
-                </div>
-                <div className="flex items-center gap-3 justify-between">
-                  <Typography className="text-black"> Actions:</Typography>
-                  <Typography>{item.action}</Typography>
                 </div>
               </Card>
             );
@@ -244,37 +415,107 @@ function DailyTracker() {
       {/* add record */}
       {showAddRecord && (
         <div className="w-full h-full flex items-center justify-center absolute top-0 bg-black/80 left-0 z-50">
-          <Card className=" p-4 gap-4">
-            <div>Add Daily Tracker</div>
-            <div className="w-72 mt-3">
-              <Select label="Select Type Of Interaction">
-                <Option>Call To</Option>
-                <Option>Call From</Option>
-                <Option>Email Exchange</Option>
-                <Option>Meeting with</Option>
+          <Card className=" p-4 gap-4 max-h-[90%] max-w-[325px] w-[80%] flex flex-col items-center justify-center">
+            <div className="text-center font-semibold">Add Daily Tracker</div>
+            <div className="w-full">
+              <Input
+                type="date"
+                label="Date"
+                name="date"
+                defaultValue={selectedRecord?.date ?? ""}
+                onChange={(e) => handleChange(e, setnewdailytracker)}
+              />
+            </div>
+            <div className="w-full">
+              <Input
+                type="time"
+                label="Time"
+                name="time"
+                defaultValue={selectedRecord?.time ?? ""}
+                onChange={(e) => handleChange(e, setnewdailytracker)}
+              />
+            </div>
+            <div className="w-full ">
+              <Select
+                label="Select Type Of Interaction"
+                value={selectedRecord?.interaction_type ?? ""}
+                onChange={(e) =>
+                  handleChange(e, setnewdailytracker, "interaction_type")
+                }
+              >
+                <Option value="Call To">Call To</Option>
+                <Option value="Call From">Call From</Option>
+                <Option value="Email Exchange">Email Exchange</Option>
+                <Option value="Meeting with">Meeting with</Option>
               </Select>
             </div>
-            <div>
-              <Input label="Interaction With" />
+            <div className="w-full">
+              <Input
+                defaultValue={selectedRecord?.interaction_with ?? ""}
+                label="Interaction With"
+                name="interaction_with"
+                onChange={(e) => handleChange(e, setnewdailytracker)}
+              />
             </div>
-            <div>
-              <Input label=" Purpose Of Call" />
+            <div className="w-full">
+              <Input
+                defaultValue={selectedRecord?.call_purpose ?? ""}
+                label=" Purpose Of Call"
+                name="call_purpose"
+                onChange={(e) => handleChange(e, setnewdailytracker)}
+              />
             </div>
-            <div>
-              <Input label=" Phone Number" />
+            <div className="w-full">
+              <Input
+                defaultValue={selectedRecord?.phone_number ?? ""}
+                label=" Phone Number"
+                name="phone_number"
+                onChange={(e) => handleChange(e, setnewdailytracker)}
+              />
             </div>
-            <div>
-              <Input label=" Notes" />
+            <div className="w-full">
+              <Input
+                defaultValue={selectedRecord?.notes ?? ""}
+                label=" Notes"
+                name="notes"
+                onChange={(e) => handleChange(e, setnewdailytracker)}
+              />
             </div>
-            <div className="flex items-center justify-between">
-              <Button onClick={handleExitClick} variant="outlined">
+            <div className="w-full flex items-center justify-between ">
+              <Button
+                onClick={() => {
+                  handleExitClick();
+                  setSelectedRecord(null);
+                }}
+                variant="outlined"
+              >
                 Exit
               </Button>
-              <Button>Submit</Button>
+              <Button onClick={() => mutation.mutate()}>
+                {selectedRecord ? "Edit" : "Submit"}
+              </Button>
             </div>
           </Card>
         </div>
       )}
+
+      <Dialog open={recordId ? true : false}>
+        <DialogBody>
+          <div className="flex flex-col items-center justify-between gap-8 ">
+            <Typography variant="h6" color="blue-gray">
+              Are you sure you want to delete this record?
+            </Typography>
+            <div className="flex items-center gap-4">
+              <Button variant="outlined" onClick={() => setRecordId(null)}>
+                No
+              </Button>
+              <Button color="red" onClick={() => mutation.mutate()}>
+                Yes
+              </Button>
+            </div>
+          </div>
+        </DialogBody>
+      </Dialog>
     </div>
   );
 }

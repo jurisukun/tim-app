@@ -11,6 +11,7 @@ export function LoadingScreen() {
     </div>
   );
 }
+
 export default function CheckAuth({ children }) {
   const { loading, error, data } = useCheckAuth().status;
 

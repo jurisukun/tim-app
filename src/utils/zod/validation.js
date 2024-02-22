@@ -119,17 +119,20 @@ export const AccountSchema = z.object({
 });
 
 export const DailyTrackerSchema = z.object({
+  // date: z.string(),
+  // time: z.string(),
+  client_id: z.string(),
   interaction_type: z.enum([
-    "Call to",
-    "Call from",
-    "Email exchange with",
+    "Call To",
+    "Call From",
+    "Email Exchange",
     "Meeting with",
   ]),
   interaction_with: z.string(),
   call_purpose: z.string(),
-  phonenumber: z.string(),
+  phone_number: z.string(),
   notes: z.string().nullable().optional(),
-  createdBy: z.string(),
+  createdBy: z.string().nullable().optional(),
 });
 
 export const LifeInsuranceSchema = z.object({

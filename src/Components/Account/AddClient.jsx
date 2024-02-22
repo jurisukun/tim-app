@@ -41,7 +41,7 @@ import { useParams } from "react-router-dom";
 
 import { format, toDate } from "date-fns";
 
-const handleChange = (e, setter, name) => {
+export const handleChange = (e, setter, name) => {
   if (name)
     setter((prev) => ({
       ...prev,

@@ -11,7 +11,7 @@ import Contract from "./Components/Contract/Contract";
 import EventCalendar from "./Components/Event/EventCalendar";
 
 import DailyTracker from "./Components/Profile/DailyTracker";
-import EmailTemplate from "./Components/Profile/emailTemplate";
+import EmailTemplate from "./Components/Profile/Email";
 import Billing from "./Components/Profile/Billing";
 import Tasks from "./Components/Profile/Tasks";
 
