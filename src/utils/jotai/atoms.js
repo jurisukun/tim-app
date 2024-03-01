@@ -101,4 +101,11 @@ export const newDailyTracker = atomWithReset({
   createdBy: null,
 });
 
-export const newTask = atomWithReset({});
+export const newTask = atomWithReset({
+  desc: null,
+  due_date: null,
+  status: null,
+  assigned_to: null,
+  notes: null,
+  createdBy: null,
+});

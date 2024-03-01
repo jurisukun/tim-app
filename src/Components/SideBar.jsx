@@ -7,7 +7,6 @@ import {
   Avatar,
   Typography,
 } from "@material-tailwind/react";
-import { useCheckAuth } from "../utils/hooks/useCheckAuth";
 
 import { FaPlus, FaUserPlus } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
@@ -15,14 +14,15 @@ import { useNavigate } from "react-router-dom";
 import { useSetAtom } from "jotai";
 import { openClient, openAccount } from "../utils/jotai/atoms";
 import { MenuRender, funeral, links, calendar } from "./MobileSidebar";
+import { useUser } from "../utils/context/useUser";
 
 function SideBar() {
   const setopenaccount = useSetAtom(openAccount);
   const setopenclient = useSetAtom(openClient);
-
-  const { user } = useCheckAuth();
+  const { user } = useUser();
 
   const navigate = useNavigate();
+
   const goto = (e) => {
     navigate(`/dashboard/${e.target.value}`);
   };
@@ -37,56 +37,7 @@ function SideBar() {
             <MenuRender data={funeral} title="Funeral" position="bottom" />
             <MenuRender data={calendar} title="Calendar" position="bottom" />
             <MenuRender data={links} title="Links" position="bottom" />
-            {/* <Menu placement="bottom">
-              <MenuHandler>
-                <Typography className="cursor-pointer  uppercase font-bold text-xs  hover:underline  hover:text-red-800 transition-all border-0 bg-transparent text-gray-900 mx-[10px] shadow-none w-full lg:w-[80px] text-center">
-                  Funeral
-                </Typography>
-              </MenuHandler>
-              <MenuList onClick={(e) => goto(e)}>
-                <MenuItem value="client">Client</MenuItem>
-                <MenuItem value="contracts">Contracts</MenuItem>
-                <MenuItem value="itenerary">Itineraries</MenuItem>
-                <MenuItem value="daily">Daily Tracker</MenuItem>
-              </MenuList>
-            </Menu>
-            <Menu placement="bottom">
-              <MenuHandler>
-                <Typography className="cursor-pointer  uppercase font-bold text-xs  hover:underline  hover:text-red-800 transition-all border-0 bg-transparent text-gray-900 mx-[10px] shadow-none w-full lg:w-[80px] text-center">
-                  Calendar
-                </Typography>
-              </MenuHandler>
-              <MenuList onClick={(e) => goto(e)}>
-                <MenuItem value="calendar">Event Calendar</MenuItem>
-                <MenuItem value="task">Task Calendar</MenuItem>
-              </MenuList>
-            </Menu>
-            <Menu placement="bottom">
-              <MenuHandler>
-                <Typography className="cursor-pointer  uppercase font-bold text-xs  hover:underline  hover:text-red-800  transition-all border-0 bg-transparent text-gray-900 mx-[10px] shadow-none w-full lg:w-[80px] text-center">
-                  Links
-                </Typography>
-              </MenuHandler>
-              <MenuList>
-                <MenuItem value="https://drive.google.com">Drive</MenuItem>
-                <MenuItem value="https://calendar.google.com">
-                  Calendar
-                </MenuItem>
-                <MenuItem value="https://maps.google.com">Maps</MenuItem>
-                <MenuItem value="https://mail.google.com">Gmail</MenuItem>
-                <MenuItem value="https://drive.google.com">Dave</MenuItem>
-                <MenuItem value="https://drive.google.com">
-                  FDJ Website
-                </MenuItem>
-                <MenuItem value="https://canva.com">Canva</MenuItem>
-                <MenuItem value="https://youtube.com">Youtube</MenuItem>
-                <MenuItem value="https://drive.google.com">
-                  Casket Orders
-                </MenuItem>
-                <MenuItem value="https://drive.google.com">E-Vital</MenuItem>
-                <MenuItem value="https://drive.google.com">Call FWD</MenuItem>
-              </MenuList>
-  </Menu>*/}
+
             <Menu placement="bottom">
               <MenuHandler>
                 <Button

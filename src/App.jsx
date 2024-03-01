@@ -4,11 +4,11 @@ import HomeProfile from "./ProfilePage/HomeProfile";
 import NotFoundPage from "./Components/NotFoundPage";
 import ErrorPage from "./Components/ErrorPage";
 import MainContainer from "./Components/MainContainer";
-import Current from "../src/Components/Current/Case";
+import Calendar from "../src/Components/Calendar/Calendar";
 import Itinerary from "./Components/Itinerary/Itinerary";
 import Contract from "./Components/Contract/Contract";
 
-import EventCalendar from "./Components/Event/EventCalendar";
+import EventCalendar from "./Components/Calendar/Calendar";
 
 import DailyTracker from "./Components/Profile/DailyTracker";
 import EmailTemplate from "./Components/Profile/Email";
@@ -22,6 +22,8 @@ import Forms from "./Components/Profile/Forms";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
+import { AuthProvider } from "./utils/context/authcontext";
+
 import { ThemeProvider } from "./theme-provider";
 
 const queryClient = new QueryClient();
@@ -30,6 +32,12 @@ const router = createBrowserRouter([
   {
     path: "/login",
     element: <LoginCheck />,
+  },
+  {
+    path: "/",
+    loader: () => {
+      return (window.location.href = `/dashboard`);
+    },
   },
   {
     path: "/dashboard",
@@ -41,7 +49,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "",
-        element: <Current />,
+        element: <Calendar />,
       },
       {
         path: "client",
@@ -55,28 +63,12 @@ const router = createBrowserRouter([
         path: "itinerary",
         element: <Itinerary />,
       },
+
       {
-        path: "daily",
-        element: <DailyTracker />,
-      },
-      {
-        path: "event",
-        element: <EventCalendar />,
-      },
-      {
-        path: "task",
-        element: <Tasks />,
+        path: "calendar",
+        element: <Calendar />,
       },
     ],
-  },
-
-  {
-    path: "client/profile",
-    element: (
-      <CheckAuth>
-        <HomeProfile />,
-      </CheckAuth>
-    ),
   },
   {
     path: "client/:clientId/profile",
@@ -125,11 +117,13 @@ const router = createBrowserRouter([
 function App() {
   return (
     <>
-      <QueryClientProvider client={queryClient}>
-        <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-          <RouterProvider router={router} errorElement={<ErrorPage />} />
-        </ThemeProvider>
-      </QueryClientProvider>
+      <AuthProvider>
+        <QueryClientProvider client={queryClient}>
+          <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+            <RouterProvider router={router} errorElement={<ErrorPage />} />
+          </ThemeProvider>
+        </QueryClientProvider>
+      </AuthProvider>
     </>
   );
 }

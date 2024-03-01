@@ -225,5 +225,14 @@ export const ToDoListSchema = z.object({
   total: z.number(),
   printed: z.enum(["Not Started", "In progress", "Completed"]),
   paymenthmethod: z.enum(["Cash", "Bank Certified Check"]),
+  notes: z.string(),
+});
+
+export const TaskSchema = z.object({
+  desc: z.string(),
+  due_date: z.string(),
+  status: z.enum(["Pending", "In progress", "Completed", "Blocked"]),
+  assigned_to: z.string().nullable().optional(),
   notes: z.string().nullable().optional(),
+  createdBy: z.string(),
 });

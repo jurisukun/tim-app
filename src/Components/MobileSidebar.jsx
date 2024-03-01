@@ -49,7 +49,7 @@ export function MenuRender({ data, title, position }) {
 
 export const funeral = [
   { label: "Client", value: "client" },
-  { label: "Contracts", value: "contracts" },
+  { label: "Contracts", value: "contract" },
   { label: "Itineraries", value: "itinerary" },
   { label: "Daily Tracker", value: "daily" },
 ];

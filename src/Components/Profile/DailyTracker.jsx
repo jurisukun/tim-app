@@ -24,13 +24,11 @@ import { DailyTrackerSchema } from "../../utils/zod/validation";
 import { toast } from "react-toastify";
 
 import { handleChange } from "../Account/AddClient";
-
-import { useCheckAuth } from "../../utils/hooks/useCheckAuth";
-import { set } from "date-fns";
+import { useUser } from "../../utils/context/useUser";
 
 function DailyTracker() {
   const { clientId } = useParams();
-  const { user } = useCheckAuth();
+  const { user } = useUser();
   const newdailytracker = useAtomValue(newDailyTracker);
   const setnewdailytracker = useSetAtom(newDailyTracker);
 

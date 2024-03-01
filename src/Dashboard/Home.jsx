@@ -1,5 +1,5 @@
 import SideBar from "../Components/SideBar";
-import CheckAuth from "../CheckAuth/CheckAuth";
+
 import { IoMenu } from "react-icons/io5";
 import { Outlet } from "react-router-dom";
 import MobileSidebar from "../Components/MobileSidebar";
@@ -19,6 +19,7 @@ import {
   Button,
 } from "@material-tailwind/react";
 import { FaUserPlus } from "react-icons/fa6";
+import { useUser } from "../utils/context/useUser";
 
 function Home() {
   const setopenmobilenav = useSetAtom(openMobileNav);
@@ -28,7 +29,6 @@ function Home() {
   const setopenclient = useSetAtom(openClient);
 
   return (
-    // <CheckAuth>
     <div className="w-full h-screen items-center ">
       {openaccount && <AddAccount />}
       {openclient && <AddClient />}
@@ -64,7 +64,6 @@ function Home() {
       </div>
       <Outlet />
     </div>
-    // </CheckAuth>
   );
 }
 

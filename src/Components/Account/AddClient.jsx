@@ -178,13 +178,14 @@ export function AddClientTab({ defaultdata }) {
               ))}
             </Select>
           </div>
-          <div className=" w-full mt-4 ">
+          <div className=" w-full mt-4">
             <Select
+              className="relative"
               label={`Service Type - (${selectedservice.length}) selected`}
               value={
-                <div className="relative overflow-hidden  max-h-[30px] text-[12px] text-nowrap  w-auto` max-w-[280px] line-clamp-1 text-ellipsis">
+                <Typography className="relative overflow-hidden max-h-[30px] text-[12px] text-nowrap max-w-[200px] sm:max-w-[280px] line-clamp-1 text-ellipsis">
                   {selectedtexts}
-                </div>
+                </Typography>
               }
             >
               <div className="flex items-center justify-center">

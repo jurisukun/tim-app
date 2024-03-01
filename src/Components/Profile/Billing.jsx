@@ -61,9 +61,7 @@ function AddBilling({ setOpen }) {
           <div className="lg:w-72 md:w-72 w-full my-2">
             <Textarea label="Notes" />
           </div>
-          <div className="lg:w-72 md:w-72 w-full my-2">
-            <Input label="Receipt" />
-          </div>
+
           <div className="w-full flex gap-4 justify-end px-4">
             <Button
               size="sm"

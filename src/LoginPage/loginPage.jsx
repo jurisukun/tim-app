@@ -5,7 +5,7 @@ import {
   Button,
   Typography,
 } from "@material-tailwind/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useCheckAuth } from "../utils/hooks/useCheckAuth";
 import { LoadingScreen } from "../CheckAuth/CheckAuth";
 import { toast } from "react-toastify";
@@ -55,7 +55,7 @@ function LoginPage() {
         .then((data) => {
           setIsLoading(false);
           if (!data?.token) {
-            toast.error("Invalid username or password");
+            toast.error(data.message);
           }
           if (data.token) {
             localStorage.setItem("token", data.token);

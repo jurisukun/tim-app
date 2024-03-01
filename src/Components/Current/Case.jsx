@@ -34,7 +34,6 @@ function Case() {
   const calendarRef = useRef(null);
 
   useEffect(() => {
-    console.log("loaded");
     let calendar = new FCalendar(document.getElementById("calendar"), {
       plugins: [listPlugin],
       initialView: "listWeek",

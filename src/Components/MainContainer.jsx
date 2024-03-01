@@ -10,7 +10,7 @@ import {
 import { useEffect, useState } from "react";
 import { Avatar } from "@material-tailwind/react";
 
-import { format, set } from "date-fns";
+import { format, isValid, set, toDate } from "date-fns";
 
 import { useQuery } from "@tanstack/react-query";
 import { LoadingScreen } from "../CheckAuth/CheckAuth";
@@ -25,47 +25,26 @@ export default function MainContainer() {
   const [statusfilter, setStatusFilter] = useState([]);
 
   useEffect(() => {
-    const filters = [monthfilter, yearfilter, statusfilter];
-
-    filters.forEach((filter, index) => {
-      if (filter.length > 0) {
-        if (index === 0) {
-          filter.forEach((month) => {
-            const filtered = filteredData.filter((user) => {
-              return (
-                format(user?.createdAt, "MMM") === month ||
-                format(user?.updatedAt, "MMM") === month
-              );
-            });
+    if (data && search !== "") {
+      const keys = Object.keys(data[0]);
+      setFilteredData(
+        data.filter((user) => {
+          return keys.some((key) => {
+            if (typeof user[key] === "string") {
+              if (isValid(toDate(user[key]))) {
+                return format(toDate(user[key]), "MMM dd, yyyy")
+                  .toLowerCase()
+                  .includes(search.toLowerCase());
+              }
+              return user[key].toLowerCase().includes(search.toLowerCase());
+            }
           });
-        }
-        if (index === 1) {
-          filter.forEach((year) => {
-            const filtered = filteredData.filter((user) => {
-              return (
-                format(user?.createdAt, "yyyy") === year ||
-                format(user?.updatedAt, "yyyy") === year
-              );
-            });
-          });
-        }
-        const filtered = data.filter((user) => {
-          const date = new Date(user.createdAt);
-          const month = date.getMonth();
-          return filter.includes(month);
-        });
-        setFilteredData(filtered);
-      }
-    });
-    if (monthfilter.length > 0) {
-      const filtered = data.filter((user) => {
-        const date = new Date(user.createdAt);
-        const month = date.getMonth();
-        return monthfilter.includes(month);
-      });
-      setFilteredData(filtered);
+        })
+      );
+    } else if (search === "") {
+      setFilteredData(data);
     }
-  }, [monthfilter, yearfilter, statusfilter]);
+  }, [search]);
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ["clientlist"],
@@ -100,42 +79,36 @@ export default function MainContainer() {
     }
   };
 
-  const handleSearch = (value) => {
-    if (value === "") {
-      setFilteredData(data);
-    } else {
-      const filtered = filteredData.filter((user) => {
-        const keys = [
-          "firstname",
-          "middlename",
-          "lastname",
-          "relationship",
-          "telephone",
-          "email",
-          "decname",
-          "servicetype",
-          "inquirystatus",
-          "notes",
-        ];
-
-        keys.forEach((key) => {
-          console.log(user[key]);
-          if (
-            typeof user[key] === "string" &&
-            user[key].toLowerCase().includes(value.toLowerCase())
-          ) {
-            return user;
-          }
-        });
-      });
-      setFilteredData(filtered);
-    }
-  };
-
   const gotoProfile = (clientId) => {
     window.location.href = `/client/${clientId}/profile`;
   };
-
+  const years = [
+    "2024",
+    "2023",
+    "2022",
+    "2021",
+    "2020",
+    "2019",
+    "2018",
+    "2017",
+    "2016",
+    "2015",
+    "2014",
+    "2013",
+    "2012",
+    "2011",
+    "2010",
+    "2009",
+    "2008",
+    "2007",
+    "2006",
+    "2005",
+    "2004",
+    "2003",
+    "2002",
+    "2001",
+    "2000",
+  ];
   const months = [
     "Jan",
     "Feb",
@@ -184,21 +157,26 @@ export default function MainContainer() {
 
                 <div className="w-full flex flex-col overflow-y-scroll h-full gap-3 p-3 scale-90">
                   <div className="flex flex-col md:flex-row md:h-[50%] gap-4 w-full">
-                    <div className="border  w-full md:w-[25%]  h-full  p-2 rounded-md justify-center items-center">
+                    <div className="border  w-full md:w-[30%]  h-full max-h-[200px] overflow-y-scroll p-2 rounded-md justify-center items-center">
                       <div>
                         <p className="text-left text-red-900 font-semibold   text-[15px]">
                           Year
                         </p>
                       </div>
-                      <div className="w-full h-full ">
-                        <div className="flex items-center ">
-                          <Checkbox />
-                          <p className="text-blue-gray-600 text-[15px]">2024</p>
-                        </div>
-                        <div className="flex items-center">
-                          <Checkbox />
-                          <p className="text-blue-gray-600 text-[15px]">2023</p>
-                        </div>
+                      <div className="w-full ">
+                        {years.map((year, key) => {
+                          return (
+                            <div key={key} className="flex items-center">
+                              <Checkbox
+                                label={year}
+                                defaultChecked={yearfilter.includes(year)}
+                                onChange={(e) =>
+                                  handleSetFilters(e, setYearFilter, year)
+                                }
+                              />
+                            </div>
+                          );
+                        })}
                       </div>
                     </div>
                     <div className="w-full border p-2 rounded-md  sm:overflow-y-scroll">
@@ -210,13 +188,12 @@ export default function MainContainer() {
                           return (
                             <div key={key} className="flex items-center">
                               <Checkbox
+                                label={month}
+                                defaultChecked={monthfilter.includes(month)}
                                 onChange={(e) =>
                                   handleSetFilters(e, setMonthFilter, month)
                                 }
                               />
-                              <p className="text-blue-gray-600 text-[15px]">
-                                {month}
-                              </p>
                             </div>
                           );
                         })}
@@ -236,13 +213,12 @@ export default function MainContainer() {
                         return (
                           <div key={key} className="flex items-center">
                             <Checkbox
+                              label={status}
+                              labelProps={{ className: "text-sm" }}
                               onChange={(e) =>
                                 handleSetFilters(e, setStatusFilter, status)
                               }
                             />
-                            <p className="text-blue-gray-600 text-[15px]">
-                              {status}
-                            </p>
                           </div>
                         );
                       })}
@@ -256,54 +232,85 @@ export default function MainContainer() {
             <Input
               label="Search"
               className="w-[90%] sm:w-full"
-              onChange={(e) => handleSearch(e.target.value)}
+              onChange={(e) => setSearch(e.target.value)}
             />
           </div>
         </div>
       </div>
 
       <div className="overflow-y-scroll overflow-x-hidden p-4 w-full justify-center   grid-rows-none mt-3   h-full grid lg:grid-cols-4 grid-cols-1 md:grid-cols-3 sm:grid-cols-2 gap-4 ">
-        {data &&
-          data.map((client, key) => {
-            return (
-              <Card
-                key={client.id}
-                className="flex flex-col p-4 min-w-[100px] h-[200px] max-h-[200px] cursor-pointer hover:shadow-lg transition-all duration-300 ease-in-out  bg-white rounded-md shadoww "
-                onClick={() => gotoProfile(client.id)}
-              >
-                <div className="flex flex-col gap-2" key={client.id}>
-                  <Typography className="text-ellipsis text-center overflow-hidden text-xs">
-                    Status: {client?.inquirystatus ?? "N/A"}
-                  </Typography>
-                  <div className="flex items-center justify-left mb-3  gap-4">
-                    <Avatar
-                      loading="lazy"
-                      src="https://docs.material-tailwind.com/img/face-2.jpg"
-                      alt="avatar"
-                      className="w-[50px] h-[50px] justify-self-start place-self-start"
-                    />
-                    <div className="w-full">
-                      <Typography className="text-ellipsis overflow-hidden font-semibold text-sm line-clamp-2 max-w-[60%]">
-                        Name: {client.decname ?? "N/A"}
-                      </Typography>
-                    </div>
-                  </div>
+        {filteredData &&
+          filteredData
+            ?.filter((user) => {
+              // Filter by month
+              if (
+                monthfilter.length > 0 &&
+                (!monthfilter.includes(format(user.createdAt, "MMM")) ||
+                  !monthfilter.includes(format(user.updatedAt, "MMM")))
+              ) {
+                console.log("monthfilter", monthfilter);
+                return false;
+              }
 
-                  <Typography className="text-ellipsis overflow-hidden text-xs">
-                    Email:{client.email ?? "N/A"}
-                  </Typography>
-                  <Typography className="text-ellipsis overflow-hidden text-xs">
-                    {client?.updatedAt
-                      ? format(
-                          client?.updatedAt ?? client?.createdAt,
-                          "MMM dd, yyyy"
-                        )
-                      : "N/A"}
-                  </Typography>
-                </div>
-              </Card>
-            );
-          })}
+              // Filter by year
+              if (
+                yearfilter.length > 0 &&
+                (!yearfilter.includes(format(user.createdAt, "yyyy")) ||
+                  !yearfilter.includes(format(user.updatedAt, "yyyy")))
+              ) {
+                return false;
+              }
+
+              // Filter by status
+              if (
+                statusfilter.length > 0 &&
+                !statusfilter.includes(user.status)
+              ) {
+                return false;
+              }
+
+              return true;
+            })
+            .map((client, key) => {
+              return (
+                <Card
+                  key={client.id}
+                  className="flex flex-col p-4 min-w-[100px] h-[200px] max-h-[200px] cursor-pointer hover:shadow-lg transition-all duration-300 ease-in-out  bg-white rounded-md shadoww "
+                  onClick={() => gotoProfile(client.id)}
+                >
+                  <div className="flex flex-col gap-2" key={client.id}>
+                    <Typography className="text-ellipsis text-center overflow-hidden text-xs">
+                      Status: {client?.inquirystatus ?? "N/A"}
+                    </Typography>
+                    <div className="flex items-center justify-left mb-3  gap-4">
+                      <Avatar
+                        loading="lazy"
+                        src="https://docs.material-tailwind.com/img/face-2.jpg"
+                        alt="avatar"
+                        className="w-[50px] h-[50px] justify-self-start place-self-start"
+                      />
+                      <div className="w-full">
+                        <Typography className="text-ellipsis overflow-hidden font-semibold text-sm line-clamp-2 max-w-[60%]">
+                          Name: {client.decname ?? "N/A"}
+                        </Typography>
+                      </div>
+                    </div>
+
+                    <Typography className="text-ellipsis overflow-hidden text-xs">
+                      Email:{client.email ?? "N/A"}
+                    </Typography>
+                    <Typography className="text-ellipsis overflow-hidden text-xs">
+                      {client?.updatedAt
+                        ? format(
+                            client?.updatedAt ?? client?.createdAt,
+                            "MMM dd, yyyy"
+                          )
+                        : "N/A"}
+                    </Typography>
+                  </div>
+                </Card>
+              );
+            })}
       </div>
     </div>
   );
