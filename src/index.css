@@ -25,6 +25,7 @@
     --input: 214.3 31.8% 91.4%;
     --ring: 221.2 83.2% 53.3%;
     --radius: 0.5rem;
+    --fc-today-bg-color: rgba(0, 0, 0, 0.05);
   }
 
   .dark {
@@ -52,9 +53,20 @@
 
 /* Custom CSS */
 .fc .fc-toolbar-title {
-  font-size: max(2.5vw, 24px);
+  font-size: max(2vw, 16px);
   text-align: center;
   scale: 0.9;
+}
+.fc .fc-toolbar.fc-header-toolbar {
+  @apply mb-2 h-[30px] scale-[.9] sm:scale-100 flex  w-full items-center justify-center sm:justify-between;
+}
+
+.fc .fc-button-group {
+  @apply scale-90;
+}
+
+.fc-day .fc-day-sat .fc-day-today .fc-daygrid-day {
+  @apply bg-gray-500;
 }
 
 .shadoww {

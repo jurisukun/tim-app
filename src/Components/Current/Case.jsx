@@ -94,9 +94,7 @@ function Case() {
           ref={calendarRef}
           headerToolbar={{
             left: "prev,next",
-
             center: "title",
-
             right: "dayGridMonth,dayGridWeek,dayGridDay", // user can switch between the two
           }}
           height={"90%"}

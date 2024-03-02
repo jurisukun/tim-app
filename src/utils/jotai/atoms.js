@@ -109,3 +109,13 @@ export const newTask = atomWithReset({
   notes: null,
   createdBy: null,
 });
+
+export const newEvent = atomWithReset({
+  title: null,
+  start: null,
+  start_time: null,
+  end: null,
+  end_time: null,
+  type: null,
+  createdBy: null,
+});

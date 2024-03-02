@@ -236,3 +236,13 @@ export const TaskSchema = z.object({
   notes: z.string().nullable().optional(),
   createdBy: z.string(),
 });
+
+export const EventSchema = z.object({
+  title: z.string(),
+  start: z.string(),
+  start_time: z.string(),
+  end: z.string(),
+  end_time: z.string(),
+  type: z.string(),
+  createdBy: z.string(),
+});

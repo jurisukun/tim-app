@@ -18,9 +18,8 @@ export const useCheckAuth = () => {
           setStatus({ loading: false, error: true, data: null });
           return;
         }
-
-        // localStorage.setItem("token", res?.refreshToken ?? res?.token);
         setStatus({ loading: false, error: false, data: res });
+
         const { isAdmin, role, userId } = res;
         setUser({ isAdmin, role, userId });
 
