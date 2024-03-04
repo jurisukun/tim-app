@@ -12,6 +12,9 @@ import { useAtom } from "jotai";
 import { openMobileNav, openAccount, openClient } from "../utils/jotai/atoms";
 import { useNavigate } from "react-router-dom";
 
+import { UserAvatar, logout } from "./SideBar";
+import { useUser } from "../utils/context/useUser";
+
 export function MenuRender({ data, title, position }) {
   const navigate = useNavigate();
 
@@ -72,11 +75,13 @@ export const links = [
 
 export default function MobileSidebar() {
   const [openmobilenav, setopenmobilenav] = useAtom(openMobileNav);
+  const { user } = useUser();
+  const navigate = useNavigate();
 
   return (
     <>
       <div
-        className={`transition-all w-[250px]  absolute top-0  h-screen bg-white p-2 lg:-left-[275px] block b-shadow z-50  ${
+        className={`flex flex-col transition-all w-[250px]  absolute top-0  h-screen bg-white p-2 lg:-left-[275px]  b-shadow z-50  ${
           openmobilenav ? "left-0" : "-left-[275px]"
         }`}
       >
@@ -93,26 +98,8 @@ export default function MobileSidebar() {
           <MenuRender data={calendar} title="Calendar" position="right-start" />
           <MenuRender data={links} title="Links" position="right-start" />
         </div>
-        <div className="flex h-[20px] items-center justify-between px-4 gap-2 w-full ">
-          <Menu placement="right-start">
-            <MenuHandler>
-              <div className="flex items-center gap-3 justify-center mb-10">
-                <Avatar
-                  src="https://docs.material-tailwind.com/img/face-2.jpg"
-                  alt="avatar"
-                  className="w-[35px] h-[35px]"
-                />
-                <h1 className="text-sm font-semibold text-black/80">
-                  Username
-                </h1>
-              </div>
-            </MenuHandler>
-            <MenuList>
-              <MenuItem>Profile</MenuItem>
-              <MenuItem>Settings</MenuItem>
-              <MenuItem>Logout</MenuItem>
-            </MenuList>
-          </Menu>
+        <div className="flex  items-center justify-between px-4 gap-2 w-full ">
+          <UserAvatar user={user} position={"right-start"} />
         </div>
       </div>
     </>

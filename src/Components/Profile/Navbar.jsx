@@ -24,6 +24,21 @@ const menu = [
   { name: "Billing", link: "billing" },
 ];
 
+export const HeaderLogo = () => {
+  const navigate = useNavigate();
+  return (
+    <div
+      className="flex cursor-pointer items-center gap-2"
+      onClick={() => navigate("/")}
+    >
+      <img src={logo} alt="logo" width={45} height={45} />
+      <div className=" protest-riot-regular md:text-2xl text-xl text-nowrap hidden sm:block">
+        Funeral System
+      </div>
+    </div>
+  );
+};
+
 function Navbar() {
   const navigate = useNavigate();
 
@@ -62,10 +77,8 @@ function Navbar() {
         </div>
       </div>
       <div className="w-full bbb lg:hidden  sm:h-[80px] flex p-2 justify-between items-center gap-2">
-        <img src={logo} alt="logo" width={45} height={45} />
-        <div className=" protest-riot-regular md:text-3xl text-xl text-nowrap hidden sm:block">
-          Funeral System
-        </div>
+        <HeaderLogo />
+
         <div className="w-full flex top-3 justify-self-end items-center justify-end  gap-3 px-4">
           <div className="flex flex-col sm:flex-row  gap-2 items-center justify-self-end">
             <Button

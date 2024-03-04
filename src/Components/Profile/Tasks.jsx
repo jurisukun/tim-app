@@ -9,7 +9,7 @@ import {
   Checkbox,
 } from "@material-tailwind/react";
 
-import { useState, Suspense } from "react";
+import { useEffect, useState, useRef } from "react";
 
 import { useQueries, useQuery } from "@tanstack/react-query";
 import { useAtomValue, useSetAtom } from "jotai";
@@ -20,9 +20,13 @@ import { handleChange } from "../Account/AddClient";
 import { toast } from "react-toastify";
 
 import { customfetch } from "../../lib/fetchhandler/requestHandler";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import { LoadingScreen } from "../../CheckAuth/CheckAuth";
+
+import { socket } from "../../utils/context/Socketcontext";
+
 import { useUser } from "../../utils/context/useUser";
+import { set } from "date-fns";
 
 function UserOptions() {
   const { data, isLoading, isError } = useQuery({
@@ -108,6 +112,13 @@ function Tasks() {
   const { clientId } = useParams();
   const { user } = useUser();
 
+  const [taskData, setTaskData] = useState([]);
+  const taskref = useRef(null);
+
+  const [urlparams, setUrlParams] = useSearchParams();
+
+  const assignedtaskid = urlparams.get("id");
+
   const [tasks, users] = useQueries({
     queries: [
       {
@@ -118,7 +129,8 @@ function Tasks() {
           );
           const data = await response.json();
           console.log(data);
-          return data;
+          setTaskData(data?.tasks);
+          return data?.tasks;
         },
       },
       {
@@ -126,11 +138,19 @@ function Tasks() {
         queryFn: async () => {
           const response = await fetch("http://localhost:3000/accounts");
           const data = await response.json();
-          return data;
+          return data?.accounts;
         },
       },
     ],
   });
+
+  useEffect(() => {
+    if (taskref.current) {
+      setTimeout(() => {
+        taskref.current.scrollIntoView({ behavior: "smooth" }), 1000;
+      });
+    }
+  }, [tasks?.data]);
 
   if (tasks?.isLoading) {
     return <LoadingScreen />;
@@ -171,6 +191,34 @@ function Tasks() {
     });
   };
 
+  const setTaskProps = (id, prop, value) => {
+    setTaskData((prev) => {
+      return prev.map((prevTask) => {
+        if (prevTask.id === id) {
+          prevTask[prop] = value;
+        }
+        return prevTask;
+      });
+    });
+  };
+
+  const handleSaveTask = (taskId) => {
+    const task = taskData.find((task) => task.id === taskId);
+    customfetch(`http://localhost:3000/tasks/${taskId}`, "PUT", task).then(
+      (data) => {
+        if (data.error) {
+          toast.error(data.message);
+          return;
+        }
+        toast.success(data.message);
+
+        socket.emit("taskassigned", { taskId, userId: task.assigned_to });
+
+        return data.data;
+      }
+    );
+  };
+
   return (
     <div className="w-full height-e  py-4 flex flex-col justify-center overflow-hidden">
       <div className="text-xl font-medium text-blue-gray-800 flex items-center justify-between gap-4 px-8 h-[80px] shadow-md">
@@ -203,12 +251,21 @@ function Tasks() {
               <th>Notes</th>
             </tr>
 
-            {tasks?.data?.tasks?.map((task) => {
+            {tasks?.data?.map((task) => {
               return (
                 <tr
+                  ref={
+                    assignedtaskid && task?.id == assignedtaskid
+                      ? taskref
+                      : null
+                  }
                   id={task?.id}
                   key={task?.id}
-                  className="border border-gray-800 mt-2 flex-col flex md:flex-row rounded-md md:max-h-[auto]  hover:border-red-800 hover:shadow-md hover:shadow-red-800 cursor-pointer box-border"
+                  className={`border border-gray-800 mt-2 flex-col flex md:flex-row rounded-md md:max-h-[auto]  hover:border-red-800 hover:shadow-md hover:shadow-red-800 cursor-pointer box-border ${
+                    assignedtaskid && task?.id == assignedtaskid
+                      ? "border-orange-700  border-2"
+                      : ""
+                  }`}
                 >
                   <td className="  text-balance p-3 h-[140px] w-full flex items-center [&>div]:w-full [&>div]:h-full ">
                     <Checkbox
@@ -224,36 +281,92 @@ function Tasks() {
                     </Typography> */}
                   </td>
                   <td className="p-3 flex flex-col gap-2">
-                    <Input type="date" label="Due Date" className="w-full" />
+                    <Input
+                      type="date"
+                      label="Due Date"
+                      className="w-full"
+                      defaultValue={task?.due_date?.split("T")[0]}
+                      onChange={(e) => {
+                        setTaskProps(task?.id, "due_date", e.target.value);
+                      }}
+                    />
                     <Select
                       label="Status"
-                      onChange={(e) => updateTask(task?.id, "due_date", e)}
+                      // value={
+                      //   <div
+                      //     className={`${
+                      //       task.status == "Pending"
+                      //         ? "text-yellow-600"
+                      //         : task.status == "In Progress"
+                      //         ? "text-orange-600"
+                      //         : task.status == "Completed"
+                      //         ? "text-green-600"
+                      //         : task.status == "In Progress"
+                      //         ? "text-orange-600"
+                      //         : "text-red-400"
+                      //     }`}
+                      //   >
+                      //     {task?.status}
+                      //   </div>
+                      // }
+                      value={task?.status}
+                      menuProps={{ className: "bg-red-50" }}
+                      onChange={(e) => setTaskProps(task?.id, "status", e)}
                     >
-                      <Option value="Pending">Pending</Option>
-                      <Option value="In Progress">In Progress</Option>
-                      <Option value="Completed">Completed</Option>
-                      <Option value="Blocked">Blocked</Option>
+                      <Option value="Pending" className="text-yellow-600">
+                        Pending
+                      </Option>
+                      <Option value="In Progress" className="text-orange-600">
+                        In Progress
+                      </Option>
+                      <Option value="Completed" className="text-green-600">
+                        Completed
+                      </Option>
+                      <Option value="Blocked" className="text-red-400">
+                        Blocked
+                      </Option>
                     </Select>
                   </td>
 
                   <td className="p-3">
                     <div className="w-full flex  flex-wrap items-center justify-end gap-2">
-                      <Select label="Assign To">
-                        <Option>Lawrence Neil</Option>
+                      <Select
+                        label="Assign To"
+                        value={task?.assigned_to}
+                        onChange={(e) => {
+                          setTaskProps(task?.id, "assigned_to", e);
+                        }}
+                      >
+                        {users?.data?.map((user) => {
+                          return (
+                            <Option key={user.id} value={user.id}>
+                              {user.firstname + " " + user.lastname}
+                            </Option>
+                          );
+                        })}
+                        {/* <Option>Lawrence Neil</Option>
                         <Option>Kevin Aquino</Option>
                         <Option>Julius Abucejo</Option>
-                        <Option>Patrick Bongalos</Option>
+                        <Option>Patrick Bongalos</Option> */}
                       </Select>
-                      <Button
-                        size="sm"
-                        className="flex items-center justify-center"
-                      >
-                        Go
-                      </Button>
                     </div>
                   </td>
                   <td className="p-3">
-                    <Textarea label="Notes" className="min-w-[50px]" />
+                    <Textarea
+                      label="Notes"
+                      className="min-w-[50px]"
+                      defaultValue={task?.notes}
+                      onChange={(e) =>
+                        setTaskProps(task.id, "notes", e.target.value)
+                      }
+                    />
+                    <Button
+                      size="sm"
+                      className="flex items-center justify-center"
+                      onClick={() => handleSaveTask(task.id)}
+                    >
+                      Save
+                    </Button>
                   </td>
                 </tr>
               );

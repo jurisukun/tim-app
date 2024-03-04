@@ -22,47 +22,23 @@ import { FaUserPlus } from "react-icons/fa6";
 import { useUser } from "../utils/context/useUser";
 
 function Home() {
-  const setopenmobilenav = useSetAtom(openMobileNav);
   const openaccount = useAtomValue(openAccount);
   const openclient = useAtomValue(openClient);
-  const setopenaccount = useSetAtom(openAccount);
-  const setopenclient = useSetAtom(openClient);
+
+  const { user } = useUser();
 
   return (
     <div className="w-full h-screen items-center ">
-      {openaccount && <AddAccount />}
+      {openaccount && user?.isAdmin && <AddAccount />}
       {openclient && <AddClient />}
       <MobileSidebar />
       <div className="flex flex-row">
         <SideBar />
-        <div className="lg:hidden flex w-full bbb justify-between  items-center h-[60px] px-6">
-          <Typography className="text-2xl flex items-center font-medium text-left protest-riot-regular flex-start">
-            Dashboard
-          </Typography>
-          <div className="flex items-center justify-center gap-3">
-            <Menu placement="right-start">
-              <MenuHandler>
-                <Button className="flex text-center items-center w-[80px] mx-[4px]  bg-gray-800">
-                  <FaUserPlus className="mx-2" />
-                </Button>
-              </MenuHandler>
-              <MenuList>
-                <MenuItem onClick={() => setopenaccount(true)}>
-                  Add Account
-                </MenuItem>
-                <MenuItem onClick={() => setopenclient(true)}>
-                  Add Client
-                </MenuItem>
-              </MenuList>
-            </Menu>
-            <IoMenu
-              className="font-bold text-3xl cursor-pointer lg:hidden flex "
-              onClick={() => setopenmobilenav(true)}
-            />
-          </div>
-        </div>
+        <div className="lg:hidden flex w-full bbb justify-between  items-center h-[60px] px-4"></div>
       </div>
-      <Outlet />
+      <div className="h-full ">
+        <Outlet />
+      </div>
     </div>
   );
 }

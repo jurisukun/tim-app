@@ -139,8 +139,8 @@ export default function MainContainer() {
   return (
     <div className="w-full height-e  py-4 flex flex-col justify-center overflow-hidden">
       <div className="p-2 h-[80px]">
-        <div className="flex items-center justify-between gap-2 w-full">
-          <div className="flex items-center gap-4 w-full">
+        <div className="flex items-center sm:justify-between justify-between px-2 gap-3 w-full">
+          <div className="flex items-center gap-2">
             <p className=" font-bold text-md">Client</p>
             <Button
               size="sm"
@@ -213,6 +213,7 @@ export default function MainContainer() {
                         return (
                           <div key={key} className="flex items-center">
                             <Checkbox
+                              defaultChecked={statusfilter.includes(status)}
                               label={status}
                               labelProps={{ className: "text-sm" }}
                               onChange={(e) =>
@@ -228,10 +229,10 @@ export default function MainContainer() {
               </DialogBody>
             </Dialog>
           </div>
-          <div className=" w-[50%]">
+          <div className="flex-1 max-w-[300px]">
             <Input
+              containerProps={{ className: " min-w-[100px]" }}
               label="Search"
-              className="w-[90%] sm:w-full"
               onChange={(e) => setSearch(e.target.value)}
             />
           </div>

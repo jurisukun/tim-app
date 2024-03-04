@@ -119,8 +119,8 @@ export const AccountSchema = z.object({
 });
 
 export const DailyTrackerSchema = z.object({
-  // date: z.string(),
-  // time: z.string(),
+  date: z.string(),
+  time: z.string(),
   client_id: z.string(),
   interaction_type: z.enum([
     "Call To",
@@ -128,6 +128,7 @@ export const DailyTrackerSchema = z.object({
     "Email Exchange",
     "Meeting with",
   ]),
+  staff: z.string(),
   interaction_with: z.string(),
   call_purpose: z.string(),
   phone_number: z.string(),

@@ -18,23 +18,15 @@ import {
 import { EventSchema } from "../../utils/zod/validation";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-import { format, set, subDays } from "date-fns";
+import { format, subDays } from "date-fns";
 
-import React from "react";
-import { Calendar as BigCalendar, momentLocalizer } from "react-big-calendar";
-import moment from "moment";
-import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
-
-import "react-big-calendar/lib/addons/dragAndDrop/styles.css";
-import "react-big-calendar/lib/css/react-big-calendar.css";
 import { toast } from "react-toastify";
 import { customfetch } from "../../lib/fetchhandler/requestHandler";
 import { LoadingScreen } from "../../CheckAuth/CheckAuth";
 import ErrorPage from "../ErrorPage";
 import { useUser } from "../../utils/context/useUser";
 
-const localizer = momentLocalizer(moment);
-const DnDCalendar = withDragAndDrop(BigCalendar);
+import { IoMdTrash } from "react-icons/io";
 
 // function getTodoList(date) {
 //   const day = date.getDate();
@@ -59,19 +51,19 @@ const DnDCalendar = withDragAndDrop(BigCalendar);
 //   }
 // }
 
-function AddEventPopup({ popupDate, setPopUpDate, setShowPopup }) {
+function AddEventPopup({ popupDate, setPopUpDate, setShowPopup, defpop }) {
   const { id } = popupDate;
-  console.log(id);
+
   const queryClient = useQueryClient();
 
-  const handleEvent = async () => {
+  const handleEvent = async (process) => {
     const newevent = EventSchema.safeParse(popupDate);
     if (!newevent.success) {
       toast.error("Please fill in all fields");
     } else {
       const response = await customfetch(
         import.meta.env.VITE_API_URL + "/events" + (id ? `/${id}` : ""),
-        id ? "PUT" : "POST",
+        process ? "DELETE" : id ? "PUT" : "POST",
         newevent.data
       );
       if (response.error) {
@@ -80,6 +72,7 @@ function AddEventPopup({ popupDate, setPopUpDate, setShowPopup }) {
       }
       toast.success(response.message);
       setShowPopup(false);
+      setPopUpDate(defpop);
 
       return response?.event;
     }
@@ -88,9 +81,15 @@ function AddEventPopup({ popupDate, setPopUpDate, setShowPopup }) {
   const mutation = useMutation({
     mutationKey: id ? ["editevntmutation", id] : ["addeventmutation"],
     mutationFn: handleEvent,
-    onSuccess: (data) => {
+    onSuccess: (data, todelete) => {
       queryClient.setQueryData(["events"], (olddata) => {
-        return id
+        return todelete
+          ? olddata.filter((old) => {
+              if (old?.id != todelete?.id) {
+                return old;
+              }
+            })
+          : id
           ? olddata.map((old) => {
               if (old?.id == id) {
                 return data;
@@ -108,9 +107,18 @@ function AddEventPopup({ popupDate, setPopUpDate, setShowPopup }) {
           className="h-auto p-3 flex flex-col gap-3 items-center justify-center "
           id="popup"
         >
-          <Typography className="text-red-800 font-semibold mt-2">
-            Add Event
-          </Typography>
+          <div className="w-[90%] flex items-center text-center">
+            <Typography className="text-red-800 font-semibold  text-center w-full">
+              {popupDate?.id ? "Edit" : "Add Event"}
+            </Typography>
+            {popupDate?.id && (
+              <IoMdTrash
+                onClick={() => mutation.mutate({ id: popupDate?.id })}
+                size={30}
+                className="w-[35px] rounded-full hover:bg-gray-100 p-1 text-gray-900 hover:text-red-800 hover:border-2 hover:border-black transition-all cursor-pointer hover:shadow-lg"
+              />
+            )}
+          </div>
 
           <div className="flex flex-col gap-3  overflow-y-scroll p-3">
             <Input
@@ -170,7 +178,10 @@ function AddEventPopup({ popupDate, setPopUpDate, setShowPopup }) {
           <div className=" w-[90%] flex justify-between mt-2">
             <Button
               variant="outlined"
-              onClick={() => setShowPopup(false)}
+              onClick={() => {
+                setShowPopup(false);
+                setPopUpDate(defpop);
+              }}
               size="sm"
             >
               Close
@@ -189,10 +200,11 @@ function Calendar() {
   const { user } = useUser();
   const [initialDate, setInitialDate] = useState(new Date());
   const [showPopup, setShowPopup] = useState(false);
-  const [popupDate, setPopUpDate] = useState({
+  const defpop = {
     createdBy: user?.userId,
     type: "event",
-  });
+  };
+  const [popupDate, setPopUpDate] = useState(defpop);
   const calendarRef = useRef(null);
 
   const { data, isLoading, isError } = useQuery({
@@ -292,6 +304,7 @@ function Calendar() {
           setShowPopup={setShowPopup}
           popupDate={popupDate}
           setPopUpDate={setPopUpDate}
+          defpop={defpop}
         />
       )}
 

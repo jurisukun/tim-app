@@ -20,10 +20,19 @@ export const useCheckAuth = () => {
         }
         setStatus({ loading: false, error: false, data: res });
 
-        const { isAdmin, role, userId } = res;
+        const { isAdmin, role, userId, firstname, lastname, username, email } =
+          res;
         setUser({ isAdmin, role, userId });
 
-        usr.setUser({ isAdmin, role, userId });
+        usr.setUser({
+          isAdmin,
+          role,
+          userId,
+          firstname,
+          lastname,
+          username,
+          email,
+        });
       })
       .catch((err) => setStatus({ loading: false, error: true, data: err }));
   }, []);

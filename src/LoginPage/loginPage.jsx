@@ -35,8 +35,7 @@ function LoginPage() {
   const [password, setPassword] = useState();
   const [isLoading, setIsLoading] = useState(false);
 
-  const location = useLocation();
-
+  const location = window.location;
   const handleLogin = () => {
     if (
       !username ||

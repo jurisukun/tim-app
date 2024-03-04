@@ -26,9 +26,75 @@ import { toast } from "react-toastify";
 import { handleChange } from "../Account/AddClient";
 import { useUser } from "../../utils/context/useUser";
 
+import { format } from "date-fns";
+
+const DailyCard = ({ item, setSelectedRecord, setShowAddRecord }) => {
+  return (
+    <Card
+      className="shadoww p-6 md:hidden cursor-pointer  "
+      onClick={() => {
+        setSelectedRecord(item);
+        setShowAddRecord(true);
+      }}
+    >
+      <div className="flex items-center gap-3 justify-between">
+        <Typography className="text-red-800 text-start  text-sm font-semibold">
+          Date:
+        </Typography>
+        <Typography className="text-end ">
+          {format(item?.date, "MMM dd, yyy")}
+        </Typography>
+      </div>
+      <div className="flex items-center gap-3 justify-between">
+        <Typography className="text-red-800 text-sm font-semibold">
+          Time:
+        </Typography>
+        <Typography>{item?.time}</Typography>
+      </div>
+      <div className="flex items-center gap-3 justify-between">
+        <Typography className="text-red-800 text-sm font-semibold">
+          Staff Name:
+        </Typography>
+        <Typography>{item?.staff}</Typography>
+      </div>
+      <div className="flex items-center gap-3 justify-between">
+        <Typography className="text-red-800 text-sm font-semibold">
+          Interaction Type:
+        </Typography>
+        <Typography className="text-end">{item?.interaction_type}</Typography>
+      </div>
+      <div className="flex items-center gap-3 justify-between">
+        <Typography className="text-red-800 text-sm font-semibold">
+          Interaction With:
+        </Typography>
+        <Typography>{item?.interaction_with}</Typography>
+      </div>
+      <div className="flex items-center gap-3 justify-between">
+        <Typography className="text-red-800 text-sm font-semibold">
+          Purpose Of Call:
+        </Typography>
+        <Typography>{item?.call_purpose}</Typography>
+      </div>
+      <div className="flex items-center gap-3 justify-between">
+        <Typography className="text-red-800 text-sm font-semibold">
+          Phone Number:
+        </Typography>
+        <Typography>{item?.phone_number}</Typography>
+      </div>
+      <div className="flex items-start gap-3 justify-between">
+        <Typography className="text-red-800 text-sm font-semibold">
+          Notes:
+        </Typography>
+        <Typography className="border text-end">{item?.notes}</Typography>
+      </div>
+    </Card>
+  );
+};
+
 function DailyTracker() {
   const { clientId } = useParams();
   const { user } = useUser();
+
   const newdailytracker = useAtomValue(newDailyTracker);
   const setnewdailytracker = useSetAtom(newDailyTracker);
 
@@ -41,6 +107,7 @@ function DailyTracker() {
   }, [selectedRecord]);
 
   const queryClient = useQueryClient();
+
   const { data, isLoading, isError } = useQuery({
     queryKey: ["dailytracker", clientId],
     queryFn: async () => {
@@ -65,41 +132,49 @@ function DailyTracker() {
     setShowAddRecord(false);
   };
 
-  const addDailyTracker = async () => {
+  const addupdateDailyTracker = async () => {
     console.log(newdailytracker);
-    const parse = DailyTrackerSchema.safeParse(
-      selectedRecord ?? {
-        ...newdailytracker,
-        client_id: clientId,
-      }
-    );
-    if (parse.success) {
-      const response = await fetch(`http://localhost:3000/dailytracker`, {
-        method: "POST",
+    const parse = DailyTrackerSchema.safeParse({
+      ...newdailytracker,
+      client_id: clientId,
+      staff: user?.firstname + " " + user?.lastname,
+    });
+
+    if (!parse.success) {
+      toast.error(parse.error.errors[0].message);
+      return;
+    }
+
+    const response = await fetch(
+      selectedRecord
+        ? `http://localhost:3000/dailytracker/${selectedRecord?.id}`
+        : `http://localhost:3000/dailytracker`,
+
+      {
+        method: selectedRecord ? "PUT" : "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON?.stringify({
-          client_id: clientId,
-
-          ...parse.data,
+          ...parse?.data,
+          staff: user?.firstname + " " + user?.lastname,
           createdBy: user?.userId,
         }),
-      });
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
       }
-      const result = await response.json();
-      if (result.error) {
-        toast.error(result.message);
-      }
-      toast.success(result.message);
-      setShowAddRecord(false);
-
-      return result.data;
-    } else {
-      toast.error(parse.error.errors[0].message);
+    );
+    if (!response.ok) {
+      toast.error("Network response was not ok");
+      // throw new Error("Network response was not ok");
     }
+    const result = await response.json();
+    if (result.error) {
+      toast.error(result.message);
+      return;
+    }
+    toast.success(result.message);
+    setShowAddRecord(false);
+
+    return result.data;
   };
 
   const deleteDailyTracker = async () => {
@@ -120,70 +195,32 @@ function DailyTracker() {
     setRecordId(null);
   };
 
-  const updateDailyTracker = async () => {
-    const parse = DailyTrackerSchema.safeParse({
-      ...newdailytracker,
-      client_id: clientId,
-    });
-    if (parse.success) {
-      const response = await fetch(
-        `http://localhost:3000/dailytracker/${selectedRecord.id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON?.stringify({
-            client_id: clientId,
-            ...newdailytracker,
-            createdBy: user?.userId,
-          }),
-        }
-      );
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      const result = await response.json();
-      if (result.error) {
-        toast.error(result.message);
-      }
-      toast.success(result.message);
-
-      setShowAddRecord(false);
-
-      return result.data;
-    } else {
-      toast.error(parse.error.errors[0].message);
-    }
-  };
-
   const mutation = useMutation({
-    mutationFn: recordId
-      ? deleteDailyTracker
-      : selectedRecord
-      ? updateDailyTracker
-      : addDailyTracker,
+    mutationFn: recordId ? deleteDailyTracker : addupdateDailyTracker,
     mutationKey: recordId
       ? ["deletedailytracker", recordId]
       : ["dailytrackermutation"],
     onSuccess: (data) => {
-      recordId
-        ? queryClient.setQueryData(["dailytracker", clientId], (oldData) => {
-            return {
-              daily: oldData.daily.filter((item) => item.id !== recordId),
-            };
-          })
-        : selectedRecord
-        ? queryClient.setQueryData(["dailytracker", clientId], (oldData) => {
-            return {
-              daily: oldData.daily.map((item) =>
-                item.id === data.id ? data : item
-              ),
-            };
-          })
-        : queryClient.setQueryData(["dailytracker", clientId], (oldData) => {
-            return { daily: [data, ...oldData.daily] };
-          });
+      if (data) {
+        recordId
+          ? queryClient.setQueryData(["dailytracker", clientId], (oldData) => {
+              return {
+                daily: oldData.daily.filter((item) => item.id !== recordId),
+              };
+            })
+          : selectedRecord
+          ? queryClient.setQueryData(["dailytracker", clientId], (oldData) => {
+              console.log(oldData, data);
+              return {
+                daily: oldData.daily.map((item) =>
+                  item.id === data.id ? data : item
+                ),
+              };
+            })
+          : queryClient.setQueryData(["dailytracker", clientId], (oldData) => {
+              return { daily: [data, ...oldData.daily] };
+            });
+      }
       setRecordId(null);
       setSelectedRecord(null);
     },
@@ -210,97 +247,47 @@ function DailyTracker() {
           Add Record
         </Button>
       </div>
-      <div className="hidden md:block flex-1 h-[80%] p-3">
+      <div className="flex-1 h-[80%] p-3">
         {daily?.length > 0 && (
-          <Card className="mt-3 hidden md:block p-2 max-h-full overflow-y-scroll">
+          <Card className="mt-3 hidden md:block p-2 h-full overflow-y-scroll">
             <table className="shadow-lg bg-white w-full">
               <tbody>
-                <tr className="sticky top-0">
+                <tr className="sticky top-0 text-xs text-white font-bold">
                   <th className="bg-blue-gray-300 border  text-left px-2 py-2">
-                    <Typography
-                      variant="small"
-                      color="blue-gray"
-                      className="font-semi-bold text-1xl "
-                    >
-                      Date
-                    </Typography>
+                    <Typography variant="small">Date</Typography>
                   </th>
                   <th className="bg-blue-gray-300 border text-left px-2 py-2">
-                    <Typography
-                      variant="small"
-                      color="blue-gray"
-                      className="font-semi-bold text-1xl "
-                    >
-                      Time
-                    </Typography>
+                    <Typography variant="small">Time</Typography>
                   </th>
                   <th className="bg-blue-gray-300 border text-left px-2 py-2">
-                    <Typography
-                      variant="small"
-                      color="blue-gray"
-                      className="font-semi-bold text-1xl "
-                    >
-                      Staff Name
-                    </Typography>
+                    <Typography variant="small">Staff Name</Typography>
                   </th>
                   <th className="bg-blue-gray-300 border text-left px-2 py-2">
-                    <Typography
-                      variant="small"
-                      color="blue-gray"
-                      className="font-semi-bold text-1xl "
-                    >
-                      Interaction Type
-                    </Typography>
+                    <Typography variant="small">Interaction Type</Typography>
                   </th>
                   <th className="bg-blue-gray-300 border text-left px-2 py-2">
-                    <Typography
-                      variant="small"
-                      color="blue-gray"
-                      className="font-semi-bold text-1xl "
-                    >
-                      Interaction With
-                    </Typography>
+                    <Typography variant="small">Interaction With</Typography>
                   </th>
                   <th className="bg-blue-gray-300 border text-left px-2 py-2">
-                    <Typography
-                      variant="small"
-                      color="blue-gray"
-                      className="font-semi-bold text-1xl "
-                    >
-                      Purpose of call
-                    </Typography>
+                    <Typography variant="small">Purpose of call</Typography>
                   </th>
                   <th className="bg-blue-gray-300 border text-left px-2 py-2">
-                    <Typography
-                      variant="small"
-                      color="blue-gray"
-                      className="font-semi-bold text-1xl "
-                    >
-                      Phone Number
-                    </Typography>
+                    <Typography variant="small">Phone Number</Typography>
                   </th>
                   <th className="bg-blue-gray-300 border text-left px-2 py-2">
-                    <Typography
-                      variant="small"
-                      color="blue-gray"
-                      className="font-semi-bold text-1xl "
-                    >
-                      Notes
-                    </Typography>
+                    <Typography variant="small">Notes</Typography>
                   </th>
                 </tr>
                 {daily.map((item, key) => {
                   return (
                     <Menu className="bg-black">
                       <MenuHandler>
-                        <tr key={key} className="hover:shadow-md ">
+                        <tr key={key} className="hover:shadow-md text-sm ">
                           <td className="border px-2 py-2 text-xs">
-                            {item?.date}
+                            {format(item?.date, "MMM dd, yyyy")}
                           </td>
                           <td className="border px-2 py-2">{item?.time}</td>
-                          <td className="border px-2 py-2">
-                            {item?.staff_name}
-                          </td>
+                          <td className="border px-2 py-2">{item?.staff}</td>
                           <td className="border px-2 py-2">
                             {item?.interaction_type}
                           </td>
@@ -347,67 +334,20 @@ function DailyTracker() {
             No records found
           </div>
         )}
-      </div>
-
-      {/* mobile view */}
-      <div className="xl:hidden lg:block overflow-y-scroll h-full p-2 px-6">
-        {daily?.length <= 0 && (
-          <div className="h-full w-full items-center flex justify-center text-gray-400">
-            No records found
+        {
+          <div className="mt-3 xl:hidden grid md:grid-cols-2 sm:grid-cols-2 gap-5 ">
+            {daily?.map((item, key) => {
+              return (
+                <DailyCard
+                  key={key}
+                  item={item}
+                  setShowAddRecord={setShowAddRecord}
+                  setSelectedRecord={setSelectedRecord}
+                />
+              );
+            })}
           </div>
-        )}
-        <div className="mt-3  grid md:grid-cols-2 sm:grid-cols-2 gap-5 ">
-          {daily?.map((item, key) => {
-            return (
-              <Card key={key} className="shadoww p-6">
-                <div className="flex items-center gap-3 justify-between">
-                  <Typography className="text-black text-start border">
-                    Date:
-                  </Typography>
-                  <Typography className="text-start border">
-                    {item?.date}
-                  </Typography>
-                </div>
-                <div className="flex items-center gap-3 justify-between">
-                  <Typography className="text-black">Time:</Typography>
-                  <Typography>{item?.time}</Typography>
-                </div>
-                <div className="flex items-center gap-3 justify-between">
-                  <Typography className="text-black">Staff Name:</Typography>
-                  <Typography>{item?.staff_name}</Typography>
-                </div>
-                <div className="flex items-center gap-3 justify-between">
-                  <Typography className="text-black">
-                    Interaction Type:
-                  </Typography>
-                  <Typography>{item?.interaction_type}</Typography>
-                </div>
-                <div className="flex items-center gap-3 justify-between">
-                  <Typography className="text-black">
-                    Interaction With:
-                  </Typography>
-                  <Typography>{item?.interaction_with}</Typography>
-                </div>
-                <div className="flex items-center gap-3 justify-between">
-                  <Typography className="text-black">
-                    Purpose Of Call:
-                  </Typography>
-                  <Typography>{item?.call_purpose}</Typography>
-                </div>
-                <div className="flex items-center gap-3 justify-between">
-                  <Typography className="text-black"> Phone Number:</Typography>
-                  <Typography>{item?.phone_number}</Typography>
-                </div>
-                <div className="flex items-start gap-3 justify-between">
-                  <Typography className="text-black"> Notes:</Typography>
-                  <Typography className="border text-end">
-                    {item?.notes}
-                  </Typography>
-                </div>
-              </Card>
-            );
-          })}
-        </div>
+        }
       </div>
 
       {/* add record */}
@@ -420,7 +360,7 @@ function DailyTracker() {
                 type="date"
                 label="Date"
                 name="date"
-                defaultValue={selectedRecord?.date ?? ""}
+                defaultValue={selectedRecord?.date?.split("T")[0] ?? ""}
                 onChange={(e) => handleChange(e, setnewdailytracker)}
               />
             </div>

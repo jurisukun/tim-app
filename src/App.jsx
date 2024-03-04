@@ -25,6 +25,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AuthProvider } from "./utils/context/authcontext";
 
 import { ThemeProvider } from "./theme-provider";
+import SocketContext from "./utils/context/Socketcontext";
+import UserProfile from "./MyProfile/UserProfile";
 
 const queryClient = new QueryClient();
 
@@ -33,6 +35,7 @@ const router = createBrowserRouter([
     path: "/login",
     element: <LoginCheck />,
   },
+
   {
     path: "/",
     loader: () => {
@@ -41,15 +44,15 @@ const router = createBrowserRouter([
   },
   {
     path: "/dashboard",
-    element: (
-      <CheckAuth>
-        <Home />
-      </CheckAuth>
-    ),
+    element: <Home />,
     children: [
       {
         path: "",
         element: <Calendar />,
+      },
+      {
+        path: "my-profile",
+        element: <UserProfile />,
       },
       {
         path: "client",
@@ -92,7 +95,11 @@ const router = createBrowserRouter([
       },
       {
         path: "tasks",
-        element: <Tasks />,
+        element: (
+          // <CheckAuth>
+          <Tasks />
+          //</CheckAuth>
+        ),
       },
       {
         path: "forms",
