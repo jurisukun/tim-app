@@ -54,11 +54,11 @@ export const funeral = [
   { label: "Client", value: "client" },
   { label: "Contracts", value: "contract" },
   { label: "Itineraries", value: "itinerary" },
-  { label: "Daily Tracker", value: "daily" },
+  { label: "Daily Tracker", value: "dailytracker" },
 ];
 export const calendar = [
-  { label: "Event Calendar", value: "events" },
-  { label: "Task Calendar", value: "tasks" },
+  { label: "Event Calendar", value: "calendar?type=event" },
+  { label: "Task Calendar", value: "calendar?type=task" },
 ];
 export const links = [
   { label: "Drive", link: "https://drive.google.com" },

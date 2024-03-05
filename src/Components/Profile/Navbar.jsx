@@ -17,7 +17,7 @@ import logo from "../../../public/pngegg.png";
 import React from "react";
 
 const menu = [
-  { name: "Daily Tracker", link: "daily-tracker" },
+  { name: "Daily Tracker", link: "dailytracker" },
   { name: "Email", link: "email" },
   { name: "Tasks", link: "tasks" },
   { name: "Forms", link: "forms" },

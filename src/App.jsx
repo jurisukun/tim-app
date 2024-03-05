@@ -71,6 +71,10 @@ const router = createBrowserRouter([
         path: "calendar",
         element: <Calendar />,
       },
+      {
+        path: "dailytracker",
+        element: <DailyTracker />,
+      },
     ],
   },
   {
@@ -81,11 +85,11 @@ const router = createBrowserRouter([
       {
         index: true,
         loader: ({ params }) => {
-          return (window.location.href = `/client/${params.clientId}/profile/daily-tracker`);
+          return (window.location.href = `/client/${params.clientId}/profile/dailytracker`);
         },
       },
       {
-        path: "daily-tracker",
+        path: "dailytracker",
         element: <DailyTracker />,
       },
       {

@@ -11,6 +11,7 @@ import {
   MenuItem,
   Dialog,
   DialogBody,
+  Textarea,
 } from "@material-tailwind/react";
 import { useEffect, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -31,7 +32,7 @@ import { format } from "date-fns";
 const DailyCard = ({ item, setSelectedRecord, setShowAddRecord }) => {
   return (
     <Card
-      className="shadoww p-6 md:hidden cursor-pointer  "
+      className="shadoww p-6 md:hidden cursor-pointer gap-2"
       onClick={() => {
         setSelectedRecord(item);
         setShowAddRecord(true);
@@ -81,11 +82,16 @@ const DailyCard = ({ item, setSelectedRecord, setShowAddRecord }) => {
         </Typography>
         <Typography>{item?.phone_number}</Typography>
       </div>
-      <div className="flex items-start gap-3 justify-between">
+      <div className="flex items-start gap-3 justify-between ">
         <Typography className="text-red-800 text-sm font-semibold">
           Notes:
         </Typography>
-        <Typography className="border text-end">{item?.notes}</Typography>
+        {/* <pre className="border text-end text-pre text-pretty">{item?.notes}</pre> */}
+        <div className=" flex max-h-[60px] overflow-y-scroll">
+          <Typography className=" text-end  text-pretty">
+            {item?.notes}
+          </Typography>
+        </div>
       </div>
     </Card>
   );
@@ -112,7 +118,9 @@ function DailyTracker() {
     queryKey: ["dailytracker", clientId],
     queryFn: async () => {
       const response = await fetch(
-        `http://localhost:3000/dailytracker/${clientId}`,
+        clientId
+          ? `http://localhost:3000/dailytracker/${clientId}`
+          : `http://localhost:3000/dailytracker`,
         {
           method: "GET",
         }
@@ -136,7 +144,7 @@ function DailyTracker() {
     console.log(newdailytracker);
     const parse = DailyTrackerSchema.safeParse({
       ...newdailytracker,
-      client_id: clientId,
+      client_id: clientId ?? "",
       staff: user?.firstname + " " + user?.lastname,
     });
 
@@ -280,28 +288,34 @@ function DailyTracker() {
                 </tr>
                 {daily.map((item, key) => {
                   return (
-                    <Menu className="bg-black">
+                    <Menu className="bg-black" key={key}>
                       <MenuHandler>
                         <tr key={key} className="hover:shadow-md text-sm ">
-                          <td className="border px-2 py-2 text-xs">
+                          <td className="border px-2 py-2  align-top">
                             {format(item?.date, "MMM dd, yyyy")}
                           </td>
-                          <td className="border px-2 py-2">{item?.time}</td>
-                          <td className="border px-2 py-2">{item?.staff}</td>
-                          <td className="border px-2 py-2">
+                          <td className="border px-2 py-2 align-top">
+                            {item?.time}
+                          </td>
+                          <td className="border px-2 py-2 align-top">
+                            {item?.staff}
+                          </td>
+                          <td className="border px-2 py-2 align-top">
                             {item?.interaction_type}
                           </td>
-                          <td className="border px-2 py-2">
+                          <td className="border px-2 py-2 align-top">
                             {item?.interaction_with}
                           </td>
-                          <td className="border px-2 py-2">
+                          <td className="border px-2 py-2 align-top">
                             {item?.call_purpose}
                           </td>
-                          <td className="border px-2 py-2">
+                          <td className="border px-2 py-2 text-start align-top">
                             {item?.phone_number}
                           </td>
-                          <td className="border px-2 py-2 text-xs text-ellipsis">
-                            {item?.notes}
+                          <td className="border px-2 py-2 text-xs text-ellipsis w-[20%] ">
+                            <div className=" max-h-[100px] overflow-y-scroll">
+                              {item?.notes}
+                            </div>
                           </td>
                         </tr>
                       </MenuHandler>
@@ -311,13 +325,13 @@ function DailyTracker() {
                             setSelectedRecord(item);
                             setShowAddRecord(true);
                           }}
-                          className="text-red-800"
+                          className="text-orange-800 font-semibold"
                         >
                           View / Edit
                         </MenuItem>
                         <MenuItem
                           onClick={() => setRecordId(item.id)}
-                          className="text-red-800"
+                          className="text-red-800 font-semibold"
                         >
                           Delete
                         </MenuItem>
@@ -353,71 +367,73 @@ function DailyTracker() {
       {/* add record */}
       {showAddRecord && (
         <div className="w-full h-full flex items-center justify-center absolute top-0 bg-black/80 left-0 z-50">
-          <Card className=" p-4 gap-4 max-h-[90%] max-w-[325px] w-[80%] flex flex-col items-center justify-center">
+          <Card className="  p-4 gap-4 max-h-[90%] max-w-[325px] w-[80%] flex flex-col items-center justify-center">
             <div className="text-center font-semibold">Add Daily Tracker</div>
-            <div className="w-full">
-              <Input
-                type="date"
-                label="Date"
-                name="date"
-                defaultValue={selectedRecord?.date?.split("T")[0] ?? ""}
-                onChange={(e) => handleChange(e, setnewdailytracker)}
-              />
-            </div>
-            <div className="w-full">
-              <Input
-                type="time"
-                label="Time"
-                name="time"
-                defaultValue={selectedRecord?.time ?? ""}
-                onChange={(e) => handleChange(e, setnewdailytracker)}
-              />
-            </div>
-            <div className="w-full ">
-              <Select
-                label="Select Type Of Interaction"
-                value={selectedRecord?.interaction_type ?? ""}
-                onChange={(e) =>
-                  handleChange(e, setnewdailytracker, "interaction_type")
-                }
-              >
-                <Option value="Call To">Call To</Option>
-                <Option value="Call From">Call From</Option>
-                <Option value="Email Exchange">Email Exchange</Option>
-                <Option value="Meeting with">Meeting with</Option>
-              </Select>
-            </div>
-            <div className="w-full">
-              <Input
-                defaultValue={selectedRecord?.interaction_with ?? ""}
-                label="Interaction With"
-                name="interaction_with"
-                onChange={(e) => handleChange(e, setnewdailytracker)}
-              />
-            </div>
-            <div className="w-full">
-              <Input
-                defaultValue={selectedRecord?.call_purpose ?? ""}
-                label=" Purpose Of Call"
-                name="call_purpose"
-                onChange={(e) => handleChange(e, setnewdailytracker)}
-              />
-            </div>
-            <div className="w-full">
-              <Input
-                defaultValue={selectedRecord?.phone_number ?? ""}
-                label=" Phone Number"
-                name="phone_number"
-                onChange={(e) => handleChange(e, setnewdailytracker)}
-              />
-            </div>
-            <div className="w-full">
-              <Input
-                defaultValue={selectedRecord?.notes ?? ""}
-                label=" Notes"
-                name="notes"
-                onChange={(e) => handleChange(e, setnewdailytracker)}
-              />
+            <div className="flex-1 w-full  flex flex-col p-4 gap-4 overflow-y-scroll">
+              <div className="w-full ">
+                <Input
+                  type="date"
+                  label="Date"
+                  name="date"
+                  defaultValue={selectedRecord?.date?.split("T")[0] ?? ""}
+                  onChange={(e) => handleChange(e, setnewdailytracker)}
+                />
+              </div>
+              <div className="w-full">
+                <Input
+                  type="time"
+                  label="Time"
+                  name="time"
+                  defaultValue={selectedRecord?.time ?? ""}
+                  onChange={(e) => handleChange(e, setnewdailytracker)}
+                />
+              </div>
+              <div className="w-full ">
+                <Select
+                  label="Select Type Of Interaction"
+                  value={selectedRecord?.interaction_type ?? ""}
+                  onChange={(e) =>
+                    handleChange(e, setnewdailytracker, "interaction_type")
+                  }
+                >
+                  <Option value="Call To">Call To</Option>
+                  <Option value="Call From">Call From</Option>
+                  <Option value="Email Exchange">Email Exchange</Option>
+                  <Option value="Meeting with">Meeting with</Option>
+                </Select>
+              </div>
+              <div className="w-full">
+                <Input
+                  defaultValue={selectedRecord?.interaction_with ?? ""}
+                  label="Interaction With"
+                  name="interaction_with"
+                  onChange={(e) => handleChange(e, setnewdailytracker)}
+                />
+              </div>
+              <div className="w-full">
+                <Input
+                  defaultValue={selectedRecord?.call_purpose ?? ""}
+                  label=" Purpose Of Call"
+                  name="call_purpose"
+                  onChange={(e) => handleChange(e, setnewdailytracker)}
+                />
+              </div>
+              <div className="w-full">
+                <Input
+                  defaultValue={selectedRecord?.phone_number ?? ""}
+                  label=" Phone Number"
+                  name="phone_number"
+                  onChange={(e) => handleChange(e, setnewdailytracker)}
+                />
+              </div>
+              <div className="w-full">
+                <Textarea
+                  defaultValue={selectedRecord?.notes ?? ""}
+                  label=" Notes"
+                  name="notes"
+                  onChange={(e) => handleChange(e, setnewdailytracker)}
+                />
+              </div>
             </div>
             <div className="w-full flex items-center justify-between ">
               <Button

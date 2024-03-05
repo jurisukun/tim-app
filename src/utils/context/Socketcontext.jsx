@@ -4,8 +4,9 @@ import { toast } from "react-toastify";
 import { useUser } from "./useUser";
 
 export const socket = io("http://localhost:3000");
+export const tasksocket = io("http://localhost:3000/tasks");
 
-socket.on("assignedtoyou", (data) => {
+tasksocket.on("assignedtoyou", (data) => {
   toast.info("Task Assigned to you");
 });
 
@@ -15,7 +16,7 @@ export default function SocketProvider({ children }) {
   const { user } = useUser();
   useEffect(() => {
     if (user.userId) {
-      socket.emit("user", user.userId);
+      tasksocket.emit("user", user.userId);
     }
     // return () => {
     //   if (socket?.connected) socket.disconnect();

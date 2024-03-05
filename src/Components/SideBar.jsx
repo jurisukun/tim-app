@@ -30,6 +30,8 @@ import { IoMenu } from "react-icons/io5";
 import { IoMdNotificationsOutline } from "react-icons/io";
 import { socket } from "../utils/context/Socketcontext";
 
+import { useQuery } from "@tanstack/react-query";
+
 export const logout = (navigate) => {
   localStorage.removeItem("token");
   socket.disconnect();
@@ -82,6 +84,72 @@ const notification = [
   },
 ];
 
+function Notification() {
+  const { user } = useUser();
+  const { isLoading, error, data } = useQuery({
+    queryKey: ["notifications", user?.userId],
+    queryFn: async () => {
+      console.log("fetching notifications");
+      const res = await fetch(
+        `http://localhost:3000/notifications/${user?.userId}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      return res.json();
+    },
+  });
+
+  console.log(data);
+
+  return (
+    <Popover placement="bottom-end">
+      <PopoverHandler>
+        <div>
+          <IoMdNotificationsOutline className=" text-3xl " />
+          <p className="absolute top-0 -right-2 aspect-square w-[25px] h-[25px] rounded-full bg-red-800 text-white text-center text-xs p-1">
+            {isLoading ? " " : data?.notifications?.length ?? 0}
+          </p>
+        </div>
+      </PopoverHandler>
+      <PopoverContent className="z-40 max-h-[250px] w-[300px] p-1">
+        <Tabs value={"message"}>
+          <TabsHeader className="text-sm sticky top-0">
+            {notification.map((item) => (
+              <Tab
+                className="text-sm"
+                activeClassName="text-red-800 font-semibold"
+                key={item.value}
+                value={item?.value}
+                label={item.label}
+                icon={item.icon}
+              >
+                {item?.label}
+              </Tab>
+            ))}
+          </TabsHeader>
+          <TabsBody>
+            {notification.map((item) => (
+              <TabPanel key={item.value} value={item.value}>
+                <List className="h-[150px] overflow-y-scroll">
+                  {item.data.map((data) => (
+                    <ListItem className="text-xs" key={data}>
+                      {data}
+                    </ListItem>
+                  ))}
+                </List>
+              </TabPanel>
+            ))}
+          </TabsBody>
+        </Tabs>
+      </PopoverContent>
+    </Popover>
+  );
+}
+
 function SideBar() {
   const setopenmobilenav = useSetAtom(openMobileNav);
   const setopenaccount = useSetAtom(openAccount);
@@ -93,47 +161,7 @@ function SideBar() {
       <div className="flex items-center justify-center gap-8">
         <HeaderLogo />
         <div className="flex relative  aspect-square rounded-full p-2 cursor-pointer">
-          <Popover placement="bottom-end">
-            <PopoverHandler>
-              <div>
-                <IoMdNotificationsOutline className=" text-3xl " />
-                <p className="absolute top-0 -right-2 aspect-square w-[25px] h-[25px] rounded-full bg-red-800 text-white text-center text-xs p-1">
-                  99
-                </p>
-              </div>
-            </PopoverHandler>
-            <PopoverContent className="z-40 max-h-[250px] w-[300px] p-1">
-              <Tabs value={"message"}>
-                <TabsHeader className="text-sm sticky top-0">
-                  {notification.map((item) => (
-                    <Tab
-                      className="text-sm"
-                      activeClassName="text-red-800 font-semibold"
-                      key={item.value}
-                      value={item?.value}
-                      label={item.label}
-                      icon={item.icon}
-                    >
-                      {item?.label}
-                    </Tab>
-                  ))}
-                </TabsHeader>
-                <TabsBody>
-                  {notification.map((item) => (
-                    <TabPanel key={item.value} value={item.value}>
-                      <List className="h-[150px] overflow-y-scroll">
-                        {item.data.map((data) => (
-                          <ListItem className="text-xs" key={data}>
-                            {data}
-                          </ListItem>
-                        ))}
-                      </List>
-                    </TabPanel>
-                  ))}
-                </TabsBody>
-              </Tabs>
-            </PopoverContent>
-          </Popover>
+          <Notification />
         </div>
       </div>
 

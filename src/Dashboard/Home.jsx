@@ -28,15 +28,17 @@ function Home() {
   const { user } = useUser();
 
   return (
-    <div className="w-full h-screen items-center ">
+    <div className="w-full h-screen items-center  ">
       {openaccount && user?.isAdmin && <AddAccount />}
       {openclient && <AddClient />}
-      <MobileSidebar />
-      <div className="flex flex-row">
-        <SideBar />
-        <div className="lg:hidden flex w-full bbb justify-between  items-center h-[60px] px-4"></div>
+      <div className="h-[15%]">
+        <MobileSidebar />
+        <div className="flex flex-row">
+          <SideBar />
+        </div>
       </div>
-      <div className="h-full ">
+
+      <div className="h-[80%]">
         <Outlet />
       </div>
     </div>

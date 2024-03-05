@@ -23,10 +23,9 @@ import { customfetch } from "../../lib/fetchhandler/requestHandler";
 import { useParams, useSearchParams } from "react-router-dom";
 import { LoadingScreen } from "../../CheckAuth/CheckAuth";
 
-import { socket } from "../../utils/context/Socketcontext";
+import { tasksocket } from "../../utils/context/Socketcontext";
 
 import { useUser } from "../../utils/context/useUser";
-import { set } from "date-fns";
 
 function UserOptions() {
   const { data, isLoading, isError } = useQuery({
@@ -212,7 +211,11 @@ function Tasks() {
         }
         toast.success(data.message);
 
-        socket.emit("taskassigned", { taskId, userId: task.assigned_to });
+        tasksocket.emit("taskassigned", {
+          taskId,
+          userId: task.assigned_to,
+          clientId,
+        });
 
         return data.data;
       }

@@ -27,6 +27,7 @@ import ErrorPage from "../ErrorPage";
 import { useUser } from "../../utils/context/useUser";
 
 import { IoMdTrash } from "react-icons/io";
+import { useSearchParams } from "react-router-dom";
 
 // function getTodoList(date) {
 //   const day = date.getDate();
@@ -198,6 +199,9 @@ function AddEventPopup({ popupDate, setPopUpDate, setShowPopup, defpop }) {
 
 function Calendar() {
   const { user } = useUser();
+  const [params, setParams] = useSearchParams();
+  const [filtered, setFiltered] = useState([]);
+
   const [initialDate, setInitialDate] = useState(new Date());
   const [showPopup, setShowPopup] = useState(false);
   const defpop = {
@@ -220,26 +224,41 @@ function Calendar() {
   });
 
   useEffect(() => {
+    const type = params.get("type");
+    if (type && data) {
+      setFiltered(
+        data.filter((item) => {
+          return item.type == type;
+        })
+      );
+    }
+    if (!type || type == "all") {
+      setFiltered(data);
+    }
+  }, [params.get("type"), data]);
+
+  useEffect(() => {
     let calendarEl = document.getElementById("calendar");
     if (calendarEl) {
       let calendar = new FCalendar(calendarEl, {
         plugins: [listPlugin, timeGridPlugin],
-        initialView: "listWeek",
+        initialView: "listMonth",
 
-        height: "90%",
+        height: "100%",
+
         views: {
           listDay: { buttonText: "day" },
           listWeek: { buttonText: "week" },
           listMonth: { buttonText: "month" },
-          timeGridWeek: { buttonText: "time/week" },
         },
-
+        initialDate: initialDate,
+        // headerToolbar: false,
         headerToolbar: {
-          left: " prev,next",
-          center: "",
-          right: "listDay,listWeek,listMonth,timeGridWeek",
+          left: "prev,next",
+
+          right: "listMonth,listWeek,listDay",
         },
-        events: data,
+        events: filtered,
         eventDidMount: function (info) {
           if (info.event.extendedProps.status === "done") {
             // Change background color of row
@@ -255,7 +274,7 @@ function Calendar() {
       });
       calendar.render();
     }
-  }, [data]);
+  }, [filtered, initialDate]);
 
   function renderEventContent(eventInfo) {
     const isEvent = eventInfo?.event.extendedProps?.type == "event";
@@ -298,61 +317,84 @@ function Calendar() {
   if (isError) return <ErrorPage />;
 
   return (
-    <div className="w-full h-[200%] flex flex-col items-center justify-center  overflow-y-scroll p-2">
-      {showPopup && (
-        <AddEventPopup
-          setShowPopup={setShowPopup}
-          popupDate={popupDate}
-          setPopUpDate={setPopUpDate}
-          defpop={defpop}
-        />
-      )}
+    <div className="w-full h-full overflow-y-scroll ">
+      <div className="w-full h-[200%] md:h-[100%]  flex flex-col md:flex-row gap-2 items-start px-3">
+        {showPopup && (
+          <AddEventPopup
+            setShowPopup={setShowPopup}
+            popupDate={popupDate}
+            setPopUpDate={setPopUpDate}
+            defpop={defpop}
+          />
+        )}
+        <div className="w-full self-end flex items-center gap-2 md:hidden">
+          <p>Filter</p>
+          <Select
+            className="scale-90"
+            labelProps={{
+              className: "scale-90",
+            }}
+            onChange={(e) => setParams({ type: e })}
+            value={params?.get("type") ?? "all"}
+          >
+            <Option value="all">All</Option>
+            <Option value="event">Event</Option>
+            <Option value="task">Task</Option>
+          </Select>
+        </div>
 
-      <div className="h-[70%]  w-[80%]">
-        <FullCalendar
-          ref={calendarRef}
-          headerToolbar={{
-            left: "prev,next",
-            center: "title",
-            right: "dayGridMonth,dayGridWeek,dayGridDay", // user can switch between the two
-          }}
-          height={"100%"}
-          expandRows={true}
-          // contentHeight={1000}
-          plugins={[dayGridPlugin, interactionPlugin]}
-          initialView="dayGridMonth"
-          events={data}
-          initialDate={initialDate}
-          dayMaxEventRows={3}
-          selectable={true}
-          select={(e) => popUp(e)}
-          eventClick={(e) => handleEventClick(e)}
-          eventContent={renderEventContent}
-          // editable={true}
-        />
+        <div className="h-full  w-full md:w-[60%] relative">
+          <FullCalendar
+            ref={calendarRef}
+            headerToolbar={{
+              left: "prev,next",
+              center: "title",
+              right: "dayGridMonth,dayGridWeek,dayGridDay", // user can switch between the two
+            }}
+            height={"100%"}
+            datesSet={(e) =>
+              setInitialDate(
+                calendarRef.current?.getApi().view.getCurrentData().currentDate
+              )
+            }
+            // contentHeight={1000}
+            themeSystem="bootstrap4"
+            plugins={[dayGridPlugin, interactionPlugin]}
+            initialView="dayGridMonth"
+            events={filtered}
+            initialDate={initialDate}
+            dayMaxEventRows={3}
+            selectable={true}
+            select={(e) => popUp(e)}
+            eventClick={(e) => handleEventClick(e)}
+            eventContent={renderEventContent}
+            lazyFetching={true}
+
+            // editable={true}
+          />
+        </div>
+        <div className=" h-full w-full md:w-[40%]">
+          <div className="w-full h-full flex flex-col justify-end px-2  ">
+            <div className="max-w-[250px] self-end md:flex items-center gap-2 hidden">
+              <p>Filter</p>
+              <Select
+                onChange={(e) => setParams({ type: e })}
+                value={params?.get("type") ?? "all"}
+              >
+                <Option value="all">All</Option>
+                <Option value="event">Event</Option>
+                <Option value="task">Task</Option>
+              </Select>
+            </div>
+            <div
+              className=" h-full flex  w-full  scale-90 align-top p-0 m-0 "
+              id="calendar"
+            ></div>
+          </div>
+        </div>
       </div>
-
-      <div className="h-full p-8  w-full scale-90 " id="calendar"></div>
     </div>
   );
-
-  // return (
-  //   <div className="App p-3">
-  //     <DnDCalendar
-  //       selectable={true}
-  //       startAccessor={"start"}
-  //       endAccessor={"end"}
-  //       onSelecting={(range) => console.log(range)}
-  //       onEventResize={(e) => console.log(e)}
-  //       onEventDrop={(e) => console.log(e)}
-  //       defaultDate={new Date()}
-  //       defaultView="month"
-  //       localizer={localizer}
-  //       resizable
-  //       style={{ height: "80vh" }}
-  //     />
-  //   </div>
-  // );
 }
 
 export default Calendar;
