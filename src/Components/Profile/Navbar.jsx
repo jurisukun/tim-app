@@ -32,7 +32,7 @@ export const HeaderLogo = () => {
       onClick={() => navigate("/")}
     >
       <img src={logo} alt="logo" width={45} height={45} />
-      <div className=" protest-riot-regular md:text-2xl text-xl text-nowrap hidden sm:block">
+      <div className=" protest-riot-regular md:text-2xl text-xl text-nowrap hidden sm:block text-black">
         Funeral System
       </div>
     </div>
@@ -47,7 +47,7 @@ function Navbar() {
   const { clientId } = useParams();
 
   return (
-    <div className="flex items-center h-[80px]">
+    <div className="flex items-center h-[80px] bbb">
       <div className="w-full md:bbb hidden lg:block  h-[80px]  hover:top-0 transition-all z-40 bg-white">
         <div className="h-full lg:flex flex-row items-center justify-evenly ">
           <Button

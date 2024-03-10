@@ -119,8 +119,8 @@ function DailyTracker() {
     queryFn: async () => {
       const response = await fetch(
         clientId
-          ? `http://localhost:3000/dailytracker/${clientId}`
-          : `http://localhost:3000/dailytracker`,
+          ? import.meta.env.VITE_API_URL + `/dailytracker/${clientId}`
+          : import.meta.env.VITE_API_URL + `/dailytracker`,
         {
           method: "GET",
         }
@@ -155,8 +155,8 @@ function DailyTracker() {
 
     const response = await fetch(
       selectedRecord
-        ? `http://localhost:3000/dailytracker/${selectedRecord?.id}`
-        : `http://localhost:3000/dailytracker`,
+        ? import.meta.env.VITE_API_URL + `/dailytracker/${selectedRecord?.id}`
+        : import.meta.env.VITE_API_URL + `/dailytracker`,
 
       {
         method: selectedRecord ? "PUT" : "POST",
@@ -187,7 +187,7 @@ function DailyTracker() {
 
   const deleteDailyTracker = async () => {
     const response = await fetch(
-      `http://localhost:3000/dailytracker/${recordId}`,
+      import.meta.env.VITE_API_URL + `/dailytracker/${recordId}`,
       {
         method: "DELETE",
       }
@@ -243,6 +243,16 @@ function DailyTracker() {
   }
 
   let daily = data?.daily;
+  const thead = [
+    { title: "Date/Time" },
+
+    { title: "Staff Name" },
+    { title: "Interaction Type" },
+    { title: "Interaction With" },
+    { title: "Purpose of Call" },
+    { title: "Phone Number" },
+    { title: "Notes" },
+  ];
   return (
     <div className="w-full  h-full flex-1 max-w-full">
       <div className="w-full h-20 text-xl font-medium  bbb text-blue-gray-800 flex items-center justify-between p-4">
@@ -255,100 +265,209 @@ function DailyTracker() {
           Add Record
         </Button>
       </div>
-      <div className="flex-1 h-[80%] p-3">
+      <div className="flex-1 h-[80%] p-3 overflow-y-auto">
         {daily?.length > 0 && (
-          <Card className="mt-3 hidden md:block p-2 h-full overflow-y-scroll">
-            <table className="shadow-lg bg-white w-full">
-              <tbody>
-                <tr className="sticky top-0 text-xs text-white font-bold">
-                  <th className="bg-blue-gray-300 border  text-left px-2 py-2">
-                    <Typography variant="small">Date</Typography>
-                  </th>
-                  <th className="bg-blue-gray-300 border text-left px-2 py-2">
-                    <Typography variant="small">Time</Typography>
-                  </th>
-                  <th className="bg-blue-gray-300 border text-left px-2 py-2">
-                    <Typography variant="small">Staff Name</Typography>
-                  </th>
-                  <th className="bg-blue-gray-300 border text-left px-2 py-2">
-                    <Typography variant="small">Interaction Type</Typography>
-                  </th>
-                  <th className="bg-blue-gray-300 border text-left px-2 py-2">
-                    <Typography variant="small">Interaction With</Typography>
-                  </th>
-                  <th className="bg-blue-gray-300 border text-left px-2 py-2">
-                    <Typography variant="small">Purpose of call</Typography>
-                  </th>
-                  <th className="bg-blue-gray-300 border text-left px-2 py-2">
-                    <Typography variant="small">Phone Number</Typography>
-                  </th>
-                  <th className="bg-blue-gray-300 border text-left px-2 py-2">
-                    <Typography variant="small">Notes</Typography>
-                  </th>
-                </tr>
-                {daily.map((item, key) => {
+          <table className="flex flex-col  lg:gap-0 w-full h-full p-3">
+            <tbody className="lg:table lg:flex-col  grid sm:grid-cols-2 gap-2 h-full space-y-3">
+              <tr className=" top-0 bg-blue-gray-300 z-20 w-full hidden lg:flex  justify-evenly text-center p-2 rounded-md text-white ">
+                {thead.map((head, index) => {
                   return (
-                    <Menu className="bg-black" key={key}>
-                      <MenuHandler>
-                        <tr key={key} className="hover:shadow-md text-sm ">
-                          <td className="border px-2 py-2  align-top">
-                            {format(item?.date, "MMM dd, yyyy")}
-                          </td>
-                          <td className="border px-2 py-2 align-top">
-                            {item?.time}
-                          </td>
-                          <td className="border px-2 py-2 align-top">
-                            {item?.staff}
-                          </td>
-                          <td className="border px-2 py-2 align-top">
-                            {item?.interaction_type}
-                          </td>
-                          <td className="border px-2 py-2 align-top">
-                            {item?.interaction_with}
-                          </td>
-                          <td className="border px-2 py-2 align-top">
-                            {item?.call_purpose}
-                          </td>
-                          <td className="border px-2 py-2 text-start align-top">
-                            {item?.phone_number}
-                          </td>
-                          <td className="border px-2 py-2 text-xs text-ellipsis w-[20%] ">
-                            <div className=" max-h-[100px] overflow-y-scroll">
-                              {item?.notes}
-                            </div>
-                          </td>
-                        </tr>
-                      </MenuHandler>
-                      <MenuList className="border shadow-md ">
-                        <MenuItem
-                          onClick={() => {
-                            setSelectedRecord(item);
-                            setShowAddRecord(true);
-                          }}
-                          className="text-orange-800 font-semibold"
-                        >
-                          View / Edit
-                        </MenuItem>
-                        <MenuItem
-                          onClick={() => setRecordId(item.id)}
-                          className="text-red-800 font-semibold"
-                        >
-                          Delete
-                        </MenuItem>
-                      </MenuList>
-                    </Menu>
+                    <th
+                      key={index}
+                      className={`px-3  text-left ${
+                        index == 6 || index == 4 ? "lg:w-[15%]" : "lg:w-[11%]"
+                      }`}
+                    >
+                      <Typography
+                        variant="small"
+                        className="font-semi-bold text-1xl x "
+                      >
+                        {head.title}
+                      </Typography>
+                    </th>
                   );
                 })}
-              </tbody>
-            </table>
-          </Card>
+              </tr>
+              {daily.map((item, index) => {
+                return (
+                  <Menu
+                    className="bg-black"
+                    key={index}
+                    // placement={"right" || "bottom"}
+                  >
+                    <MenuHandler>
+                      <tr
+                        className=" px-3 py-6 border border-black rounded-md lg:p-1 flex flex-col lg:flex-row  text-gray-800 cursor-pointer hover:shadow-md hover:shadow-red-800 hover:border-red-600 transition-all  w-full justify-evenly"
+                        key={index}
+                      >
+                        <td className="py-1  px-2 text-sm flex justify-between lg:w-[11%]">
+                          <span className="lg:hidden text-red-700 text-xs font-semibold">
+                            Date/Time:
+                          </span>
+                          {item?.date ? format(new Date(), "MMM dd, yyyy") : ""}{" "}
+                          {item?.time}
+                        </td>
+
+                        <td className="py-1  px-2 text-sm flex justify-between  lg:w-[11%]">
+                          <span className="lg:hidden text-red-700 text-xs font-semibold">
+                            Staff Name:
+                          </span>
+                          {item?.staff}
+                        </td>
+                        <td className="py-1  px-2 text-sm flex justify-between lg:w-[11%]">
+                          <span className="lg:hidden text-red-700 text-xs font-semibold">
+                            Interaction Type:
+                          </span>
+                          {item?.interaction_type}
+                        </td>
+                        <td className="py-1 px-2 text-sm flex justify-between w-full lg:w-[15%] text-ellipsis overflow-hidden">
+                          <span className="lg:hidden text-red-700 text-xs font-semibold w-1/2">
+                            Interaction With:
+                          </span>
+                          <p className="w-1/2  text-ellipsis lg:text-left text-right overflow-hidden">
+                            {item?.interaction_with}
+                          </p>
+                        </td>
+                        <td className="py-1  px-2 text-sm flex justify-between gap-4 lg:w-[11%]">
+                          <span className="lg:hidden text-red-700 text-xs font-semibold">
+                            Purpose of Call
+                          </span>
+                          {item?.call_purpose}
+                        </td>
+                        <td className="py-1  px-2 text-sm flex justify-between gap-4 lg:w-[11%]">
+                          <span className="lg:hidden text-red-700 text-xs font-semibold">
+                            Phone Number:
+                          </span>
+                          {item?.phone_number ?? ""}
+                        </td>
+
+                        <td className="py-1  px-2 text-sm flex justify-between gap-4 lg:w-[15%]">
+                          <span className="lg:hidden text-red-700 text-xs font-semibold">
+                            Notes
+                          </span>
+                          <p className="min-h-[50px] max-h-[80px] w-3/4 lg:w-full border rounded-md p-2 text-sm ">
+                            {item?.notes}
+                          </p>
+                        </td>
+                        {/* <td className="border  flex justify-center items-center px-2 text-sm">
+                      <Button size="sm">View receipt</Button>
+                    </td> */}
+                      </tr>
+                    </MenuHandler>
+                    <MenuList className="border shadow-md ">
+                      <MenuItem
+                        onClick={() => {
+                          setSelectedRecord(item);
+                          setShowAddRecord(true);
+                        }}
+                        className="text-orange-800 font-semibold"
+                      >
+                        View / Edit
+                      </MenuItem>
+                      <MenuItem
+                        onClick={() => setRecordId(item.id)}
+                        className="text-red-800 font-semibold"
+                      >
+                        Delete
+                      </MenuItem>
+                    </MenuList>
+                  </Menu>
+                );
+              })}
+            </tbody>
+          </table>
+          // <Card className="mt-3 hidden md:block p-2 h-full overflow-y-scroll">
+          // <table className="shadow-lg bg-white w-full hidden md:table ">
+          //   <tbody className="w-full">
+          //     <tr className="sticky top-0  text-white font-bold w-full rounded-md bg-blue-gray-300 ">
+          //       <th className="   text-left px-2 py-2">
+          //         <Typography>Date</Typography>
+          //       </th>
+          //       <th className=" border text-left px-2 py-2">
+          //         <Typography>Time</Typography>
+          //       </th>
+          //       <th className="border text-left px-2 py-2">
+          //         <Typography>Staff Name</Typography>
+          //       </th>
+          //       <th className=" border text-left px-2 py-2">
+          //         <Typography>Interaction Type</Typography>
+          //       </th>
+          //       <th className=" border text-left px-2 py-2">
+          //         <Typography>Interaction With</Typography>
+          //       </th>
+          //       <th className=" border text-left px-2 py-2">
+          //         <Typography>Purpose of call</Typography>
+          //       </th>
+          //       <th className=" border text-left px-2 py-2">
+          //         <Typography>Phone Number</Typography>
+          //       </th>
+          //       <th className=" border text-left px-2 py-2">
+          //         <Typography>Notes</Typography>
+          //       </th>
+          //     </tr>
+          //     {daily.map((item, key) => {
+          //       return (
+          //         <Menu className="bg-black" key={key}>
+          //           <MenuHandler>
+          //             <tr key={key} className="hover:shadow-md text-sm ">
+          //               <td className="border px-2 py-2  align-top">
+          //                 {format(item?.date, "MMM dd, yyyy")}
+          //               </td>
+          //               <td className="border px-2 py-2 align-top">
+          //                 {item?.time}
+          //               </td>
+          //               <td className="border px-2 py-2 align-top">
+          //                 {item?.staff}
+          //               </td>
+          //               <td className="border px-2 py-2 align-top">
+          //                 {item?.interaction_type}
+          //               </td>
+          //               <td className="border px-2 py-2 align-top">
+          //                 {item?.interaction_with}
+          //               </td>
+          //               <td className="border px-2 py-2 align-top">
+          //                 {item?.call_purpose}
+          //               </td>
+          //               <td className="border px-2 py-2 text-start align-top">
+          //                 {item?.phone_number}
+          //               </td>
+          //               <td className="border px-2 py-2 text-xs text-ellipsis w-[20%] ">
+          //                 <div className=" max-h-[100px] overflow-y-auto">
+          //                   {item?.notes}
+          //                 </div>
+          //               </td>
+          //             </tr>
+          //           </MenuHandler>
+          //           <MenuList className="border shadow-md ">
+          //             <MenuItem
+          //               onClick={() => {
+          //                 setSelectedRecord(item);
+          //                 setShowAddRecord(true);
+          //               }}
+          //               className="text-orange-800 font-semibold"
+          //             >
+          //               View / Edit
+          //             </MenuItem>
+          //             <MenuItem
+          //               onClick={() => setRecordId(item.id)}
+          //               className="text-red-800 font-semibold"
+          //             >
+          //               Delete
+          //             </MenuItem>
+          //           </MenuList>
+          //         </Menu>
+          //       );
+          //     })}
+          //   </tbody>
+          // </table>
+          // </Card>
         )}
         {daily?.length <= 0 && (
           <div className="h-full w-full items-center flex justify-center text-gray-400">
             No records found
           </div>
         )}
-        {
+        {/* {
           <div className="mt-3 xl:hidden grid md:grid-cols-2 sm:grid-cols-2 gap-5 ">
             {daily?.map((item, key) => {
               return (
@@ -361,7 +480,7 @@ function DailyTracker() {
               );
             })}
           </div>
-        }
+        } */}
       </div>
 
       {/* add record */}

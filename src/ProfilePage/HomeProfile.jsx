@@ -53,7 +53,7 @@ function HomeProfile() {
     queryKey: ["clientprofile", clientId],
     queryFn: async () => {
       const result = await customfetch(
-        `http://localhost:3000/clients/${clientId}`,
+        import.meta.env.VITE_API_URL + `/clients/${clientId}`,
         "GET"
       );
 

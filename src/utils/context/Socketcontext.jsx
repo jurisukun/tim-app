@@ -3,8 +3,8 @@ import { io } from "socket.io-client";
 import { toast } from "react-toastify";
 import { useUser } from "./useUser";
 
-export const socket = io("http://localhost:3000");
-export const tasksocket = io("http://localhost:3000/tasks");
+export const socket = io(import.meta.env.VITE_API_URL);
+export const tasksocket = io(import.meta.env.VITE_API_URL + "/tasks");
 
 tasksocket.on("assignedtoyou", (data) => {
   toast.info("Task Assigned to you");

@@ -31,6 +31,9 @@ import { IoMdNotificationsOutline } from "react-icons/io";
 import { socket } from "../utils/context/Socketcontext";
 
 import { useQuery } from "@tanstack/react-query";
+import { format } from "date-fns";
+import { customfetch } from "../lib/fetchhandler/requestHandler";
+import { toast } from "react-toastify";
 
 export const logout = (navigate) => {
   localStorage.removeItem("token");
@@ -43,9 +46,9 @@ export const UserAvatar = ({ user, position }) => {
   return (
     <Menu placement={position}>
       <MenuHandler>
-        <div className="flex items-center gap-3 justify-center cursor-pointer hover:shadow-xl w-full p-2 rounded-md border-2 hover:border-red-800 transition-all">
+        <div className="flex items-center gap-3 justify-center cursor-pointer hover:shadow-xl w-full p-2 rounded-md border-2 border-white hover:border-red-800 transition-all">
           <Avatar
-            src="https://docs.material-tailwind.com/img/face-2.jpg"
+            src="https://walnuteducation.com/static/core/images/icon-profile.png"
             alt="avatar"
             className="w-[35px] h-[35px]"
           />
@@ -63,35 +66,16 @@ export const UserAvatar = ({ user, position }) => {
   );
 };
 
-const notification = [
-  {
-    label: "Message",
-    value: "message",
-    icon: <IoMdNotificationsOutline />,
-    data: ["Message 1", "Message 2", "Message 3"],
-  },
-  {
-    label: "Email",
-    value: "email",
-    icon: <IoMdNotificationsOutline />,
-    data: ["Email 1", "Email 2", "Email 3"],
-  },
-  {
-    label: "Tasks",
-    value: "task",
-    icon: <IoMdNotificationsOutline />,
-    data: ["Task 1", "Task 2", "Task 3", "Task 4"],
-  },
-];
-
 function Notification() {
+  const navigate = useNavigate();
   const { user } = useUser();
   const { isLoading, error, data } = useQuery({
     queryKey: ["notifications", user?.userId],
     queryFn: async () => {
       console.log("fetching notifications");
       const res = await fetch(
-        `http://localhost:3000/notifications/${user?.userId}`,
+        import.meta.env.VITE_API_URL + `/notifications/${user?.userId}`,
+
         {
           method: "GET",
           headers: {
@@ -102,49 +86,118 @@ function Notification() {
       return res.json();
     },
   });
+  const messagenotif = [];
+  const emailnotif = [];
+  const tasknotif = [];
+  let count = 0;
 
-  console.log(data);
+  if (data) {
+    data.notifications.map((item) => {
+      if (!item?.seen) {
+        count += 1;
+      }
+      if (item.type === "message") {
+        messagenotif.push(item);
+      }
+      if (item.type === "email") {
+        emailnotif.push(item);
+      }
+      if (item.type === "task") {
+        tasknotif.push(item);
+      }
+    });
+  }
+  const notification = [
+    { label: "Message", value: "message", data: messagenotif },
+    { label: "Email", value: "email", data: emailnotif },
+    { label: "Tasks", value: "task", data: tasknotif },
+  ];
+
+  const gotoNotif = async (notif) => {
+    const notifseen = await customfetch(
+      import.meta.env.VITE_API_URL + `/notifications/updateseen/${notif?.id}`,
+      "PUT"
+    );
+    console.log(notifseen);
+    if (notifseen.error) {
+      toast.error("Noitification error");
+      return;
+    }
+    if (notif?.type === "task") {
+      navigate(
+        `/client/${notif?.client_id}/profile/tasks?id=${notif?.item_id}`
+      );
+    }
+    if (notif?.type === "email") {
+      navigate(`/client/${notif?.client_id}/profile/email`);
+    }
+  };
 
   return (
     <Popover placement="bottom-end">
       <PopoverHandler>
         <div>
           <IoMdNotificationsOutline className=" text-3xl " />
-          <p className="absolute top-0 -right-2 aspect-square w-[25px] h-[25px] rounded-full bg-red-800 text-white text-center text-xs p-1">
-            {isLoading ? " " : data?.notifications?.length ?? 0}
-          </p>
+          {count > 0 && (
+            <p className="absolute top-0 -right-2 aspect-square w-[25px] h-[25px] rounded-full bg-red-800 text-white text-center text-xs p-1">
+              {count}
+            </p>
+          )}
         </div>
       </PopoverHandler>
       <PopoverContent className="z-40 max-h-[250px] w-[300px] p-1">
-        <Tabs value={"message"}>
-          <TabsHeader className="text-sm sticky top-0">
-            {notification.map((item) => (
-              <Tab
-                className="text-sm"
-                activeClassName="text-red-800 font-semibold"
-                key={item.value}
-                value={item?.value}
-                label={item.label}
-                icon={item.icon}
-              >
-                {item?.label}
-              </Tab>
-            ))}
-          </TabsHeader>
-          <TabsBody>
-            {notification.map((item) => (
-              <TabPanel key={item.value} value={item.value}>
-                <List className="h-[150px] overflow-y-scroll">
-                  {item.data.map((data) => (
-                    <ListItem className="text-xs" key={data}>
-                      {data}
-                    </ListItem>
-                  ))}
-                </List>
-              </TabPanel>
-            ))}
-          </TabsBody>
-        </Tabs>
+        {isLoading && <p>Loading...</p>}
+        {data && (
+          <Tabs value={"message"}>
+            <TabsHeader className="text-sm sticky top-0">
+              {notification.map((item) => (
+                <Tab
+                  className="text-sm"
+                  activeClassName="text-red-800 font-semibold"
+                  key={item.value}
+                  value={item?.value}
+                  label={item.label}
+                >
+                  {item?.label}
+                </Tab>
+              ))}
+            </TabsHeader>
+            <TabsBody>
+              {notification.map((item) => (
+                <TabPanel className="p-0" key={item.value} value={item.value}>
+                  <ul className="h-[150px] overflow-y-scroll gap-0 p-2">
+                    {item.data.map((data) => (
+                      <li
+                        className="w-full"
+                        key={data?.id}
+                        onClick={() => {
+                          gotoNotif(data);
+                        }}
+                      >
+                        <div
+                          className={`w-full  flex justify-between items-center ${
+                            data?.seen ? "bg-gray-100" : "bg-red-50"
+                          } p-2 rounded-md cursor-pointer hover:border-gray-300 border-[3px] border-white transition-all`}
+                        >
+                          <p
+                            className={`text-sm ${
+                              !data?.seen ? "text-red-800 font-semibold" : ""
+                            }`}
+                          >
+                            {data?.messaage ?? "New Task"}
+                          </p>
+                          <p className="text-xs scale-75">
+                            {format(data?.updatedAt, "MMM dd, yyyy")}
+                          </p>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </TabPanel>
+              ))}
+            </TabsBody>
+          </Tabs>
+        )}
       </PopoverContent>
     </Popover>
   );
@@ -158,7 +211,7 @@ function SideBar() {
 
   return (
     <div className="flex h-[70px] transition-transform w-full absolute top-0 left-0   lg:max-w-full p-4 lg:static lg:flex-row b-shadow z-40 lg:w-[100%]  bg-white lg:p-4 lg:flex  justify-between b-shadow ">
-      <div className="flex items-center justify-center gap-8">
+      <div className="flex items-center justify-center gap-4">
         <HeaderLogo />
         <div className="flex relative  aspect-square rounded-full p-2 cursor-pointer">
           <Notification />
@@ -176,7 +229,7 @@ function SideBar() {
               <MenuHandler>
                 <Button
                   size="sm"
-                  className="flex hover:scale-105  bg-gray-700  mx-[6px] w-full lg:w-[100px]  hover:bg-red-800  text-center items-center justify-center gap-2"
+                  className="flex hover:scale-105  hover:bg-gray-700  mx-[6px] w-full lg:w-[100px]  bg-red-800  text-center items-center justify-center gap-2"
                 >
                   ADD <FaUserPlus className="" />
                 </Button>
@@ -206,7 +259,7 @@ function SideBar() {
       <div className="lg:hidden flex items-center justify-center gap-3">
         <Menu placement="right-start">
           <MenuHandler>
-            <Button className="flex text-center items-center w-[80px] mx-[4px] hover:scale-105 hover:bg-red-800  bg-gray-800">
+            <Button className="flex text-center items-center w-[80px] mx-[4px] hover:scale-105 bg-red-800  hover:bg-gray-800">
               <FaUserPlus className="mx-2 " />
             </Button>
           </MenuHandler>

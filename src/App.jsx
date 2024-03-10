@@ -8,14 +8,11 @@ import Calendar from "../src/Components/Calendar/Calendar";
 import Itinerary from "./Components/Itinerary/Itinerary";
 import Contract from "./Components/Contract/Contract";
 
-import EventCalendar from "./Components/Calendar/Calendar";
-
 import DailyTracker from "./Components/Profile/DailyTracker";
 import EmailTemplate from "./Components/Profile/Email";
 import Billing from "./Components/Profile/Billing";
 import Tasks from "./Components/Profile/Tasks";
-
-import CheckAuth from "./CheckAuth/CheckAuth";
+import CurrentCase from "./Components/Current/Case";
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Forms from "./Components/Profile/Forms";
@@ -48,7 +45,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "",
-        element: <Calendar />,
+        element: <CurrentCase />,
       },
       {
         path: "my-profile",

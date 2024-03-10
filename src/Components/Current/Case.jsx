@@ -1,136 +1,140 @@
-import FullCalendar from "@fullcalendar/react";
-import { Calendar as FCalendar } from "@fullcalendar/core";
-import dayGridPlugin from "@fullcalendar/daygrid"; // a plugin!
-import interactionPlugin from "@fullcalendar/interaction";
-import listPlugin from "@fullcalendar/list";
+import { Card, Typography } from "@material-tailwind/react";
+import React from "react";
 
-import { useEffect, useState, useRef } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { customfetch } from "../../lib/fetchhandler/requestHandler";
 
-function getTodoList(date) {
-  const day = date.getDate();
+import { LoadingScreen } from "../../CheckAuth/CheckAuth";
+import ErrorPage from "../ErrorPage";
 
-  switch (day) {
-    case 10:
-      return [
-        { time: "10:30 am", title: "Meeting" },
-        { time: "12:00 pm", title: "Lunch" },
-      ];
-    case 15:
-      return [
-        { time: "09:30 pm", title: "Products Introduction Meeting" },
-        { time: "12:30 pm", title: "Client entertaining" },
-        { time: "02:00 pm", title: "Product design discussion" },
-        { time: "05:00 pm", title: "Product test and acceptance" },
-        { time: "06:30 pm", title: "Reporting" },
-        { time: "10:00 pm", title: "Going home to walk the dog" },
-      ];
-    default:
-      return [];
+import { addDays, format, toDate } from "date-fns";
+import { useNavigate } from "react-router-dom";
+
+export default function CurrentCase() {
+  const navigate = useNavigate();
+
+  let todaycase = [];
+  let thisweeekcase = [];
+  let nextweekcase = [];
+  let upcomingcase = [];
+  let pendingcase = [];
+
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["currents"],
+    queryFn: async () => {
+      const response = await customfetch(
+        import.meta.env.VITE_API_URL + "/tasks/currents",
+        "GET"
+      );
+
+      return response;
+    },
+  });
+
+  if (isLoading) return <LoadingScreen />;
+  if (isError) return <ErrorPage />;
+  if (data) {
+    const today = new Date();
+    const thisweek = addDays(today, 6);
+    const nextweek = addDays(thisweek, 6);
+    const upcoming = addDays(nextweek, 6);
+    const pending = addDays(upcoming, 6);
+
+    for (const task of data.tasks) {
+      if (task.due_date.split("T")[0] <= today.toISOString().split("T")[0]) {
+        todaycase.push(task);
+        continue;
+      } else if (
+        task.due_date.split("T")[0] <= thisweek.toISOString().split("T")[0]
+      ) {
+        thisweeekcase.push(task);
+        continue;
+      } else if (
+        task.due_date.split("T")[0] <= nextweek.toISOString().split("T")[0]
+      ) {
+        nextweekcase.push(task);
+        continue;
+      } else if (task.due_date <= upcoming.toISOString().split("T")[0]) {
+        upcomingcase.push(task);
+        continue;
+      } else {
+        pendingcase.push(task);
+        continue;
+      }
+    }
   }
-}
 
-function Case() {
-  const [initialDate, setInitialDate] = useState(new Date());
-  const calendarRef = useRef(null);
+  const cases = [
+    {
+      title: "Today",
+      data: todaycase,
+    },
+    {
+      title: "This Week",
+      data: thisweeekcase,
+    },
+    {
+      title: "Next Week",
+      data: nextweekcase,
+    },
+    {
+      title: "Upcoming",
+      data: upcomingcase,
+    },
 
-  useEffect(() => {
-    let calendar = new FCalendar(document.getElementById("calendar"), {
-      plugins: [listPlugin],
-      initialView: "listWeek",
-      initialDate: initialDate,
-      height: "90%",
-      views: {
-        listDay: { buttonText: "list day" },
-        listWeek: { buttonText: "list week" },
-        listMonth: { buttonText: "list month" },
-      },
+    {
+      title: "Pending",
+      data: pendingcase,
+    },
+  ];
 
-      headerToolbar: {
-        left: " prev,next",
-        center: "",
-        right: "listDay,listWeek,listMonth",
-      },
-      events: [
-        {
-          title: "Meeting",
-          start: "2024-02-12T14:30:00",
-        },
-        {
-          title: "Birthday Party",
-          start: "2024-02-13T07:00:00",
-          backgroundColor: "green",
-          borderColor: "green",
-        },
-      ],
-      eventDidMount: function (info) {
-        if (info.event.extendedProps.status === "done") {
-          // Change background color of row
-          info.el.style.backgroundColor = "red";
-
-          // Change color of dot marker
-          var dotEl = info.el.getElementsByClassName("fc-event-dot")[0];
-          if (dotEl) {
-            dotEl.style.backgroundColor = "white";
-          }
-        }
-      },
-    });
-    calendar.render();
-  }, []);
-
-  function renderEventContent(eventInfo) {
-    return (
-      <>
-        <b>{eventInfo.timeText}</b>
-        <i>{eventInfo.event.title}</i>
-      </>
-    );
-  }
+  console.log(data);
 
   return (
-    <div className="w-full h-full flex flex-col md:flex-row overflow-y-scroll items-center justify-center">
-      <div className="h-full  p-8 md:w-[50%] w-full">
-        <FullCalendar
-          ref={calendarRef}
-          headerToolbar={{
-            left: "prev,next",
-            center: "title",
-            right: "dayGridMonth,dayGridWeek,dayGridDay", // user can switch between the two
-          }}
-          height={"90%"}
-          plugins={[dayGridPlugin, interactionPlugin]}
-          initialView="dayGridMonth"
-          events={[
-            { title: "event 1", date: "2024-04-01" },
-            { title: "event 1", date: "2024-04-01" },
-            { title: "event 1", date: "2024-04-01" },
-            { title: "event 1", date: "2024-04-01" },
-            { title: "event 1", date: "2024-04-01" },
-            { title: "event 1", date: "2024-04-01" },
-            { title: "event 1", date: "2024-04-01" },
-            { title: "event 1", date: "2024-04-01" },
-            { title: "event 1", date: "2024-04-01" },
-            { title: "event 1", date: "2024-04-01" },
+    <div className="flex flex-col h-full px-3  overflow-y-auto">
+      <Typography className="font-bold text-xl">Current Case</Typography>
+      <div className="w-full  flex-1 flex flex-col md:flex-row gap-6 md:gap-2 p-4">
+        {cases.map((current, index) => {
+          return (
+            <Card
+              key={index}
+              className="w-full md:w-[20%] min-h-[300px] md:flex-1 border  gap-2 cursor-pointer hover:shadow-lg"
+            >
+              <Typography className="w-full text-center font-bold text-white bg-gray-600 rounded-t-md p-2">
+                {current.title}
+              </Typography>
 
-            { title: "event 1", start: "2024-04-01", end: "2024-04-02" },
-          ]}
-          initialDate={initialDate}
-          dayMaxEventRows={true}
-          dateClick={(e) => console.log(e)}
-          selectable={true}
-          select={(e) => console.log(e)}
-          eventClick={(e) => console.log(e)}
-          eventContent={renderEventContent}
-          editable={true}
-        />
+              <div className="w-full h-full  p-2 overflow-y-auto flex flex-col gap-2">
+                {current.data.map((data, index) => {
+                  return (
+                    <div
+                      onClick={() =>
+                        navigate(
+                          `/client/${data.client_id}/profile/tasks/?id=${data.id}`
+                        )
+                      }
+                      key={index}
+                      className="flex flex-col w-full p-2 rounded-md border-2 hover:shadow-lg hover:border-red-400 transition-all "
+                    >
+                      <div className="flex w-full">
+                        <Typography className="font-bold text-xs text-red-800">
+                          {format(data.due_date, "MMM dd")}
+                        </Typography>
+                        <Typography className="text-sm text-ellipsis">
+                          {data.client?.decname}
+                        </Typography>
+                      </div>
+                      <Typography className="text-xs">
+                        {data.desc?.desc}
+                      </Typography>
+                    </div>
+                  );
+                })}
+              </div>
+            </Card>
+          );
+        })}
       </div>
-
-      <div
-        className="h-full p-8 md:w-[50%] w-full scale-90 "
-        id="calendar"
-      ></div>
     </div>
   );
 }
-
-export default Case;

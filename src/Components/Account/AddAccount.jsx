@@ -27,7 +27,7 @@ function AddAccount() {
       const validnewaccount = AccountSchema.parse(newaccount);
       console.log(validnewaccount);
       const result = await customfetch(
-        "http://localhost:3000/accounts",
+        import.meta.env.VITE_API_URL + "/accounts",
         "POST",
         validnewaccount
       );

@@ -50,7 +50,7 @@ export default function MainContainer() {
     queryKey: ["clientlist"],
     queryFn: async () => {
       const response = await customfetch(
-        `http://localhost:3000/clients`,
+        import.meta.env.VITE_API_URL + "/clients",
         "GET"
       );
       setFilteredData(response?.data.clients);

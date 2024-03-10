@@ -30,6 +30,8 @@ import {
   openTodoList,
 } from "../../utils/jotai/atoms";
 
+import { HeaderLogo } from "./Navbar";
+
 function Sidebar({ defaultdata }) {
   const [open, setOpen] = React.useState(0);
   const [opensidebar, setsidebar] = useAtom(openSidebar);
@@ -52,19 +54,22 @@ function Sidebar({ defaultdata }) {
     >
       <div className="overflow-hidden  b-shadow ">
         <Card className="h-screen  w-full  max-w-[325px] p-4 shadow-xl shadow-blue-gray-900/5  z-50 lg:z-0 overflow-y-scroll">
-          <div className=" flex items-center justify-center max-w-[250px] gap-2">
-            <Typography
-              variant="h5"
-              color="blue-gray"
-              className=" text-blue-gray-700 text-center max-w-[200px]"
-            >
-              Deceased Profile
-            </Typography>
+          <div className=" flex items-center justify-center max-w-[250px] gap-2 flex-col">
+            <HeaderLogo />
+            <div className="flex mt-2">
+              <Typography
+                variant="h5"
+                color="blue-gray"
+                className=" text-blue-gray-700 text-center max-w-[200px]"
+              >
+                Deceased Profile
+              </Typography>
 
-            <IoCloseCircle
-              onClick={() => setsidebar(false)}
-              className=" lg:hidden font-bold text-3xl max-w-[50px] justify-self-end  absolute right-5 cursor-pointer rounded-full bg-white  "
-            />
+              <IoCloseCircle
+                onClick={() => setsidebar(false)}
+                className=" lg:hidden font-bold text-3xl max-w-[50px] justify-self-end  absolute right-5 cursor-pointer rounded-full bg-white  "
+              />
+            </div>
           </div>
           <div className="mb-2 p-4 flex items-center gap-[10px] mt-4 justify-left">
             <Avatar

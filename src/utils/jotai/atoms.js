@@ -119,3 +119,13 @@ export const newEvent = atomWithReset({
   type: null,
   createdBy: null,
 });
+
+export const newBill = atomWithReset({
+  overall_status: null,
+  date: null,
+  payment_status: null,
+  via: null,
+  amount: null,
+  notes: null,
+  createdBy: null,
+});

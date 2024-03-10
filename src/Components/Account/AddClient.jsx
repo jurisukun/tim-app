@@ -795,7 +795,7 @@ function AddClient() {
       let execute;
       if (defaultclientdata) {
         execute = customfetch(
-          `http://localhost:3000/clients/${clientId}`,
+          import.meta.env.VITE_API_URL + `/clients/${clientId}`,
           "PUT",
           {
             client,
@@ -804,11 +804,15 @@ function AddClient() {
           }
         );
       } else {
-        execute = customfetch(`http://localhost:3000/clients`, "POST", {
-          client,
-          primaryintake,
-          servicedetails,
-        });
+        execute = customfetch(
+          import.meta.env.VITE_API_URL + `/clients`,
+          "POST",
+          {
+            client,
+            primaryintake,
+            servicedetails,
+          }
+        );
       }
 
       const data = await execute

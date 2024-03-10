@@ -59,6 +59,7 @@ function AddEventPopup({ popupDate, setPopUpDate, setShowPopup, defpop }) {
 
   const handleEvent = async (process) => {
     const newevent = EventSchema.safeParse(popupDate);
+
     if (!newevent.success) {
       toast.error("Please fill in all fields");
     } else {
@@ -69,7 +70,7 @@ function AddEventPopup({ popupDate, setPopUpDate, setShowPopup, defpop }) {
       );
       if (response.error) {
         toast.error(response.message);
-        return;
+        return { error: true, message: response.message };
       }
       toast.success(response.message);
       setShowPopup(false);
@@ -83,15 +84,18 @@ function AddEventPopup({ popupDate, setPopUpDate, setShowPopup, defpop }) {
     mutationKey: id ? ["editevntmutation", id] : ["addeventmutation"],
     mutationFn: handleEvent,
     onSuccess: (data, todelete) => {
+      if (data?.error) {
+        return;
+      }
       queryClient.setQueryData(["events"], (olddata) => {
         return todelete
-          ? olddata.filter((old) => {
+          ? olddata?.filter((old) => {
               if (old?.id != todelete?.id) {
                 return old;
               }
             })
           : id
-          ? olddata.map((old) => {
+          ? olddata?.map((old) => {
               if (old?.id == id) {
                 return data;
               } else return old;
@@ -204,9 +208,12 @@ function Calendar() {
 
   const [initialDate, setInitialDate] = useState(new Date());
   const [showPopup, setShowPopup] = useState(false);
+
   const defpop = {
     createdBy: user?.userId,
     type: "event",
+    start_time: "00:00",
+    end_time: "23:59",
   };
   const [popupDate, setPopUpDate] = useState(defpop);
   const calendarRef = useRef(null);
@@ -224,16 +231,18 @@ function Calendar() {
   });
 
   useEffect(() => {
-    const type = params.get("type");
-    if (type && data) {
-      setFiltered(
-        data.filter((item) => {
-          return item.type == type;
-        })
-      );
-    }
-    if (!type || type == "all") {
-      setFiltered(data);
+    if (params?.size > 0) {
+      const type = params.get("type");
+      if (type && data) {
+        setFiltered(
+          data?.filter((item) => {
+            return item?.type == type;
+          })
+        );
+      }
+      if (!type || type == "all") {
+        setFiltered(data);
+      }
     }
   }, [params.get("type"), data]);
 

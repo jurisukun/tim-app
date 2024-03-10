@@ -247,3 +247,17 @@ export const EventSchema = z.object({
   type: z.string(),
   createdBy: z.string(),
 });
+
+export const BillSchema = z.object({
+  overall_status: z.enum([
+    "Paid in full",
+    "Pending in balance",
+    "Insurance to pay",
+  ]),
+  date: z.string(),
+  payment_status: z.enum(["Not yet paid", "Paid", "Paid with balance"]),
+  via: z.enum(["Zelle", "Cash", "Check", "Credit Card", "Bank Transfer"]),
+  amount: z.number(),
+  notes: z.string().nullable().optional(),
+  createdBy: z.string(),
+});

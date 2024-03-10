@@ -31,7 +31,7 @@ function UserOptions() {
   const { data, isLoading, isError } = useQuery({
     queryKey: ["users"],
     queryFn: async () => {
-      const response = await fetch("http://localhost:3000/accounts");
+      const response = await fetch(import.meta.env.VITE_API_URL + "/accounts");
       const data = await response.json();
       return data;
     },
@@ -124,7 +124,7 @@ function Tasks() {
         queryKey: ["tasks", clientId],
         queryFn: async () => {
           const response = await fetch(
-            `http://localhost:3000/tasks/${clientId}`
+            import.meta.env.VITE_API_URL + `/tasks/${clientId}`
           );
           const data = await response.json();
           console.log(data);
@@ -135,7 +135,9 @@ function Tasks() {
       {
         queryKey: ["users"],
         queryFn: async () => {
-          const response = await fetch("http://localhost:3000/accounts");
+          const response = await fetch(
+            import.meta.env.VITE_API_URL + "/accounts"
+          );
           const data = await response.json();
           return data?.accounts;
         },
@@ -165,7 +167,7 @@ function Tasks() {
       toast.error(taskData.error.message);
       return;
     }
-    customfetch("http://localhost:3000/tasks", "POST", {
+    customfetch(import.meta.env.VITE_API_URL + "/tasks", "POST", {
       ...taskData.data,
     }).then((data) => {
       if (data.error) {
@@ -178,7 +180,7 @@ function Tasks() {
   };
 
   const updateTask = (id, prop, value) => {
-    customfetch(`http://localhost:3000/tasks/${id}`, "PUT", {
+    customfetch(import.meta.env.VITE_API_URL + `/tasks/${id}`, "PUT", {
       [prop]: value,
     }).then((data) => {
       if (data.error) {
@@ -203,23 +205,25 @@ function Tasks() {
 
   const handleSaveTask = (taskId) => {
     const task = taskData.find((task) => task.id === taskId);
-    customfetch(`http://localhost:3000/tasks/${taskId}`, "PUT", task).then(
-      (data) => {
-        if (data.error) {
-          toast.error(data.message);
-          return;
-        }
-        toast.success(data.message);
-
+    customfetch(
+      import.meta.env.VITE_API_URL + `/tasks/${taskId}`,
+      "PUT",
+      task
+    ).then((data) => {
+      if (data.error) {
+        toast.error(data.message);
+        return;
+      }
+      toast.success(data.message);
+      if (task.assigned_to)
         tasksocket.emit("taskassigned", {
           taskId,
           userId: task.assigned_to,
           clientId,
         });
 
-        return data.data;
-      }
-    );
+      return data.data;
+    });
   };
 
   return (
@@ -243,10 +247,10 @@ function Tasks() {
           </Button>
         </div>
       </div>
-      <div className="w-full p-3 h-[80vh] overflow-y-scroll max-w-full">
+      <div className="w-full p-3 h-[80vh] overflow-y-auto max-w-full">
         <table className="flex flex-col gap-2 w-full">
           <tbody className="md:flex md:flex-col sm:gap-2 grid sm:grid-cols-2 gap-5">
-            <tr className=" top-0 bg-blue-gray-500 z-20 w-full hidden md:flex  justify-evenly text-center p-2 rounded-md">
+            <tr className=" top-0 bg-blue-gray-300 z-20 w-full hidden md:flex text-base justify-evenly text-center p-2 text-white rounded-md">
               <th>Task</th>
               <th>Due Date / Status</th>
 
